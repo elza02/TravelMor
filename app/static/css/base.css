@@ -36,9 +36,10 @@ body .container {
 
 header {
     position: fixed;
-    background-color: rgba(164, 164, 185, 0.168);
+    /* background-color: rgba(164, 164, 185, 0.168); */
+    background-color: rgb(255, 255, 255);
     z-index: 998;
-    backdrop-filter: blur(50px);
+    /* backdrop-filter: blur(50px); */
     /* display: none; */
 }
 
@@ -246,7 +247,21 @@ main .first {
     background: linear-gradient(90deg, #000000d3,   rgba(0, 0, 0, 0.448)), url('../assets/background-home.jpg') center/cover;
 }
 
+main .first h1 {
+    color: white;
+    font-weight: lighter;
+    margin-top: 200px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 5rem;
+    text-align: center;
+}
 
+main .first h1 span {
+    background-color: var(--main--green);
+    font-weight: 400;
+    opacity: 0.9;
+}
 
 main .mini-card-voyage {
     width: 400px;
