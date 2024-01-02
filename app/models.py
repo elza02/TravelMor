@@ -75,12 +75,12 @@ class Commentaire(models.Model):
 
 class Recevoir(models.Model):
     id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
-    id_notification = models.ForeignKey(Notification, on_delete=models.CASCADE, primary_key=True)
+    id_notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
 
 class Reserver(models.Model):
     id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
-    id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE, primary_key=True)
+    id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
 
 class Avoir(models.Model):
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
-    id_ville = models.ForeignKey(Ville, on_delete=models.CASCADE, primary_key=True)
+    id_ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
