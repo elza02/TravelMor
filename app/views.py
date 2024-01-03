@@ -124,13 +124,13 @@ def home (request):
 
     # # Create Voyage instances
     # voyage1 = models.Voyage.objects.create(
-    #     prix_voyage=1000.0, duree_voyage=5, transport=True, id_hotel=hotel1, id_promotion=promotion1, id_categorie=categorie1
+    #     titre_voyage = "titre voyage",prix_voyage=1000.0, duree_voyage=5, transport=True, id_hotel=hotel1, id_promotion=promotion1, id_categorie=categorie1
     # )
     # voyage2 = models.Voyage.objects.create(
-    #     prix_voyage=1200.0, duree_voyage=7, transport=True, id_hotel=hotel2, id_promotion=promotion2, id_categorie=categorie2
+    #     titre_voyage = "titre voyage",prix_voyage=1200.0, duree_voyage=7, transport=True, id_hotel=hotel2, id_promotion=promotion2, id_categorie=categorie2
     # )
     # voyage3 = models.Voyage.objects.create(
-    #     prix_voyage=800.0, duree_voyage=4, transport=False, id_hotel=hotel3, id_promotion=promotion3, id_categorie=categorie3
+    #     titre_voyage = "titre voyage",prix_voyage=800.0, duree_voyage=4, transport=False, id_hotel=hotel3, id_promotion=promotion3, id_categorie=categorie3
     # )
 
     # # Create Commentaire instances
@@ -192,8 +192,8 @@ def home (request):
     # inclure1.save()
     # inclure2.save()
     # inclure3.save()
-    # voyage = models.Voyage.objects.get(id_voyage = 1)
-    return render(request, 'home.html', {})
+    query = models.Voyage.prefetch_related('models.Avoir_set__models.Ville_set').all()
+    return render(request, 'home.html', {'query' : query})
 
 
     

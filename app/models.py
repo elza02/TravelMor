@@ -66,6 +66,7 @@ class Utilisateur(models.Model):
 
 class Voyage(models.Model):
     id_voyage = models.AutoField(primary_key=True)
+    titre_voyage = models.CharField(max_length = 50)
     prix_voyage = models.DecimalField(max_digits=15, decimal_places=2)
     duree_voyage = models.IntegerField()
     transport = models.BooleanField()
