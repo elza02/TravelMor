@@ -28,10 +28,10 @@ class Ville(models.Model):
     id_pays = models.ForeignKey(Pays, on_delete=models.CASCADE)
 
 class Hotel(models.Model):
-    id_hotel = models.CharField(primary_key=True, max_length=50)
+    id_hotel = models.AutoField(primary_key=True)
     prix_nuit = models.DecimalField(max_digits=15, decimal_places=2)
     type_chambre = models.CharField(max_length=50)
-    n_chambreDispo = models.CharField(max_length=50)
+    n_chambreDispo = models.IntegerField()
     nom_hotel = models.CharField(max_length=50)
     id_ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
 
@@ -70,7 +70,7 @@ class Voyage(models.Model):
     duree_voyage = models.IntegerField()
     transport = models.BooleanField()
     id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    id_promotion = models.OneToOneField(Promotion, on_delete=models.CASCADE, unique=True)
+    id_promotion = models.OneToOneField(Promotion, on_delete=models.CASCADE, unique=True,null=True)
     id_categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
 
 class Commentaire(models.Model):
