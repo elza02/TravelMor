@@ -388,6 +388,11 @@ main .mini-card-voyage .image .reaction img {
     /* box-shadow: 0 0 10px #eee; */
 }
 
+main .mini-card-voyage .image .reaction img:hover {
+    scale: 1.2;
+}
+
+
 main .mini-card-voyage .body {
     display: flex;
     flex-direction: column;
@@ -420,6 +425,7 @@ main .mini-card-voyage .body form button {
     font-weight: 600;
     background-color: var(--main--green);
     cursor: pointer;
+    transition: all .2s ease;
 }
 
 main .mini-card-voyage .body form button:hover {

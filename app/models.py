@@ -97,6 +97,6 @@ class Aimer(models.Model):
     id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
 
-class Asso_14(models.Model):
+class inclure(models.Model):
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     id_vol = models.ForeignKey(Vol, on_delete=models.CASCADE)
