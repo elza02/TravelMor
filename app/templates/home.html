@@ -1,57 +1,70 @@
 {% extends 'app/templates/base.html' %}
 {% load static %}
 {% block title %} Home {% endblock %}
+{% block js_block %} 
+    <script src="{% static 'js/home.js' %}" type="text/javascript"></script>
+    <script>
+        function toggleLike(heart) {
+            if (heart.src.includes('{% static "assets/like-full.svg" %}')) {
+                heart.src = '{% static "assets/like-empty.svg" %}';
+            } else {
+                heart.src = '{% static "assets/like-full.svg" %}';
+            }
+        }
+    </script>
+{% endblock %}
 {% block main %}
-    <section class="first">
-        <h1>Voyager <span>le monde</span></h1>
-        <div class="services-cards">
-            <div class="card">
-                <div class="icon">
-                    <img src="{% static "assets/secured-payment.png" %}" alt="services-message">
-                </div>
-                <p class="text">
-                    Paiement Securisé
-                </p>
+<section class="first">
+    <h1>Voyager <span>le monde</span></h1>
+    <div class="services-cards">
+        <div class="card">
+            <div class="icon">
+                <img src="{% static "assets/secured-payment.png" %}" alt="services-message">
             </div>
-            <div class="card">
-                <div class="icon">
-                    <img src="{% static "assets/bill_repo.png" %}" alt="services-message">
-                </div>
-                <p class="text">
-                    0 Dhs Frais De Dossier
-                </p>
-            </div>
-            <div class="card">
-                <div class="icon">
-                    <img src="{% static "assets/price-tag.png" %}" alt="services-message">
-                </div>
-                <p class="text">
-                    Meilleurs Tarifs Garanties
-                </p>
-            </div>
-            <div class="card">
-                <div class="icon">
-                    <img src="{% static "assets/24-hours.png" %}" alt="services-message">
-                </div>
-                <p class="text">
-                    Assistance 24H/24
-                </p>
-            </div>
+            <p class="text">
+                Paiement Securisé
+            </p>
         </div>
-    </section>
-    <section class="last">
-        <div class="mini-card-voyage">
-            <div class="image">
-                <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
-                <span class="reaction">
-                    <img id="heart" src="{% static 'assets/like-empty.png' %}" data-full-src="{% static 'assets/like-full.png' %}" alt="">
-                </span>
+        <div class="card">
+            <div class="icon">
+                <img src="{% static "assets/bill_repo.png" %}" alt="services-message">
             </div>
-            <div class="body">
-                <span class="localisation"><img src="{% static "assets/localisation.png" alt="localisation" %}">Maroc</span>
-                <span class="price">Prix: <span>289&euro;</span></span>
-                <span class="rating">Prix: <span>289&euro;</span></span>
+            <p class="text">
+                0 Dhs Frais De Dossier
+            </p>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <img src="{% static "assets/price-tag.png" %}" alt="services-message">
             </div>
-        </div> 
-    </section>
+            <p class="text">
+                Meilleurs Tarifs Garanties
+            </p>
+        </div>
+        <div class="card">
+            <div class="icon">
+                <img src="{% static "assets/24-hours.png" %}" alt="services-message">
+            </div>
+            <p class="text">
+                Assistance 24H/24
+            </p>
+        </div>
+    </div>
+</section>
+<section class="last">
+    <div class="mini-card-voyage">
+        <div class="image">
+            <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
+            <span class="reaction">
+                <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
+            </span>
+        </div>
+        <div class="body">
+            <span class="localisation"><img src="{% static "assets/localisation.png" alt="localisation" %}">Maroc</span>
+            <span class="price">Prix: <span>289&euro;</span></span>
+            <span class="rating">Prix: <span>289&euro;</span></span>
+        </div>
+    </div> 
+</section>
+
 {% endblock %}
