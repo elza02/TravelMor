@@ -341,13 +341,14 @@ main .last {
 }
 
 main .mini-card-voyage {
-    width: 400px;
-    height: 800px;
+    width: 300px;
+    height: 400px;
     border: 1px solid var(--second-underline);
     border-radius: var(--main-border-radius);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    box-shadow: var(--main-shadow);
+    overflow: hidden;
 }
 
 main .mini-card-voyage .image {
@@ -358,15 +359,16 @@ main .mini-card-voyage .image {
     border-top-right-radius: var(--main-border-radius);
     border-top-left-radius: var(--main-border-radius);
     position: relative;
+    padding: 5px;
 }
 
 main .mini-card-voyage .image img {
-    width: 100%;
-    height: auto;
     border-top-right-radius: var(--main-border-radius);
     border-top-left-radius: var(--main-border-radius);
     overflow: hidden;
-    object-fit: scale-down;
+    width: auto; /* Make the image fill the container */
+    height: 100%; /* Maintain aspect ratio */
+    display: block;
 }
 
 main .mini-card-voyage .image .reaction img {
@@ -382,7 +384,12 @@ main .mini-card-voyage .image .reaction img {
 main .mini-card-voyage .body {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 10px;
+    height: 150px;
+    background-color: var(--main-gray-bg);
+    border-radius: var(--main-border-radius);
 }
 
 main .mini-card-voyage .body .localisation {
@@ -390,7 +397,7 @@ main .mini-card-voyage .body .localisation {
     gap: 10px;
     width: fit-content;
     height: fit-content;
-    /* border: 2px solid black; */
+    border: 2px solid black;
 }
 
 main .mini-card-voyage .body .localisation img {
@@ -399,7 +406,6 @@ main .mini-card-voyage .body .localisation img {
     border-radius: var(--main-border-radius);
     box-shadow: 0 0 5px rgb(184, 180, 180);
 }
-
 
 /* footer styles */
 

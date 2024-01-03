@@ -6,9 +6,9 @@ class Utilisateur(models.Model):
     est_admin = models.BooleanField()
     nom = models.CharField(max_length=15)
     num_telephone = models.CharField(max_length=12)
-    email = models.EmailField(null=True)
+    email = models.EmailField()
     mot_d_passe = models.CharField(max_length=10)
-    nom_utilisateur = models.CharField(max_length=50, null=True)
+    nom_utilisateur = models.CharField(max_length=50)
 
 class Notification(models.Model):
     id_notification = models.AutoField(primary_key=True)
@@ -34,6 +34,7 @@ class Pays(models.Model):
 
 class Ville(models.Model):
     id_ville = models.AutoField(primary_key=True)
+    nom_ville = models.CharField(max_length=15)
     id_pays = models.ForeignKey(Pays, on_delete=models.CASCADE)
 
 class Hotel(models.Model):
