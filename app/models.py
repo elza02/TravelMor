@@ -66,7 +66,7 @@ class Utilisateur(models.Model):
 
 class Voyage(models.Model):
     id_voyage = models.AutoField(primary_key=True)
-    prix_voyage = models.CharField(max_length=50)
+    prix_voyage = models.DecimalField(max_digits=15, decimal_places=2)
     duree_voyage = models.IntegerField()
     transport = models.BooleanField()
     id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
@@ -100,3 +100,5 @@ class Aimer(models.Model):
 class inclure(models.Model):
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     id_vol = models.ForeignKey(Vol, on_delete=models.CASCADE)
+
+
