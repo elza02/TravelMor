@@ -386,6 +386,7 @@ main .mini-card-voyage .image .reaction img {
     height: 40px;
     cursor: pointer; 
     /* box-shadow: 0 0 10px #eee; */
+    transition: all .2s ease;
 }
 
 main .mini-card-voyage .image .reaction img:hover {
