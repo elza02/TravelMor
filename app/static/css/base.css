@@ -18,14 +18,15 @@
     --main-border-radius: 30px;
     --main-shadow: 0 2px 6px rgba(180, 177, 177, 0.442);
     --main-shadow-hovered: 0 2px 6px rgba(180, 177, 177, 0.749);
+    --main-background-card: rgb(253, 253, 253);
 }
 
 body {
     font-family: Poppins, sans-serif;
 }
 
-body .container {
-}
+/* body .container {
+} */
 
 .show {
     display: block;
@@ -300,7 +301,7 @@ main .first .services-cards {
 }
 
 main .first .services-cards .card {
-    background-color: rgb(253, 253, 253);
+    background-color: var(--main-background-card);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -335,14 +336,19 @@ main .first .services-cards .card .text {
 
 }
 
-main .last {
+main .second {
     padding: 100px;
     margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
 }
 
 main .mini-card-voyage {
-    width: 300px;
-    height: 400px;
+    width: 400px;
+    height: 500px;
     border: 1px solid var(--second-underline);
     border-radius: var(--main-border-radius);
     display: flex;
@@ -359,16 +365,17 @@ main .mini-card-voyage .image {
     border-top-right-radius: var(--main-border-radius);
     border-top-left-radius: var(--main-border-radius);
     position: relative;
-    padding: 5px;
+    /* padding: 5px; */
 }
 
 main .mini-card-voyage .image img {
     border-top-right-radius: var(--main-border-radius);
     border-top-left-radius: var(--main-border-radius);
     overflow: hidden;
-    width: auto; /* Make the image fill the container */
-    height: 100%; /* Maintain aspect ratio */
+    width: 500px; 
+    height: 250px; 
     display: block;
+    object-fit: cover;
 }
 
 main .mini-card-voyage .image .reaction img {
@@ -386,26 +393,40 @@ main .mini-card-voyage .body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 10px;
     gap: 10px;
-    height: 150px;
-    background-color: var(--main-gray-bg);
-    border-radius: var(--main-border-radius);
+    height: 100%;
+    background-color: var(--main-background-card);
+    border-bottom-left-radius: var(--main-border-radius);
+    border-bottom-right-radius: var(--main-border-radius);
 }
 
 main .mini-card-voyage .body .localisation {
     display: flex;
+    align-items: center;
     gap: 10px;
     width: fit-content;
     height: fit-content;
-    border: 2px solid black;
 }
 
-main .mini-card-voyage .body .localisation img {
-    width: 30px;
-    height: 30px;
+main .mini-card-voyage .body form button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    padding: 10px 15px;
     border-radius: var(--main-border-radius);
-    box-shadow: 0 0 5px rgb(184, 180, 180);
+    font-weight: 600;
+    background-color: var(--main--green);
+    cursor: pointer;
 }
+
+main .mini-card-voyage .body form button:hover {
+    box-shadow: var(--main-shadow-hovered);
+}
+
+
 
 /* footer styles */
 

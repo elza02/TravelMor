@@ -51,7 +51,7 @@
         </div>
     </div>
 </section>
-<section class="last">
+<section class="second">
     <div class="mini-card-voyage">
         <div class="image">
             <img src="{% static 'assets/dubai.jpg' %}" alt="image-hotel">
@@ -60,11 +60,13 @@
             </span>
         </div>
         <div class="body">
-            <span class="localisation"><img src="{% static "assets/localisation.png" alt="localisation" %}">Maroc</span>
+            <span class="title">Voyage organisé delux</span>
+            <span class="localisation"><i class="fa-solid fa-location-dot"></i>Maroc, Casa</span>
             <span class="price">Prix: <span>289&euro;</span></span>
             <span class="rating">Durée: <span>8 jours/7 nuits</span></span>
-            <span class="rating">Prix: <span>289&euro;</span></span>
-            <span class="rating">Prix: <span>289&euro;</span></span>
+            <form method="get" action="#">
+                <button type="submit">Details</button>
+            </form>
         </div>
     </div> 
     <div class="mini-card-voyage">
@@ -75,11 +77,30 @@
             </span>
         </div>
         <div class="body">
-            <span class="localisation"><img src="{% static "assets/localisation.png" alt="localisation" %}">Maroc</span>
+            <span class="title">Voyage organisé delux</span>
+            <span class="localisation"><i class="fa-solid fa-location-dot"></i>Maroc, Agadir</span>
             <span class="price">Prix: <span>289&euro;</span></span>
             <span class="rating">Durée: <span>8 jours/7 nuits</span></span>
-            <span class="rating">Prix: <span>289&euro;</span></span>
-            <span class="rating">Prix: <span>289&euro;</span></span>
+            <form method="get" action="#">
+                <button type="submit">Details</button>
+            </form>
+        </div>
+    </div> 
+    <div class="mini-card-voyage">
+        <div class="image">
+            <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
+            <span class="reaction">
+                <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
+            </span>
+        </div>
+        <div class="body">
+            <span class="title">Voyage organisé delux</span>
+            <span class="localisation"><i class="fa-solid fa-location-dot"></i>Maroc, Agadir</span>
+            <span class="price">Prix: <span>289&euro;</span></span>
+            <span class="rating">Durée: <span>8 jours/7 nuits</span></span>
+            <form method="get" action="#">
+                <button type="submit">Details</button>
+            </form>
         </div>
     </div> 
 </section>
