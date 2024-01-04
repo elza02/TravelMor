@@ -31,7 +31,7 @@ class Hotel(models.Model):
     id_hotel = models.AutoField(primary_key=True)
     prix_nuit = models.DecimalField(max_digits=15, decimal_places=2)
     type_chambre = models.CharField(max_length=50)
-    type_hotel = models.IntegerField()
+    type_hotel = models.IntegerField() #c'est le nbr etoile d'hotel 
     n_chambreDispo = models.IntegerField()
     nom_hotel = models.CharField(max_length=50)
     id_ville = models.ForeignKey(Ville, on_delete=models.CASCADE)

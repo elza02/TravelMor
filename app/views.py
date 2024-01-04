@@ -18,6 +18,7 @@ def home (request):
     # # Create Hotel instances
     # hotel1 = models.Hotel.objects.create(
     #     prix_nuit=150.0,
+    #     type_hotel = 5,
     #     type_chambre="Standard",
     #     n_chambreDispo=50,
     #     nom_hotel="Eiffel Tower Hotel",
@@ -25,6 +26,7 @@ def home (request):
     # )
     # hotel2 = models.Hotel.objects.create(
     #     prix_nuit=120.0,
+    #     type_hotel = 3,
     #     type_chambre="Deluxe",
     #     n_chambreDispo=30,
     #     nom_hotel="Sagrada Familia Hotel",
@@ -32,6 +34,7 @@ def home (request):
     # )
     # hotel3 = models.Hotel.objects.create(
     #     prix_nuit=180.0,
+    #     type_hotel = 4,
     #     type_chambre="Suite",
     #     n_chambreDispo=20,
     #     nom_hotel="Colosseum Hotel",
@@ -192,8 +195,9 @@ def home (request):
     # inclure1.save()
     # inclure2.save()
     # inclure3.save()
-    query = models.Avoir.objects
-    return render(request, 'home.html', {'query' : av})
 
+    av = Avoir.objects.all()
+    img = ImageHotel.objects
+    return render(request, 'home.html', {'query' : av,'img' : img})
 
     
