@@ -192,9 +192,8 @@ def home (request):
     # inclure1.save()
     # inclure2.save()
     # inclure3.save()
-    av = Avoir.objects.all()
+    query = models.Avoir.objects
     return render(request, 'home.html', {'query' : av})
->>>>>>> 10feb99cf42eb5e85e1c68696fd43854f0bba064
 
 
     
