@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="{% static "assets/travelmor-icon.png" %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {% block block_css %}{% endblock block_css %}
 </head>
 <body>
 <div class="container">
@@ -36,11 +37,11 @@
         <div class="inner2">
             <nav>
                 <ul>
-                    <li><a href="{% url "home" %}" class="active"><i class="fa-solid fa-house"></i><span>Accueil</span></a></li>
+                    <li><a href="{% url "home" %}" ><i class="fa-solid fa-house"></i><span>Accueil</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-hotel"></i><span>Hôtels </span></a></li>
                     <li><a href="#"><i class="fa-solid fa-wand-magic-sparkles"></i>Special Turquie</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-wand-magic-sparkles"></i>Special Asie</span></a></li>
-                    <li><a href="{% url "voyage_organise" %}"><i class="fa-solid fa-wand-magic-sparkles"></i>Voyage organisé</span></a></li>
+                    <li><a class="active" href="{% url "voyage_organise" %}"><i class="fa-solid fa-wand-magic-sparkles"></i>Voyage organisé</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-kaaba"></i></i><span>Special Omra</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-kaaba"></i></i><span>Special Haj</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-percent"></i><span>Promotion</span></a></li>
