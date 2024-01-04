@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,request
-from . import models
+from .models import *
 from datetime import datetime
 from decimal import Decimal
 from django.utils import timezone
@@ -192,8 +192,8 @@ def home (request):
     # inclure1.save()
     # inclure2.save()
     # inclure3.save()
-    query = models.Voyage.prefetch_related('models.Avoir_set__models.Ville_set').all()
-    return render(request, 'home.html', {'query' : query})
+    av = Avoir.objects.all()
+    return render(request, 'home.html', {'query' : av})
 
 
     
