@@ -52,23 +52,29 @@
     </div>
 </section>
 <section class="second">
+    {% for card in query %}
+    
     <div class="mini-card-voyage">
         <div class="image">
             <img src="{% static 'assets/dubai.jpg' %}" alt="image-hotel">
-            <span class="reaction">
+            {% comment "" %}<span class="reaction">
                 <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
-            </span>
+            </span>{% endcomment %}
         </div>
         <div class="body">
-            <span class="title">Voyage organisé delux</span>
-            <span class="localisation"><i class="fa-solid fa-location-dot"></i>Maroc, Casa</span>
-            <span class="price">Prix: <span>289&euro;</span></span>
-            <span class="rating">Durée: <span>8 jours/7 nuits</span></span>
+            <span class="title">{{card.id_voyage.titre_voyage}}</span>
+            <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{card.id_ville.nom_ville}}</span>
+            <span class="price">Prix: <span>{{card.id_voyage.prix_voyage}}&euro;</span></span>
+            {% with nuit=card.id_voyage.duree_voyage|add:"-1" %}
+            <span class="rating">Durée: <span> {{card.id_voyage.duree_voyage}} jours/{{nuit}} nuits</span></span>
+            {% endwith %}
             <form method="get" action="#">
                 <button type="submit">Details</button>
             </form>
         </div>
     </div> 
+    {% endfor %}
+    {% comment "" %}
     <div class="mini-card-voyage">
         <div class="image">
             <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
@@ -76,6 +82,7 @@
                 <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
             </span>
         </div>
+        
         <div class="body">
             <span class="title">Voyage organisé delux</span>
             <span class="localisation"><i class="fa-solid fa-location-dot"></i>Maroc, Agadir</span>
@@ -102,7 +109,8 @@
                 <button type="submit">Details</button>
             </form>
         </div>
-    </div> 
+        
+    </div> {% endcomment %}
 </section>
 
 {% endblock %}

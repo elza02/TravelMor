@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse,request
-from . import models
+from .models import *
 from datetime import datetime
 from decimal import Decimal
 from django.utils import timezone
@@ -122,6 +122,7 @@ def home (request):
     categorie2 = models.Categorie.objects.create(nom_categorie="City Break")
     categorie3 = models.Categorie.objects.create(nom_categorie="Beach Holiday")
 
+<<<<<<< HEAD
     # Create Voyage instances
     voyage1 = models.Voyage.objects.create(
         prix_voyage=1000.0, duree_voyage=5, transport=True, id_hotel=hotel1, id_promotion=promotion1, id_categorie=categorie1
@@ -132,6 +133,18 @@ def home (request):
     voyage3 = models.Voyage.objects.create(
         prix_voyage=800.0, duree_voyage=4, transport=False, id_hotel=hotel3, id_promotion=promotion3, id_categorie=categorie3
     )
+=======
+    # # Create Voyage instances
+    # voyage1 = models.Voyage.objects.create(
+    #     titre_voyage = "titre voyage",prix_voyage=1000.0, duree_voyage=5, transport=True, id_hotel=hotel1, id_promotion=promotion1, id_categorie=categorie1
+    # )
+    # voyage2 = models.Voyage.objects.create(
+    #     titre_voyage = "titre voyage",prix_voyage=1200.0, duree_voyage=7, transport=True, id_hotel=hotel2, id_promotion=promotion2, id_categorie=categorie2
+    # )
+    # voyage3 = models.Voyage.objects.create(
+    #     titre_voyage = "titre voyage",prix_voyage=800.0, duree_voyage=4, transport=False, id_hotel=hotel3, id_promotion=promotion3, id_categorie=categorie3
+    # )
+>>>>>>> 10feb99cf42eb5e85e1c68696fd43854f0bba064
 
     # Create Commentaire instances
     commentaire1 = models.Commentaire.objects.create(
@@ -157,6 +170,7 @@ def home (request):
         date_notif=timezone.now().date(), type="Reminder", heure_d_notif=timezone.now().time()
     )
 
+<<<<<<< HEAD
     # Create Recevoir instances
     recevoir1 = models.Recevoir.objects.create(id_utilisateur_1=utilisateur1, id_notification=notification1)
     recevoir2 = models.Recevoir.objects.create(id_utilisateur_1=utilisateur2, id_notification=notification2)
@@ -193,6 +207,45 @@ def home (request):
     inclure2.save()
     inclure3.save()
     return render(request, 'home.html', {})
+=======
+    # # Create Recevoir instances
+    # recevoir1 = models.Recevoir.objects.create(id_utilisateur_1=utilisateur1, id_notification=notification1)
+    # recevoir2 = models.Recevoir.objects.create(id_utilisateur_1=utilisateur2, id_notification=notification2)
+    # recevoir3 = models.Recevoir.objects.create(id_utilisateur_1=utilisateur3, id_notification=notification3)
+    # recevoir1.save()
+    # recevoir2.save()
+    # recevoir3.save()
+    # # Create ReserverVoyage instances
+    # reserver_voyage1 = models.ReserverVoyage.objects.create(id_utilisateur_1=utilisateur1, id_voyage=voyage1)
+    # reserver_voyage2 = models.ReserverVoyage.objects.create(id_utilisateur_1=utilisateur2, id_voyage=voyage2)
+    # reserver_voyage3 = models.ReserverVoyage.objects.create(id_utilisateur_1=utilisateur3, id_voyage=voyage3)
+    # reserver_voyage1.save()
+    # reserver_voyage2.save()
+    # reserver_voyage3.save()
+    # # Create Avoir instances
+    # avoir1 = models.Avoir.objects.create(id_voyage=voyage1, id_ville=ville1)
+    # avoir2 = models.Avoir.objects.create(id_voyage=voyage2, id_ville=ville2)
+    # avoir3 = models.Avoir.objects.create(id_voyage=voyage3, id_ville=ville3)
+    # avoir1.save()
+    # avoir2.save()
+    # avoir3.save()
+    # # Create Aimer instances
+    # aimer1 = models.Aimer.objects.create(id_utilisateur_1=utilisateur1, id_voyage=voyage1)
+    # aimer2 = models.Aimer.objects.create(id_utilisateur_1=utilisateur2, id_voyage=voyage2)
+    # aimer3 = models.Aimer.objects.create(id_utilisateur_1=utilisateur3, id_voyage=voyage3)
+    # aimer1.save()
+    # aimer2.save()
+    # aimer3.save()
+    # # Create inclure instances
+    # inclure1 = models.inclure.objects.create(id_voyage=voyage1, id_vol=vol1)
+    # inclure2 = models.inclure.objects.create(id_voyage=voyage2, id_vol=vol2)
+    # inclure3 = models.inclure.objects.create(id_voyage=voyage3, id_vol=vol3)
+    # inclure1.save()
+    # inclure2.save()
+    # inclure3.save()
+    av = Avoir.objects.all()
+    return render(request, 'home.html', {'query' : av})
+>>>>>>> 10feb99cf42eb5e85e1c68696fd43854f0bba064
 
 
     

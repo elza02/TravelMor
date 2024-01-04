@@ -31,9 +31,11 @@ class Hotel(models.Model):
     id_hotel = models.AutoField(primary_key=True)
     prix_nuit = models.DecimalField(max_digits=15, decimal_places=2)
     type_chambre = models.CharField(max_length=50)
+    type_hotel = models.IntegerField()
     n_chambreDispo = models.IntegerField()
     nom_hotel = models.CharField(max_length=50)
     id_ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
+    
 
 class Image(models.Model):
     id_images = models.AutoField(primary_key=True)
@@ -66,6 +68,7 @@ class Utilisateur(models.Model):
 
 class Voyage(models.Model):
     id_voyage = models.AutoField(primary_key=True)
+    titre_voyage = models.CharField(max_length = 50)
     prix_voyage = models.DecimalField(max_digits=15, decimal_places=2)
     duree_voyage = models.IntegerField()
     transport = models.BooleanField()
