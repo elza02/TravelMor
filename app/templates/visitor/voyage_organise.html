@@ -3,11 +3,10 @@
 {% block url_5_class %} active {% endblock url_5_class %}
 {% block title %} voyage-organise {% endblock title %}
 {% block main %}
-<br><br><br><br><br><br><br><br><br><br>
-<h1>Hello from voyage_organise</h1>
+
 <section class="second">
     {% for avoir_instance in query %}
-        {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "voyage_organise"%}
+        {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "voyage_organise"%} 
     <div class="mini-card-voyage">
         <div class="image">
             <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
@@ -27,7 +26,7 @@
                      
         </div>        
     </div> 
-    {% endif%}
+     {% endif%} 
     {% endfor %}
 </section>
 {% endblock main %}

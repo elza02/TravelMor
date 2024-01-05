@@ -212,9 +212,9 @@ def voyage_organise(request):
         'id_voyage__id_promotion',
         'id_voyage__id_categorie',
         'id_ville__id_pays'
-    ).filter(id_voyage__id_promotion__isnull=True)
-    print(str(query.query))
-    query = query.all()
+    ).all()
+    
+    
     return render(request, 'visitor/voyage_organise.html', {'query' : query})
 
 
