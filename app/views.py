@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse,request
-from . import models
+from .models import *
 from datetime import datetime
 from decimal import Decimal
 from django.utils import timezone
@@ -203,7 +203,7 @@ def voyage_organise(request):
     # img = ImageHotel.objects
     # return render(request, 'voyage_organise.html', {'query' : av,'img' : img})
     # query = models.Avoir.objects.select_related('id_voyage__id__hotel', 'id_voyage__id__promotion', 'id_voyage__id__categorie', 'id_ville__id__pays')
-    query = models.Avoir.objects.select_related(
+    query = Avoir.objects.select_related(
         'id_voyage__id_hotel__id_ville__id_pays',  # Inclure le pays lié à l'hôtel
         'id_voyage__id_promotion',
         'id_voyage__id_categorie',
@@ -217,7 +217,7 @@ def voyage_organise_details(request, id_voyage):
     # img = ImageHotel.objects
     # return render(request, 'voyage_organise.html', {'query' : av,'img' : img})
     # query = models.Avoir.objects.select_related('id_voyage__id__hotel', 'id_voyage__id__promotion', 'id_voyage__id__categorie', 'id_ville__id__pays')
-    avoir_instance = get_object_or_404(models.Avoir.objects.select_related(
+    avoir_instance = get_object_or_404(Avoir.objects.select_related(
             'id_voyage__id_hotel',
             'id_voyage__id_promotion',
             'id_voyage__id_categorie',
@@ -225,4 +225,13 @@ def voyage_organise_details(request, id_voyage):
         ), id=id_voyage)
 
     return render(request, 'voyage_organise_details.html', {'avoir_instance' : avoir_instance})
-
+def paysRelatedToVoyage(ville):
+    return Avoir.objects.get(id_ville = ville).id_ville.id_pays
+def promotions(request):
+    query = Avoir.objects.select_related(
+        'id_voyage__id_hotel__id_ville__id_pays',  # Inclure le pays lié à l'hôtel
+        'id_voyage__id_promotion',
+        'id_voyage__id_categorie',
+        'id_ville__id_pays'  # Inclure le pays lié à la ville
+        ).all()
+    return render(request, 'promotions.html', {'query' : query})
