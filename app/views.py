@@ -392,7 +392,8 @@ def pays_form(request):
         form = PaysForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('success')  # Redirect to a success page
+            # return redirect('success')  # Redirect to a success page
+            return render(request, 'admin_pages/pays_form.html', {'form' : form, 'form_msg' : 'succes'})  # Redirect to a success page
     else:
         form = PaysForm()
 
