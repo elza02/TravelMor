@@ -59,3 +59,8 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+
+form input[type='text'] {
+    border: 1px solid red;
+    outline: none;
+}

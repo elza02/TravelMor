@@ -16,13 +16,20 @@
                 <img src="{% static 'assets/travelMor-logo-black.png' %}" alt="LOGO TRAVEL MOR">
             </div>
             <ul>
-                <li><a href="{% url "pays_form" %}">PAYS</a></li>
-                <li><a href="#">link</a></li>
-                <li><a href="#">link</a></li>
-                <li><a href="#">link</a></li>
-                <li><a href="#">link</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Voyages</a></li>
+                <li><a href="#">Hotels</a></li>
+                <li><a href="#">Promotions</a></li>
+                <li><a href="#">Vols</a></li>
+                <li><a href="#">Notifications</a></li>
+                <li><a href="#">Commentaires</a></li>
+                <li><a href="#">Villes</a></li>
+                <li><a href="{% url "pays_form" %}">Pays</a></li>
             </ul>
         </nav>
+        <div class="secondary-menu">
+            <h3>deconnexion</h3>
+        </div>
         <main>{% block main %} {% endblock main %}</main>
     </div>
     {% block js_block %}{% endblock js_block %}
