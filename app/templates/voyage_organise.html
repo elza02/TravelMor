@@ -4,6 +4,7 @@
 {% block main %}
 <section class="second">
     {% for avoir_instance in query %}
+        {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "voyage_organise"%}
     <div class="mini-card-voyage">
         <div class="image">
             <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
@@ -23,6 +24,7 @@
                      
         </div>        
     </div> 
+    {% endif%}
     {% endfor %}
 </section>
 {% endblock main %}
