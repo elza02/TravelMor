@@ -265,3 +265,34 @@ def promotions_details(request, id_voyage):
         'id_ville__id_pays'
     ).filter(id_promotion=promotion)
     return render(request, 'promotions_details.html', {'avoir_instance' : avoir_instance})
+
+def hotels(request):
+    return render(request, 'hotels.html', {})
+
+def hotels_details(request):
+    return render(request, 'hotels_details.html', {})
+
+
+def special_turqie(request):
+    return render(request, 'special_turqie.html', {})
+
+def special_turqie_details(request):
+    return render(request, 'special_turqie_details.html', {})
+
+def special_asie(request):
+    return render(request, 'special_asie.html', {})
+
+def special_asie_details(request):
+    return render(request, 'special_asie_details.html', {})
+
+def special_omra(request):
+    return render(request, 'special_omra.html', {})
+
+def special_omra_details(request):
+    return render(request, 'special_omra_details.html', {})
+
+def special_haj(request):
+    return render(request, 'special_haj.html', {})
+
+def special_haj_details(request):
+    return render(request, 'special_haj_details.html', {})
