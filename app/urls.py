@@ -23,4 +23,10 @@ urlpatterns = [
     
     path('special_haj/', views.special_haj, name="special_haj"),
     path('special_haj_details/<int:id_voyage>/', views.special_haj_details, name="special_haj_details"),
+    # admin urls
+    path('admin_page', views.admin_view, name="admin"),
+    # path('pays', views.pays, name="pays"),
+    # path('pays/ajouter', views.ajouter_pays, name="ajouter_pays"),
+    path('pays/ajouter', views.pays_form, name="pays_form"),
+    
 ]

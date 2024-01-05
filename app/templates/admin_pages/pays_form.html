@@ -1,0 +1,10 @@
+{% extends 'admin_pages/base.html' %}
+{% block title %} pays {% endblock title %}
+{% block main %}
+    <h1>administration pays</h1>
+    <form action="{% url 'pays_form' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ajouter</button>
+    </form>
+{% endblock main %}

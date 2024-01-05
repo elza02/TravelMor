@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN - {% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static "admin_styles/base.css" %}">
+    {% block css_block %}{% endblock css_block %}
+</head>
+<body>
+    {% comment %} <h1>C'est l'administration</h1> {% endcomment %}
+    <div class="container">
+        <nav class="main_menu">
+            <div class="logo">
+                <img src="{% static 'assets/travelMor-logo-black.png' %}" alt="LOGO TRAVEL MOR">
+            </div>
+            <ul>
+                <li><a href="{% url "pays_form" %}">PAYS</a></li>
+                <li><a href="#">link</a></li>
+                <li><a href="#">link</a></li>
+                <li><a href="#">link</a></li>
+                <li><a href="#">link</a></li>
+            </ul>
+        </nav>
+        <main>{% block main %} {% endblock main %}</main>
+    </div>
+    {% block js_block %}{% endblock js_block %}
+</body>
+</html>

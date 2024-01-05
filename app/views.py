@@ -296,3 +296,31 @@ def special_haj(request):
 
 def special_haj_details(request):
     return render(request, 'visitor/special_haj_details.html', {})
+
+# admin views
+def admin_view(request):
+    return render(request, 'admin_pages/dashboard.html', {})
+
+# def pays(request):
+#     ajouter_pays(request)
+#     return render(request, 'admin_pages/pays.html', {})
+
+# def ajouter_pays(request):
+#     pays = models.Pays.objects.create(nom_pays=request.nom_pays)
+#     pays.save()
+#     return render(request, 'admin_pages/pays.html', {})
+
+# myapp/views.py
+from django.shortcuts import render, redirect
+from .forms import PaysForm
+
+def pays_form(request):
+    if request.method == 'POST':
+        form = PaysForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('success')  # Redirect to a success page
+    else:
+        form = PaysForm()
+
+    return render(request, 'admin_pages/pays_form.html', {'form': form})
