@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse,request
-from .models import *
+from . import models
 from datetime import datetime
 from decimal import Decimal
 from django.utils import timezone
@@ -135,7 +135,10 @@ def home (request):
     # voyage3 = models.Voyage.objects.create(
     #     titre_voyage = "titre voyage",prix_voyage=800.0, duree_voyage=4, transport=False, id_hotel=hotel3, id_promotion=promotion3, id_categorie=categorie3
     # )
-
+    # voyage4 = models.Voyage.objects.create(
+    #     titre_voyage = "titre voyage 4",prix_voyage=10000.0, duree_voyage=12, transport=False, id_hotel=hotel3, id_categorie=categorie3
+    # )
+    # voyage4.save()
     # # Create Commentaire instances
     # commentaire1 = models.Commentaire.objects.create(
     #     text_comment="Great experience!", date_redaction=timezone.now().date(), heure_redaction=timezone.now().time(), evaluation=5, id_voyage=voyage1
@@ -195,43 +198,70 @@ def home (request):
     # inclure1.save()
     # inclure2.save()
     # inclure3.save()
-
     return render(request, 'home.html', {})
+
+
 
 def voyage_organise(request):
     # av = Avoir.objects.all()
     # img = ImageHotel.objects
     # return render(request, 'voyage_organise.html', {'query' : av,'img' : img})
     # query = models.Avoir.objects.select_related('id_voyage__id__hotel', 'id_voyage__id__promotion', 'id_voyage__id__categorie', 'id_ville__id__pays')
-    query = Avoir.objects.select_related(
-        'id_voyage__id_hotel__id_ville__id_pays',  # Inclure le pays lié à l'hôtel
+    query = models.Avoir.objects.select_related(
+        'id_voyage__id_hotel__id_ville__id_pays',
         'id_voyage__id_promotion',
         'id_voyage__id_categorie',
-        'id_ville__id_pays'  # Inclure le pays lié à la ville
-        ).all()
-
+        'id_ville__id_pays'
+    ).filter(id_voyage__id_promotion__isnull=True)
+    print(str(query.query))
+    query = query.all()
     return render(request, 'voyage_organise.html', {'query' : query})
+
+
 
 def voyage_organise_details(request, id_voyage):
     # av = Avoir.objects.all()
     # img = ImageHotel.objects
     # return render(request, 'voyage_organise.html', {'query' : av,'img' : img})
     # query = models.Avoir.objects.select_related('id_voyage__id__hotel', 'id_voyage__id__promotion', 'id_voyage__id__categorie', 'id_ville__id__pays')
-    avoir_instance = get_object_or_404(Avoir.objects.select_related(
+    avoir_instance = get_object_or_404(models.Avoir.objects.select_related(
             'id_voyage__id_hotel',
             'id_voyage__id_promotion',
             'id_voyage__id_categorie',
             'id_ville__id_pays'
         ), id=id_voyage)
-
     return render(request, 'voyage_organise_details.html', {'avoir_instance' : avoir_instance})
+
+
+
 def paysRelatedToVoyage(ville):
-    return Avoir.objects.get(id_ville = ville).id_ville.id_pays
+    return models.Avoir.objects.get(id_ville = ville).id_ville.id_pays
+
+
+
 def promotions(request):
-    query = Avoir.objects.select_related(
+    query = models.Avoir.objects.select_related(
         'id_voyage__id_hotel__id_ville__id_pays',  # Inclure le pays lié à l'hôtel
         'id_voyage__id_promotion',
         'id_voyage__id_categorie',
         'id_ville__id_pays'  # Inclure le pays lié à la ville
         ).all()
     return render(request, 'promotions.html', {'query' : query})
+
+
+
+def promotions_details(request, id_voyage):
+    # av = Avoir.objects.all()
+    # img = ImageHotel.objects
+    # return render(request, 'promotions.html', {'query' : av,'img' : img})
+    # query = models.Avoir.objects.select_related('id_voyage__id__hotel', 'id_voyage__id__promotion', 'id_voyage__id__categorie', 'id_ville__id__pays')
+    # First, check if the promotion with pourcentage greater than 0 exists
+    promotion = get_object_or_404(models.Promotion, pourcentage__gt=0)
+    # Then, fetch the Avoir instances related to the promotion
+    avoir_instance = models.Avoir.objects.select_related(
+        'id_voyage__id_hotel',
+        'id_voyage__id_promotion',
+        'id_voyage__id_categorie',
+        'id_ville__id_pays'
+    ).filter(id_promotion=promotion)
+    return render(request, 'promotions_details.html', {'avoir_instance' : avoir_instance})
