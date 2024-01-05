@@ -1,6 +1,32 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 {% block url_7_class %} active {% endblock url_7_class %}
+{% block title %} voyage-organise {% endblock title %}
 {% block main %}
-    <br><br><br><br><br><br><br><br><br><br>
-    <h1>Hello from special_haj</h1>
+
+<section class="second">
+    {% for avoir_instance in query %}
+        {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "special_haj"%} 
+    <div class="mini-card-voyage">
+        <div class="image">
+            <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
+            <span class="reaction">
+                <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
+            </span>
+        </div>
+        <div class="body">
+            <span class="title">{{ avoir_instance.id_voyage.titre_voyage }}</span>
+            <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
+            <span class="price">Prix: <span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs</span></span>
+            <span class="price">Nom hotel: <span>{{ avoir_instance.id_voyage.id_hotel.nom_hotel }}</span></span>
+            <span class="rating">Durée: <span>{{ avoir_instance.id_voyage.duree_voyage }} jours / {{ avoir_instance.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
+            <form method="get" action="/voyage_organise_details/{{ avoir_instance.id_voyage.id_voyage }}">
+                <button type="submit">Details</button>
+            </form>
+                     
+        </div>        
+    </div> 
+     {% endif%} 
+    {% endfor %}
+</section>
 {% endblock main %}

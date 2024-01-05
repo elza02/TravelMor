@@ -3,8 +3,6 @@
 {% block url_8_class %} active {% endblock url_8_class %}
 {% block title %} promotions {% endblock title %}
 {% block main %}
-<br><br><br><br><br><br><br><br><br><br>
-<h1>Hello from promotions</h1>
 <section class="second">
     {% for avoir_instance in query %}
     {% if avoir_instance.id_voyage.id_promotion.pourcentage > 0 %}
