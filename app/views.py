@@ -198,7 +198,7 @@ def home (request):
     # inclure1.save()
     # inclure2.save()
     # inclure3.save()
-    return render(request, 'home.html', {})
+    return render(request, 'visitor/home.html', {})
 
 
 
@@ -215,7 +215,7 @@ def voyage_organise(request):
     ).filter(id_voyage__id_promotion__isnull=True)
     print(str(query.query))
     query = query.all()
-    return render(request, 'voyage_organise.html', {'query' : query})
+    return render(request, 'visitor/voyage_organise.html', {'query' : query})
 
 
 
@@ -230,7 +230,7 @@ def voyage_organise_details(request, id_voyage):
             'id_voyage__id_categorie',
             'id_ville__id_pays'
         ), id=id_voyage)
-    return render(request, 'voyage_organise_details.html', {'avoir_instance' : avoir_instance})
+    return render(request, 'visitor/voyage_organise_details.html', {'avoir_instance' : avoir_instance})
 
 
 
@@ -246,7 +246,7 @@ def promotions(request):
         'id_voyage__id_categorie',
         'id_ville__id_pays'  # Inclure le pays lié à la ville
         ).all()
-    return render(request, 'promotions.html', {'query' : query})
+    return render(request, 'visitor/promotions.html', {'query' : query})
 
 
 
@@ -264,35 +264,35 @@ def promotions_details(request, id_voyage):
         'id_voyage__id_categorie',
         'id_ville__id_pays'
     ).filter(id_promotion=promotion)
-    return render(request, 'promotions_details.html', {'avoir_instance' : avoir_instance})
+    return render(request, 'visitor/promotions_details.html', {'avoir_instance' : avoir_instance})
 
 def hotels(request):
-    return render(request, 'hotels.html', {})
+    return render(request, 'visitor/hotels.html', {})
 
 def hotels_details(request):
-    return render(request, 'hotels_details.html', {})
+    return render(request, 'visitor/hotels_details.html', {})
 
 
 def special_turqie(request):
-    return render(request, 'special_turqie.html', {})
+    return render(request, 'visitor/special_turqie.html', {})
 
 def special_turqie_details(request):
-    return render(request, 'special_turqie_details.html', {})
+    return render(request, 'visitor/special_turqie_details.html', {})
 
 def special_asie(request):
-    return render(request, 'special_asie.html', {})
+    return render(request, 'visitor/special_asie.html', {})
 
 def special_asie_details(request):
-    return render(request, 'special_asie_details.html', {})
+    return render(request, 'visitor/special_asie_details.html', {})
 
 def special_omra(request):
-    return render(request, 'special_omra.html', {})
+    return render(request, 'visitor/special_omra.html', {})
 
 def special_omra_details(request):
-    return render(request, 'special_omra_details.html', {})
+    return render(request, 'visitor/special_omra_details.html', {})
 
 def special_haj(request):
-    return render(request, 'special_haj.html', {})
+    return render(request, 'visitor/special_haj.html', {})
 
 def special_haj_details(request):
-    return render(request, 'special_haj_details.html', {})
+    return render(request, 'visitor/special_haj_details.html', {})
