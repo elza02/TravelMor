@@ -73,7 +73,7 @@ class Voyage(models.Model):
     duree_voyage = models.IntegerField()
     transport = models.BooleanField()
     id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    id_promotion = models.OneToOneField(Promotion, on_delete=models.CASCADE, unique=True,null=True)
+    id_promotion = models.OneToOneField(Promotion, on_delete=models.CASCADE,null=True)
     id_categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
 
 class Commentaire(models.Model):
