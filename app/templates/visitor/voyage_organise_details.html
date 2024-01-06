@@ -6,17 +6,17 @@
 
 <h1>{{ id_voyage }}</h1>
 
-<div class="mini-card-voyage">
+<div class="detailed-card-voyage">
     <div class="image">
         <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
-        <span class="reaction">
+        {% comment %} <span class="reaction">
             <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
-        </span>
+        </span> {% endcomment %}
     </div>
     <div class="body">
         <span class="title">{{ avoir_instance.id_voyage.titre_voyage }}</span>
         <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
-        <span class="price">Prix: <span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs</span></span>
+        <span class="price">à partir de <span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs par personne</span></span>
         <span class="price">Nom hotel: <span>{{ avoir_instance.id_voyage.id_hotel.nom_hotel }}</span></span>
         <span class="rating">Durée: <span>{{ avoir_instance.id_voyage.duree_voyage }} jours / {{ avoir_instance.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
         <form method="get" action="/voyage_organise_details/{{ avoir_instance.id_voyage.id_voyage }}">
@@ -24,20 +24,43 @@
         </form>
     </div>            
 </div> 
+
 <div class = "vols-box">
-    {% for vol in vols%}
-
-
-    <div class = "vol">
-        <div class = "image-vol"> 
-            <img src="#">
+    {% for vol in vols %}
+    <div class="vol">
+        <div class="image-vol"> 
+            <img src="{% static "assets/royal-air-maroc.svg" %}">
+            <div class="from">{{ vol.id_vol.date_d_vol }}</div>
+            <div class="to">{{ vol.id_vol.date_f_vol }}</div>
         </div>
-        <div class = "body">
-            <p class="descrp">Fake it until u make it</p>
+        <div class="body">
+            <p class="descrp">{{ avoir_instance.id_voyage.id_hotel.type_hotel }}</p>
         </div>
     </div>
-
     {% endfor%}
 </div>
+
+<div class="comments">
+    <h4>Les commentaire sur ce voyage : ({{ avoir_instance.id_voyage.id_hotel.type_hotel }} commentaires)</h4>
+    <div class="comment">
+        <div class="author">hamid</div>
+        <div class="text">nadi!</div>
+        <div class="time">10:10</div>
+        <div class="evaluation">4</div>
+    </div>
+</div>
 {% endblock main %}
+{% block js_block %}
+<script>
+    const evaluation_div = document.querySelector('div[class="evaluation"]');
+    document.addEventListener('DOMContentLoaded', function() {
+    let evaluation = evaluation_div.textContent;
+    let text = '';
+    for(let i = 0; i < parseInt(evaluation); i++) {
+        text += '*';
+    }                
+    evaluation_div.innerHTML = text;
+});
+</script>
+{% endblock js_block %}
 

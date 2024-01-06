@@ -283,7 +283,8 @@ def voyage_organise_details(request, id_voyage):
             'id_voyage__id_categorie',
             'id_ville__id_pays'
         ), id=id_voyage)
-    return render(request, 'visitor/voyage_organise_details.html', {'avoir_instance' : avoir_instance})
+    inclure_instance = models.inclure.objects.filter(id_voyage=id_voyage)
+    return render(request, 'visitor/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir_instance' : avoir_instance, 'vols' : inclure_instance})
 
 
 

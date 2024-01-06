@@ -348,6 +348,8 @@ main .second {
     gap: 30px;
 }
 
+/* minimal cards styling */
+
 main .mini-card-voyage {
     width: 400px;
     height: 500px;
@@ -435,7 +437,81 @@ main .mini-card-voyage .body form button:hover {
     box-shadow: var(--main-shadow-hovered);
 }
 
+/* detailed cards styling */
 
+main .detailed-card-voyage {
+    max-width: 100%;
+    margin: 20px 100px;
+    padding: 20px;
+    height: 500px;
+    border: 1px solid var(--second-underline);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--main-shadow);
+    overflow: hidden;
+}
+
+main .detailed-card-voyage .image {
+    width: 100%;
+    height: fit-content;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+    position: relative;
+    border: 1px solid green;
+}
+
+main .detailed-card-voyage .image img {
+    overflow: hidden;
+    width: 100%; 
+    height: auto; 
+    display: block;
+    object-fit: cover;
+}
+
+/* vols styling */
+
+main .vols-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 100px;
+    box-shadow: var(--main-shadow-hovered);
+}
+
+main .vols-box .vol {
+    border: 1px solid black; 
+    width: 100%;
+    padding: 10px;
+}
+
+main .vols-box .vol img {
+    width: 80px;
+    height: auto;
+}
+
+/* comments styling */
+
+main .comments {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+    align-items: center;
+    margin: 20px 100px;
+    box-shadow: var(--main-shadow-hovered);
+}
+
+main .comments h4 {
+    width: 100%;
+}
+
+main .comments .comment {
+
+}
 
 /* footer styles */
 
