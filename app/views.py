@@ -195,13 +195,13 @@ def home (request):
     # voyage5.save()
     # voyage6.save()
     # # Create Commentaire instances
-    # commentaire1 = models.Commentaire.objects.create(
+    # commentaire1 = models.Commentaire.objects.create(id_utilisateur = utilisateur1,
     #     text_comment="Great experience!", date_redaction=timezone.now().date(), heure_redaction=timezone.now().time(), evaluation=5, id_voyage=voyage1
     # )
-    # commentaire2 = models.Commentaire.objects.create(
+    # commentaire2 = models.Commentaire.objects.create(id_utilisateur = utilisateur2,
     #     text_comment="Wonderful trip!", date_redaction=timezone.now().date(), heure_redaction=timezone.now().time(), evaluation=4, id_voyage=voyage2
     # )
-    # commentaire3 = models.Commentaire.objects.create(
+    # commentaire3 = models.Commentaire.objects.create(id_utilisateur = utilisateur3,
     #     text_comment="Not bad!", date_redaction=timezone.now().date(), heure_redaction=timezone.now().time(), evaluation=3, id_voyage=voyage3
     # )
     # commentaire1.save()

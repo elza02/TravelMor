@@ -56,7 +56,7 @@ class Vol(models.Model):
     prix_vol = models.DecimalField(max_digits=15, decimal_places=2)
 
 class Utilisateur(models.Model):
-    id_utilisateur_1 = models.AutoField(primary_key=True)
+    id_utilisateur = models.AutoField(primary_key=True)
     mot_d_passe = models.CharField(max_length=10)
     est_admin = models.BooleanField()
     nom = models.CharField(max_length=15)
@@ -83,6 +83,8 @@ class Commentaire(models.Model):
     heure_redaction = models.TimeField()
     evaluation = models.IntegerField()
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
+    id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    
 
 class Recevoir(models.Model):
     id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
