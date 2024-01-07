@@ -2,6 +2,43 @@
 {% load static %}
 {% block url_1_class %} active {% endblock url_1_class %}
 {% block title %} Home {% endblock %}
+{% block block_css %}
+    <style>
+        header {
+            background-color: rgb(100, 100, 100, 0.3);
+            backdrop-filter: blur(20px);
+        }
+        .search input {
+            border: 1px solid var(--second-underline);
+            background-color: rgb(100, 100, 100, 0.3);
+            backdrop-filter: blur(20px);
+        }
+        header .inner2 ul li a.active::before {
+            background-color: rgb(255, 255, 255);
+        }
+        header .inner2 ul li a:not(.active):hover {
+            color: rgb(255, 255, 255);
+        }
+        header .inner2 ul li a:hover::before {
+            background-color: rgb(255, 255, 255);
+        }
+        
+        header .inner2 ul li a.active {
+            color: rgba(255, 255, 255);
+        }        
+        .search input::placeholder {
+            color: #fff;
+        }
+        body .container {
+            background: linear-gradient(90deg, #000000d3, rgba(0, 0, 0, 0.448)), url('{% static "assets/background-home.jpg" %}') center/cover;
+            height: 700px;
+            position: relative;
+        }
+        body .container h1 {
+            background-color: red;
+        }
+    </style>
+{% endblock block_css %}
 {% block js_block %} 
     <script src="{% static 'js/home.js' %}" type="text/javascript"></script>
     <script>
@@ -15,63 +52,56 @@
     </script>
 {% endblock %}
 {% block main %}
-<section class="first">
-    <h1>Voyager <span>le monde</span></h1>
-    <div class="services-cards">
-        <div class="card">
-            <div class="icon">
-                <img src="{% static "assets/secured-payment.png" %}" alt="services-message">
+    <section class="first">
+        <h1>Voyager <span>le monde</span></h1>
+        <div class="services-cards">
+            <div class="card">
+                <div class="icon">
+                    <img src="{% static "assets/secured-payment.png" %}" alt="services-message">
+                </div>
+                <p class="text">
+                    Paiement Securisé
+                </p>
             </div>
-            <p class="text">
-                Paiement Securisé
-            </p>
-        </div>
-        <div class="card">
-            <div class="icon">
-                <img src="{% static "assets/bill_repo.png" %}" alt="services-message">
+            <div class="card">
+                <div class="icon">
+                    <img src="{% static "assets/bill_repo.png" %}" alt="services-message">
+                </div>
+                <p class="text">
+                    0 Dhs Frais De Dossier
+                </p>
             </div>
-            <p class="text">
-                0 Dhs Frais De Dossier
-            </p>
-        </div>
-        <div class="card">
-            <div class="icon">
-                <img src="{% static "assets/price-tag.png" %}" alt="services-message">
+            <div class="card">
+                <div class="icon">
+                    <img src="{% static "assets/price-tag.png" %}" alt="services-message">
+                </div>
+                <p class="text">
+                    Meilleurs Tarifs Garanties
+                </p>
             </div>
-            <p class="text">
-                Meilleurs Tarifs Garanties
-            </p>
-        </div>
-        <div class="card">
-            <div class="icon">
-                <img src="{% static "assets/24-hours.png" %}" alt="services-message">
+            <div class="card">
+                <div class="icon">
+                    <img src="{% static "assets/24-hours.png" %}" alt="services-message">
+                </div>
+                <p class="text">
+                    Assistance 24H/24
+                </p>
             </div>
-            <p class="text">
-                Assistance 24H/24
-            </p>
         </div>
-    </div>
-</section>
-<section class="second">
-    {% comment %} {% for card in query %}
-    
-    <div class="mini-card-voyage">
-        <div class="image">
-            <img src="{% static 'assets/dubai.jpg' %}" alt="image-hotel">
-        </div>
-        <div class="body">
-            <span class="title">{{card.id_voyage.titre_voyage}}</span>
-            <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{card.id_ville.nom_ville}}</span>
-            <span class="price">Prix: <span>{{card.id_voyage.prix_voyage}}&euro;</span></span>
-            {% with nuit=card.id_voyage.duree_voyage|add:"-1" %}
-            <span class="rating">Durée: <span> {{card.id_voyage.duree_voyage}} jours/{{nuit}} nuits</span></span>
-            {% endwith %}
-            <form method="get" action="#">
-                <button type="submit">Details</button>
-            </form>
-        </div>
-    </div> 
-    {% endfor %} {% endcomment %}
-</section>
-
+    </section>
+    <section class="second">
+        nothing
+        <br><br><br><br><br><br><br><br><br><br>
+        nothing
+        <br><br><br><br><br><br><br><br><br><br>
+        nothing
+        <br><br><br><br><br><br><br><br><br><br>
+        nothing
+        <br><br><br><br><br><br><br><br><br><br>
+        nothing
+        <br><br><br><br><br><br><br><br><br><br>
+        nothing
+        <br><br><br><br><br><br><br><br><br><br>
+        nothing
+    </section>
 {% endblock %}
