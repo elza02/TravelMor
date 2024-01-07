@@ -11,9 +11,10 @@ urlpatterns = [
     
     path('promotions_details/<int:id_voyage>/', views.promotions_details, name="promotions_details"),
     path('hotels/', views.hotels, name="hotels"),
-    
     path('hotels_details/<int:id_voyage>/', views.hotels_details, name="hotels_details"),
+    
     path('special_turqie/', views.special_turqie, name="special_turqie"),
+    path('special_turqie_details/<int:id_voyage>/', views.special_turqie_details, name="special_turqie_details"),
     
     path('special_asie/', views.special_asie, name="special_asie"),
     path('special_asie_details/<int:id_voyage>/', views.special_asie_details, name="special_asie_details"),

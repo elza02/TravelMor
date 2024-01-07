@@ -264,28 +264,15 @@ def home (request):
 
 
 def voyage_organise(request):
-    query = models.Avoir.objects.select_related(
-        'id_voyage__id_hotel__id_ville__id_pays',
-        'id_voyage__id_promotion',
-        'id_voyage__id_categorie',
-        'id_ville__id_pays'
-    ).all()
-    
-    
+    query = models.Avoir.objects.all()  
     return render(request, 'visitor/voyage_organise.html', {'query' : query})
 
 
-
 def voyage_organise_details(request, id_voyage):
-    avoir_instance = get_object_or_404(models.Avoir.objects.select_related(
-            'id_voyage__id_hotel',
-            'id_voyage__id_promotion',
-            'id_voyage__id_categorie',
-            'id_ville__id_pays'
-        ), id=id_voyage)
+    avoir = models.Avoir.objects.filter(id_voyage = id_voyage)
     inclure_instance = models.inclure.objects.filter(id_voyage=id_voyage)
-    return render(request, 'visitor/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir_instance' : avoir_instance, 'vols' : inclure_instance})
-
+    comment = models.Commentaire.objects.filter(id_voyage = id_voyage)
+    return render(request, 'visitor/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 
 def paysRelatedToVoyage(ville):
@@ -324,48 +311,28 @@ def hotels_details(request):
 
 
 def special_turqie(request):
-    query = models.Avoir.objects.select_related(
-        'id_voyage__id_hotel__id_ville__id_pays',
-        'id_voyage__id_promotion',
-        'id_voyage__id_categorie',
-        'id_ville__id_pays'
-    ).all()
+    query = models.Avoir.objects.all()
     return render(request, 'visitor/special_turqie.html', {'query' :query})
 
 def special_turqie_details(request):
     return render(request, 'visitor/special_turqie_details.html', {})
 
 def special_asie(request):
-    query = models.Avoir.objects.select_related(
-        'id_voyage__id_hotel__id_ville__id_pays',
-        'id_voyage__id_promotion',
-        'id_voyage__id_categorie',
-        'id_ville__id_pays'
-    ).all()
+    query = models.Avoir.objects.all()
     return render(request, 'visitor/special_asie.html', {'query' :query})
 
 def special_asie_details(request):
     return render(request, 'visitor/special_asie_details.html', {})
 
 def special_omra(request):
-    query = models.Avoir.objects.select_related(
-        'id_voyage__id_hotel__id_ville__id_pays',
-        'id_voyage__id_promotion',
-        'id_voyage__id_categorie',
-        'id_ville__id_pays'
-    ).all()
+    query = models.Avoir.objects.all()
     return render(request, 'visitor/special_omra.html', {'query' :query})
 
 def special_omra_details(request):
     return render(request, 'visitor/special_omra_details.html', {})
 
 def special_haj(request):
-    query = models.Avoir.objects.select_related(
-        'id_voyage__id_hotel__id_ville__id_pays',
-        'id_voyage__id_promotion',
-        'id_voyage__id_categorie',
-        'id_ville__id_pays'
-    ).all()
+    query = models.Avoir.objects.all()
     return render(request, 'visitor/special_haj.html', {'query' :query})
 
 def special_haj_details(request):
