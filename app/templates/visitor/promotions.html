@@ -2,6 +2,13 @@
 {% load static %}
 {% block url_8_class %} active {% endblock url_8_class %}
 {% block title %} promotions {% endblock title %}
+{% block block_css %}
+<style>
+    .mini-card-hotel .body {
+        gap: 25px;
+    }
+</style>
+{% endblock block_css %}
 {% block main %}
 <section class="second">
     {% for avoir_instance in query %}
@@ -14,14 +21,16 @@
             </span>
         </div>
         <div class="body">
-            <span class="title">{{ avoir_instance.id_voyage.titre_voyage }}</span>
-            <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
-            <span class="price">Prix: <span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs</span></span>
-            <span class="price">Nom hotel: <span>{{ avoir_instance.id_voyage.id_hotel.nom_hotel }}</span></span>
+            <div class="title-localisation">
+                <span class="title">{{ avoir_instance.id_voyage.titre_voyage }}</span>
+                <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
+            </div>
+            <span class="price"><img src="{% static 'assets/background-pricing.png' %}" alt="background-pricing">Prix: <span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs</span></span>
+            <span class="nom-hotel">Nom hotel: <span>{{ avoir_instance.id_voyage.id_hotel.nom_hotel }}</span></span>
             <span class="rating">Durée: <span>{{ avoir_instance.id_voyage.duree_voyage }} jours / {{ avoir_instance.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
             <span class="rating">Promotion: <span>{{ avoir_instance.id_voyage.id_promotion.pourcentage }} %</span></span>
             <form method="get" action="/promotions_details/{{ avoir_instance.id_voyage.id_voyage }}">
-                <button type="submit">Details</button>
+                <button type="submit"><i class="fa-solid fa-angles-right">&nbsp;&nbsp;</i>Details</button>
             </form>
                      
         </div>        

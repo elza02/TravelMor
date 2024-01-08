@@ -2,9 +2,6 @@
 {% load static %}
 {% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
 {% block main %}
-<div style="height: 200px;"></div>
-
-<h1>{{ id_voyage }}</h1>
 {% for avoir in avoir%}
 <div class="detailed-card-voyage">
     <div class="image">
@@ -16,7 +13,7 @@
     <div class="body">
         <span class="title">{{ avoir.id_voyage.titre_voyage }}</span>
         <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir.id_ville.id_pays.nom_pays }}, {{ avoir.id_ville.nom_ville }}</span>
-        <span class="price">à partir de <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span>
+        <div class="price">à partir de <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></div>
         <span class="price">Nom hotel: <span>{{ avoir.id_voyage.id_hotel.nom_hotel }}</span></span>
         <span class="rating">Durée: <span>{{ avoir.id_voyage.duree_voyage }} jours / {{ avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
         <form method="get" action="/voyage_organise_details/{{ avoir.id_voyage.id_voyage }}">

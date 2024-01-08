@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
+{% block title %} voyage organise details - {{ id_promotion }} {% endblock title %}
 {% block main %}
 <div style="height: 200px;"></div>
 
-<h1>{{ id_voyage }}</h1>
+<h1>{{ id_promotion }}</h1>
 
 <div class="mini-card-voyage">
     <div class="image">
@@ -14,13 +14,13 @@
         </span> {% endcomment %}
     </div>
     <div class="body">
-        <span class="title">{{ avoir_instance.id_voyage.titre_voyage }}</span>
-        <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
-        <span class="price">Prix: <span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs</span></span>
-        <span class="price">Nom hotel: <span>{{ avoir_instance.id_voyage.id_hotel.nom_hotel }}</span></span>
-        <span class="rating">Durée: <span>{{ avoir_instance.id_voyage.duree_voyage }} jours / {{ avoir_instance.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
-        <span class="rating">Promotion: <span>{{ avoir_instance.id_voyage.id_promotion.pourcentage }} %</span></span>
-        <form method="get" action="/promotions_details/{{ avoir_instance.id_voyage.id_voyage }}">
+        {% comment %} <span class="title">{{ promotion.id_promotion.titre_voyage }}</span> {% endcomment %}
+        {% comment %} <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ promotion.id_ville.id_pays.nom_pays }}, {{ promotion.id_ville.nom_ville }}</span> {% endcomment %}
+        <span class="price">Prix: <span>{{ promotion.id_promotion.percentage }} Dhs</span></span>
+        <span class="price">Nom hotel: <span>{{ promotion.id_promotion.id_voyage.id_hotel.nom_hotel }}</span></span>
+        {% comment %} <span class="rating">Durée: <span>{{ promotion.id_promotion.duree_voyage }} jours / {{ promotion.id_promotion.duree_voyage|add:"-1" }} nuits</span></span> {% endcomment %}
+        <span class="rating">Promotion: <span>{{ promotion.id_promotion.id_promotion.pourcentage }} %</span></span>
+        <form method="get" action="/promotions_details/{{ promotion.id_promotion.id_promotion }}">
             <button type="submit">J'en profit</button>
         </form>
     </div>        

@@ -292,14 +292,16 @@ def promotions(request):
 
 
 def promotions_details(request, id_voyage):
-    promotion = get_object_or_404(models.Promotion, pourcentage__gt=0)
-    avoir_instance = models.Avoir.objects.select_related(
-        'id_voyage__id_hotel',
-        'id_voyage__id_promotion',
-        'id_voyage__id_categorie',
-        'id_ville__id_pays'
-    ).all()    
-    return render(request, 'visitor/promotions_details.html', {'avoir_instance' : avoir_instance})
+    # promotion = get_object_or_404(models.Promotion, pourcentage__gt=0, voyage=id_voyage)
+    # avoir_instance = models.Avoir.objects.select_related(
+    #     'id_voyage__id_hotel',
+    #     'id_voyage__id_promotion',
+    #     'id_voyage__id_categorie',
+    #     'id_ville__id_pays'
+    # ).all()    
+    promotion = models.Promotion.objects.filter(voyage = id_voyage)
+    
+    return render(request, 'visitor/promotions_details.html', {'promotion' : promotion})
 
 def hotels(request):
     query = models.Hotel.objects.all()
