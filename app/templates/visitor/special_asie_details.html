@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block url_6_class %}active{% endblock url_6_class %}
+{% block url_4_class %}active{% endblock url_4_class %}
 {% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
 {% block block_css %}
 <style>
@@ -24,7 +24,7 @@
         <span class="price">à partir de <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span>
         <span class="price">Nom hotel: <span>{{ avoir.id_voyage.id_hotel.nom_hotel }}</span></span>
         <span class="rating">Durée: <span>{{ avoir.id_voyage.duree_voyage }} jours / {{ avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
-        <form method="get" action="/special_omra_details/{{ avoir.id_voyage.id_voyage }}">
+        <form method="get" action="/special_turqie_details/{{ avoir.id_voyage.id_voyage }}">
             <button type="submit">J'en profit</button>
         </form>
     </div>            

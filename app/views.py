@@ -262,23 +262,22 @@ def home (request):
     return render(request, 'visitor/home.html')
 
 
+def voyageDetails(id_voyage):
+    avoir = models.Avoir.objects.filter(id_voyage = id_voyage)
+    inclure_instance = models.inclure.objects.filter(id_voyage=id_voyage)
+    comment = models.Commentaire.objects.filter(id_voyage = id_voyage)
+    return avoir, inclure_instance, comment
 
 def voyage_organise(request):
     query = models.Avoir.objects.all()  
     return render(request, 'visitor/voyage_organise.html', {'query' : query})
 
-
 def voyage_organise_details(request, id_voyage):
-    avoir = models.Avoir.objects.filter(id_voyage = id_voyage)
-    inclure_instance = models.inclure.objects.filter(id_voyage=id_voyage)
-    comment = models.Commentaire.objects.filter(id_voyage = id_voyage)
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
     return render(request, 'visitor/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
-
 
 def paysRelatedToVoyage(ville):
     return models.Avoir.objects.get(id_ville = ville).id_ville.id_pays
-
-
 
 def promotions(request):
     query = models.Avoir.objects.select_related(
@@ -289,56 +288,53 @@ def promotions(request):
         ).all()
     return render(request, 'visitor/promotions.html', {'query' : query})
 
-
-
-def promotions_details(request, id_voyage):
-    # promotion = get_object_or_404(models.Promotion, pourcentage__gt=0, voyage=id_voyage)
-    # avoir_instance = models.Avoir.objects.select_related(
-    #     'id_voyage__id_hotel',
-    #     'id_voyage__id_promotion',
-    #     'id_voyage__id_categorie',
-    #     'id_ville__id_pays'
-    # ).all()    
-    promotion = models.Promotion.objects.filter(voyage = id_voyage)
-    
-    return render(request, 'visitor/promotions_details.html', {'promotion' : promotion})
+def promotions_details(request, id_voyage):  
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    return render(request, 'visitor/promotions_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 def hotels(request):
     query = models.Hotel.objects.all()
     return render(request, 'visitor/hotels.html', {'query' :query})
 
-def hotels_details(request):
-
-    return render(request, 'visitor/hotels_details.html', {})
-
+def hotels_details(request, id_hotel):
+    hotels = models.Hotel.objects.filter(id_hotel=id_hotel)
+    return render(request, 'visitor/hotels_details.html', {'hotels' : hotels})
 
 def special_turqie(request):
     query = models.Avoir.objects.all()
     return render(request, 'visitor/special_turqie.html', {'query' :query})
 
-def special_turqie_details(request):
-    return render(request, 'visitor/special_turqie_details.html', {})
+def special_turqie_details(request, id_voyage):
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    return render(request, 'visitor/special_turqie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+
 
 def special_asie(request):
     query = models.Avoir.objects.all()
     return render(request, 'visitor/special_asie.html', {'query' :query})
 
-def special_asie_details(request):
-    return render(request, 'visitor/special_asie_details.html', {})
+def special_asie_details(request, id_voyage):
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    return render(request, 'visitor/special_asie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+
 
 def special_omra(request):
     query = models.Avoir.objects.all()
     return render(request, 'visitor/special_omra.html', {'query' :query})
 
-def special_omra_details(request):
-    return render(request, 'visitor/special_omra_details.html', {})
+def special_omra_details(request, id_voyage):
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    return render(request, 'visitor/special_omra_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+
 
 def special_haj(request):
     query = models.Avoir.objects.all()
     return render(request, 'visitor/special_haj.html', {'query' :query})
 
-def special_haj_details(request):
-    return render(request, 'visitor/special_haj_details.html', {})
+def special_haj_details(request, id_voyage):
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    return render(request, 'visitor/special_haj_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+
 
 # admin views
 def admin_view(request):

@@ -1,17 +1,22 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block url_7_class %}active{% endblock url_7_class %}
 {% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
+{% block block_css %}
+<style>
+    body .container {
+        height: 200px;
+        background-color: rgb(255, 255, 255);
+    }
+</style>
+{% endblock block_css %}
 {% block main %}
-<div style="height: 200px;"></div>
 
 <h1>{{ id_voyage }}</h1>
 {% for avoir in avoir%}
 <div class="detailed-card-voyage">
     <div class="image">
         <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
-        {% comment %} <span class="reaction">
-            <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
-        </span> {% endcomment %}
     </div>
     <div class="body">
         <span class="title">{{ avoir.id_voyage.titre_voyage }}</span>

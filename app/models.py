@@ -58,10 +58,10 @@ class Vol(models.Model):
 
 class Utilisateur(models.Model):
     id_utilisateur = models.AutoField(primary_key=True)
-    mot_d_passe = models.CharField(max_length=10)
-    est_admin = models.BooleanField()
     nom = models.CharField(max_length=15)
     prenom = models.CharField(max_length=15)
+    est_admin = models.BooleanField()
+    mot_d_passe = models.CharField(max_length=10)
     num_telephone = models.CharField(max_length=12)
     email = models.EmailField()
     path_img_profile = models.CharField(max_length=100)
