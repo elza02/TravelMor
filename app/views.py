@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse,request
+
+from app.forms import PaysForm
 from . import models
 from datetime import datetime
 from decimal import Decimal
@@ -339,19 +341,6 @@ def special_haj_details(request, id_voyage):
 # admin views
 def admin_view(request):
     return render(request, 'admin_pages/dashboard.html', {})
-
-# def pays(request):
-#     ajouter_pays(request)
-#     return render(request, 'admin_pages/pays.html', {})
-
-# def ajouter_pays(request):
-#     pays = models.Pays.objects.create(nom_pays=request.nom_pays)
-#     pays.save()
-#     return render(request, 'admin_pages/pays.html', {})
-
-# myapp/views.py
-from django.shortcuts import render, redirect
-from .forms import PaysForm
 
 def pays_form(request):
     if request.method == 'POST':

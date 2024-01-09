@@ -8,6 +8,217 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="{% static "assets/travelmor-icon.png" %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <style>
+        .overlay {
+            height: 100%;
+            width: 100%;
+            display: none;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: rgba(200,200,200,  0.7); /* Black with a little bit see-through */
+            backdrop-filter: blur(30px);
+        }
+        
+        /* The content */
+        .overlay-content {
+            position: relative;
+            top: 46%;
+            width: 80%;
+            text-align: center;
+            margin-top: 30px;
+            margin: auto;
+        }
+        
+        /* Close button */
+        .overlay .closebtn {
+            position: absolute;
+            top: 150px;
+            right: 45px;
+            font-size: 60px;
+            cursor: pointer;
+            color: white;    
+        }
+        
+        .overlay .closebtn:hover {
+            color: #ccc;
+        }
+        
+        /* Style the search field */
+        .overlay input[type=text] {
+            padding: 15px;
+            font-size: 17px;
+            border: none;
+            float: left;
+            width: 80%;
+            background: white;
+            border-top-left-radius: var(--main-border-radius);
+            border-bottom-left-radius: var(--main-border-radius);
+        }
+        
+        .overlay input[type=text]:hover {
+            background: #f1f1f1;
+        }
+        
+        /* Style the submit button */
+        .overlay button {
+            float: left;
+            width: 20%;
+            padding: 15px;
+            background: #ddd;
+            font-size: 17px;
+            border: none;
+            cursor: pointer;
+            border-top-right-radius: var(--main-border-radius);
+            border-bottom-right-radius: var(--main-border-radius);
+        }
+        
+        .overlay button:hover {
+            background: #bbb;
+        }
+{% comment %} login form modal  {% endcomment %}
+
+          /* Full-width input fields */
+        #login-form-modal input[type=text], input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px auto;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            border-radius: var(--main-border-radius);
+        }
+
+        #login-form-modal input[type=text] {
+            width: 60%;
+        }
+
+        #login-form-modal input[type=password] {
+            width: 60%;
+        }
+
+        /* Set a style for all buttons */
+        #login-form-modal button {
+            background-color: #04AA6D;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: var(--main-border-radius);
+        }
+
+        #login-form-modal button:hover {
+            opacity: 0.8;
+        }
+
+        /* Extra styles for the cancel button */
+        #login-form-modal .cancelbtn {
+            width: auto;
+            padding: 10px 18px;
+            background-color: #f44336;
+            border-radius: var(--main-border-radius);
+        }
+
+        /* Center the image and position the close button */
+        #login-form-modal .head {
+            text-align: center;
+            margin: 24px 0 12px 0;
+            position: relative;
+        }
+
+        #login-form-modal img.avatar {
+            width: 40%;
+            border-radius: 50%;
+        }
+        #login-form-modal .container-login { 
+            margin-top:60px;
+            border: 2px solid green ;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start; 
+            gap: 20px;
+            border-radius: var(--main-border-radius);
+        }
+
+        #login-form-modal span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+        /* The Modal (background) */
+        #login-form-modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+            backdrop-filter: blur(30px);
+        }
+
+        /* Modal Content/Box */
+        #login-form-modal .modal-content {
+            background-color: #fefefe;
+            margin: 150px auto; 
+            border: 1px solid #888;
+            width: 50%; 
+            height: fit-content;
+            padding: 30px;
+            border-radius: var(--main-border-radius);
+        }
+
+        /* The Close Button (x) */
+        #login-form-modal .close {
+            position: absolute;
+            right: 25px;
+            top: 0;
+            color: #000;
+            font-size: 35px;
+            font-weight: bold;
+        }
+
+        #login-form-modal .close:hover,
+        #login-form-modal .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {-webkit-transform: scale(0)} 
+            to {-webkit-transform: scale(1)}
+        }
+        
+        @keyframes animatezoom {
+            from {transform: scale(0)} 
+            to {transform: scale(1)}
+        }
+
+        /* Change styles for span and cancel button on extra small screens */
+        @media screen and (max-width: 300px) {
+            span.psw {
+                display: block;
+                float: none;
+            }
+            .cancelbtn {
+                width: 100%;
+            }
+        }
+    </style>
     {% block block_css %}{% endblock block_css %}
 </head>
 <body>
@@ -16,7 +227,7 @@
             <div class="logo">
                 <img src="{% static 'assets/travelmor-logo-bg.png' %}" alt="LOGO TRAVEL MOR">
             </div>
-            <div class="search">
+            <div class="search" onclick="openSearch()">
                 <input type="text" name="search" placeholder="Recherche">
                 <span><i class="fa-solid fa-magnifying-glass"></i></span>
             </div>
@@ -26,7 +237,7 @@
                 <div class="menu hide" id="LogMenu">
                     <ul>
                         <li><a href="#">Inscription</a></li>
-                        <li><a href="#">Connexion</a></li>
+                        <li><a href="#" onclick="document.getElementById('login-form-modal').style.display='block'">Connexion</a></li>
                         <li><a href="#">Cartes cadeaux</a></li>
                         <li><a href="#">Centre d'aide</a></li>
                     </ul>
@@ -47,9 +258,47 @@
                 </ul>
             </nav>
         </div>
-
     </header>
+
     <div class="container"></div>
+
+    <div id="myOverlay" class="overlay">
+        <div class="overlay-content">
+        <form action="action_page.php">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+        </div>
+    </div>
+
+    <div id="login-form-modal" class="modal">
+        <form class="modal-content animate" action="#" method="post"> {% comment %} entrer le lien de la view {% endcomment %}
+            <div class="head">
+                <h1>Authentification</h3>
+                <span onclick="document.getElementById('login-form-modal').style.display='none'" class="close" title="Close Modal">&times;</span>
+                {% comment %} <img src="img_avatar2.png" alt="Avatar" class="avatar"> {% endcomment %}
+            </div>
+        
+            <div class="container-login">
+                <label for="uname"><b>Nom utilisateur :</b></label>
+                <input type="text" placeholder="Enter Username" name="uname" required>
+            
+                <label for="psw"><b>Mot de pass :</b></label>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+                    
+                <button type="submit">s'authentifier</button>
+                <label>
+                    <input type="checkbox" checked="checked" name="remember"> Rester connecté
+                </label>
+            </div>
+        
+            <div class="container-login" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('login-form-modal').style.display='none'" class="cancelbtn">Annuler</button>
+                <span class="psw">Vous avez oublier <a href="#">mot de pass?</a></span>
+            </div>
+        </form>
+    </div>
+
     {% block main %} {% endblock %}
 
     <footer>
@@ -131,5 +380,31 @@
     </footer>
     {% block js_block %} {% endblock %} 
     <script src="{% static 'js/base.js' %}" type="text/javascript"></script>
+    <script>
+        function toggleLike(heart) {
+            if (heart.src.includes('{% static "assets/like-full.svg" %}')) {
+                heart.src = '{% static "assets/like-empty.svg" %}';
+            } else {
+                heart.src = '{% static "assets/like-full.svg" %}';
+            }
+        }
+
+        // Open the full screen search box
+        function openSearch() {
+            document.getElementById("myOverlay").style.display = "block";
+            document.querySelector("header .search").style.display = "none";
+        }
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("myOverlay")) {
+                document.getElementById("myOverlay").style.display = "none";
+                document.querySelector("header .search").style.display = "block";
+            }
+            //if (event.target != document.querySelector(".inner1 .menu")) {
+            //    document.querySelector(".inner1 .menu").style.display = "none";
+            //}
+        }
+    </script>
 </body>
 </html>
