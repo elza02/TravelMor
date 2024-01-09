@@ -342,14 +342,33 @@ def special_haj_details(request, id_voyage):
 def admin_view(request):
     return render(request, 'admin_pages/dashboard.html', {})
 
-def pays_form(request):
+def pays_gestion(request):
     if request.method == 'POST':
         form = PaysForm(request.POST)
         if form.is_valid():
             form.save()
             # return redirect('success')  # Redirect to a success page
-            return render(request, 'admin_pages/pays_form.html', {'form' : form, 'form_msg' : 'succes'})  # Redirect to a success page
+            return render(request, 'admin_pages/pays_gestion.html', {'form' : form, 'form_msg' : 'succes'})  # Redirect to a success page
     else:
         form = PaysForm()
+    pays = models.Pays.objects.all()
+    return render(request, 'admin_pages/pays_gestion.html', {'form': form, 'pays' : pays})
+def villes_gestion(request):
+    villes = models.Ville.objects.all()
+    return render(request,'admin_pages/villes_gestion.html',{'villes' : villes})
 
-    return render(request, 'admin_pages/pays_form.html', {'form': form})
+def commentaires_gestion(request):
+    commentaires = models.Commentaire.objects.all()
+    return render(request, 'admin_pages/commentaires_gestion.html',{'commentaires' : commentaires})
+
+def notifications_gestion(request):
+    notifications = models.Notification.objects.all()
+    return render(request, 'admin_pages/notifications_gestion.html',{'notifications' : notifications})
+
+def vols_gestion(request):
+    vols = models.Vol.objects.all()
+    return render(request, 'admin_pages/vols_gestion.html',{'vols' : vols})
+
+def promotions_gestion(request):
+    promotions = models.Promotion.objects.all()
+    return render(request, 'admin_pages/promotions_gestion.html',{'promotions' : promotions})

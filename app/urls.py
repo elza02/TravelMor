@@ -29,6 +29,11 @@ urlpatterns = [
 
     # admin urls
     path('admin_page/', views.admin_view, name="admin"),
-    path('pays/ajouter/', views.pays_form, name="pays_form"),
+    path('admin_page/pays/', views.pays_gestion, name="pays_gestion"),
+    path('admin_page/villes/', views.villes_gestion, name="villes_gestion"),
+    path('admin_page/commentaires/', views.commentaires_gestion, name="commentaires_gestion"),
+    path('admin_page/notifications/', views.notifications_gestion, name="notifications_gestion"),
+    path('admin_page/vols/', views.vols_gestion, name="vols_gestion"),
+    path('admin_page/promotions/', views.promotions_gestion, name="promotions_gestion"),
     
 ]

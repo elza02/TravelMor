@@ -1,0 +1,33 @@
+{% extends 'admin_pages/base.html' %}
+{% block title %} Ville {% endblock title %}
+{% block main %}
+    <h1>administration ville</h1>
+    <div>
+        <table border = 1>
+            <thead>
+                <tr>
+                    <th> ID ville </th>
+                    <th> Nom ville </th>
+                    <th> Nom Pays </th>
+                    <th> Actions </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for v in villes%}
+                <tr>
+                    <td>{{v.id_ville}} </td> 
+                    <td>{{v.nom_ville}} </td> 
+                    <td>{{v.id_pays.nom_pays}} </td> 
+                    <td><button>editer</button> <button>supprimer</button></td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form action="{% url 'villes_gestion' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ajouter</button>
+    </form>
+{% endblock main %}
