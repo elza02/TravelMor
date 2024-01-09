@@ -1,0 +1,35 @@
+{% extends 'admin_pages/base.html' %}
+{% block title %} Promos {% endblock title %}
+{% block main %}
+    <h1>administration promotions</h1>
+    <div>
+        <table border = 1>
+            <thead>
+                <tr>
+                    <th> ID Promotion </th>
+                    <th> Date debut </th>
+                    <th> Date fin </th>
+                    <th> Pourcentage </th>
+                    <th> Actions </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for promotion in promotions%}
+                <tr>
+                    <td>{{promotion.id_promotion}} </td> 
+                    <td>{{promotion.date_d_promo}} </td> 
+                    <td>{{promotion.date_f_promo}} </td> 
+                    <td>{{promotion.pourcentage}} </td> 
+                    <td><button>Supprimer</button><button>Modifier</button></td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form action="{% url 'villes_gestion' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ajouter</button>
+    </form>
+{% endblock main %}

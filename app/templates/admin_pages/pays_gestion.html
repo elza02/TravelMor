@@ -1,0 +1,31 @@
+{% extends 'admin_pages/base.html' %}
+{% block title %} pays {% endblock title %}
+{% block main %}
+    <h1>administration pays</h1>
+    <div>
+        <table border = 1>
+            <thead>
+                <tr>
+                    <th> ID Pays </th>
+                    <th> Nom Pays </th>
+                    <th> Actions </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for p in pays%}
+                <tr>
+                    <td>{{p.id_pays}} </td> 
+                    <td>{{p.nom_pays}} </td> 
+                    <td><button>editer</button> <button>supprimer</button></td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form action="{% url 'pays_gestion' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ajouter</button>
+    </form>
+{% endblock main %}

@@ -1,0 +1,35 @@
+{% extends 'admin_pages/base.html' %}
+{% block title %} Vols {% endblock title %}
+{% block main %}
+    <h1>administration vols</h1>
+    <div>
+        <table border = 1>
+            <thead>
+                <tr>
+                    <th> ID Vol </th>
+                    <th> Date debut </th>
+                    <th> Date fin </th>
+                    <th> Prix </th>
+                    <th> Actions </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for vol in vols%}
+                <tr>
+                    <td>{{vol.id_vol}} </td> 
+                    <td>{{vol.date_d_vol}} </td> 
+                    <td>{{vol.date_f_vol}} </td> 
+                    <td>{{vol.prix_vol}} </td> 
+                    <td><button>Supprimer</button><button>Modifier</button></td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form action="{% url 'villes_gestion' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ajouter</button>
+    </form>
+{% endblock main %}
