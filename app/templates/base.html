@@ -9,6 +9,8 @@
     <link rel="icon" href="{% static "assets/travelmor-icon.png" %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <style>
+
+
         .overlay {
             height: 100%;
             width: 100%;
@@ -81,36 +83,32 @@
 
           /* Full-width input fields */
         #login-form-modal input[type=text], input[type=password] {
-            width: 100%;
+            width: 80%;
             padding: 12px 20px;
-            margin: 8px auto;
+            margin: 0 auto;
             display: inline-block;
             border: 1px solid #ccc;
             box-sizing: border-box;
             border-radius: var(--main-border-radius);
         }
 
-        #login-form-modal input[type=text] {
-            width: 60%;
-        }
-
-        #login-form-modal input[type=password] {
-            width: 60%;
-        }
-
         /* Set a style for all buttons */
         #login-form-modal button {
-            background-color: #04AA6D;
+            background-color: var(--main--green);
             color: white;
             padding: 14px 20px;
-            margin: 8px 0;
             border: none;
             cursor: pointer;
-            width: 100%;
+            width: 20%;
+            margin: auto;
             border-radius: var(--main-border-radius);
         }
 
-        #login-form-modal button:hover {
+        #login-form-modal .under-container-login button {
+            margin: 0;
+        }
+
+        button:hover {
             opacity: 0.8;
         }
 
@@ -133,9 +131,9 @@
             width: 40%;
             border-radius: 50%;
         }
+
         #login-form-modal .container-login { 
-            margin-top:60px;
-            border: 2px solid green ;
+            margin-top:40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -144,9 +142,18 @@
             border-radius: var(--main-border-radius);
         }
 
-        #login-form-modal span.psw {
-            float: right;
-            padding-top: 16px;
+        #login-form-modal .under-container-login {
+            margin-top: 20px;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: var(--main-border-radius);
+        }
+
+        #login-form-modal span.psw a {
+            text-decoration: none;
+            cursor: pointer;
         }
 
         /* The Modal (background) */
@@ -158,7 +165,7 @@
             top: 0;
             width: 100%; 
             height: 100%; 
-            overflow: auto; 
+            overflow: hidden; 
             background-color: rgb(0,0,0); 
             background-color: rgba(0,0,0,0.4);
             padding-top: 60px;
@@ -179,11 +186,12 @@
         /* The Close Button (x) */
         #login-form-modal .close {
             position: absolute;
-            right: 25px;
-            top: 0;
+            right: 15px;
+            top: -30px;
             color: #000;
             font-size: 35px;
             font-weight: bold;
+            transition: all .2s ease;
         }
 
         #login-form-modal .close:hover,
@@ -215,6 +223,9 @@
                 float: none;
             }
             .cancelbtn {
+                width: 100%;
+            } 
+            #login-form-modal .modal-content {
                 width: 100%;
             }
         }
@@ -276,25 +287,18 @@
             <div class="head">
                 <h1>Authentification</h3>
                 <span onclick="document.getElementById('login-form-modal').style.display='none'" class="close" title="Close Modal">&times;</span>
-                {% comment %} <img src="img_avatar2.png" alt="Avatar" class="avatar"> {% endcomment %}
             </div>
-        
             <div class="container-login">
-                <label for="uname"><b>Nom utilisateur :</b></label>
-                <input type="text" placeholder="Enter Username" name="uname" required>
-            
-                <label for="psw"><b>Mot de pass :</b></label>
-                <input type="password" placeholder="Enter Password" name="psw" required>
-                    
-                <button type="submit">s'authentifier</button>
-                <label>
+                <input type="text" placeholder="Entrer le nom d'utilisateur" name="uname" required>
+                <input type="password" placeholder="Entrer le mot de pass" name="psw" required>
+                <label style="margin: auto;">
                     <input type="checkbox" checked="checked" name="remember"> Rester connecté
                 </label>
+                <button type="submit">s'authentifier</button>
             </div>
-        
-            <div class="container-login" style="background-color:#f1f1f1">
+            <div class="under-container-login" style="background-color:#f1f1f1">
+                <span class="psw">Vous avez oublier <a href="#">mot de pass ?</a></span>
                 <button type="button" onclick="document.getElementById('login-form-modal').style.display='none'" class="cancelbtn">Annuler</button>
-                <span class="psw">Vous avez oublier <a href="#">mot de pass?</a></span>
             </div>
         </form>
     </div>
@@ -305,7 +309,6 @@
         <section class="Paiement">
             <h3>Paiement securisé</h3>
             <div class="methods">
-                <!-- on va mettre ici de icones de methodes de Paiement -->
                 <img src="{% static "assets/visa.png" %}" alt="payment-methode-visa">
                 <img src="{% static "assets/paypal.png" %}" alt="payment-methode-paypal">
                 <img src="{% static "assets/western-union.png" %}" alt="payment-methode-western-union">
