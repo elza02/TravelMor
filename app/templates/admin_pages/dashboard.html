@@ -2,4 +2,59 @@
 {% block title %} dashboard {% endblock title %}
 {% block main %}
     <h1>admin dashboard</h1>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Agency Dashboard</title>
+    <div class="dashboard">
+        <div class="card">
+            <h2>Total Reservations</h2>
+            <p>{{reservations_nbr}}</p>
+        </div>
+
+        <div class="card">
+            <h2>Revenue</h2>
+            <p>${{revenue}}</p>
+        </div>
+
+        <div class="card">
+            <h2>Nombre de client</h2>
+            <p>{{client_nb}} </p>
+        </div>
+        <div class="card">
+            <h2>Nombre de Voyage</h2>
+            <p>{{nb_voyages}} </p>
+        </div>
+        <div class="card">
+            <h2>Satisfaction des clients</h2>
+            <p>{{Satisfaction}}/5 </p>
+        </div>
+    </div>
+    <div>
+        <h1> Liste des reservations</h1>
+        <table border = 1>
+            <thead>
+                <tr>
+                    <th> Voyage ID </th>
+                    <th> Client ID </th>
+                    <th> Client nom </th>
+                    <th> Duree de voyage </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for reservation in reservations%}
+                <tr>
+                    <td>{{reservation.id_voyage.id_voyage}} </td> 
+                    <td>{{reservation.id_utilisateur_1.id_utilisateur}} </td> 
+                    <td>{{reservation.id_utilisateur_1.nom}} {{reservation.id_utilisateur_1.prenom}} </td> 
+                    <td>{{reservation.id_voyage.duree_voyage}} jours </td> 
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 {% endblock main %}

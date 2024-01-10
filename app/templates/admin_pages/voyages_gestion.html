@@ -1,0 +1,47 @@
+{% extends 'admin_pages/base.html' %}
+{% block title %} voyages {% endblock title %}
+{% block main %}
+    <h1>administration voyages</h1>
+    <div>
+        <table border = 1>
+            <thead>
+                <tr>
+                    <th> ID voyage </th>
+                    <th> Titre voyage </th>
+                    <th> Prix </th>
+                    <th> Duree </th>
+                    <th> Transport </th>
+                    <th> ID hotel </th>
+                    <th> Nom hotel </th>
+                    <th> ID Promotion </th>
+                    <th> Promotion valeur </th>
+                    <th> Categorie </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for voyage in voyages%}
+                <tr>
+                    <td>{{voyage.id_voyage}} </td> 
+                    <td>{{voyage.titre_voyage}} </td> 
+                    <td>{{voyage.prix_voyage}} </td> 
+                    <td>{{voyage.duree_voyage}} </td> 
+                    <td>{{voyage.transport}} </td> 
+                    <td>{{voyage.id_hotel.id_hotel}} </td> 
+                    <td>{{voyage.id_hotel.nom_hotel}} </td> 
+                    <td>{{voyage.id_promotion.id_promotion}} </td> 
+                    <td>{{voyage.id_promotion.pourcentage}} </td> 
+                    <td>{{voyage.id_categorie.nom_categorie}} </td> 
+                    <td><button>Supprimer</button><button>Modifier</button></td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form action="{% url 'villes_gestion' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ajouter</button>
+    </form>
+{% endblock main %}

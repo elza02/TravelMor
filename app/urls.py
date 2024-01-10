@@ -35,5 +35,8 @@ urlpatterns = [
     path('admin_page/notifications/', views.notifications_gestion, name="notifications_gestion"),
     path('admin_page/vols/', views.vols_gestion, name="vols_gestion"),
     path('admin_page/promotions/', views.promotions_gestion, name="promotions_gestion"),
+    path('admin_page/hotels/', views.hotels_gestion, name="hotels_gestion"),
+    path('admin_page/voyages/', views.voyages_gestion, name="voyages_gestion"),
+    path('admin_page/dashboard/', views.dashboard_gestion, name="dashboard_gestion"),
     
 ]

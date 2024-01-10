@@ -1,0 +1,39 @@
+{% extends 'admin_pages/base.html' %}
+{% block title %} Hotels {% endblock title %}
+{% block main %}
+    <h1>administration hotels</h1>
+    <div>
+        <table border = 1>
+            <thead>
+                <tr>
+                    <th> ID hotel </th>
+                    <th> Nom hotel </th>
+                    <th> Prix </th>
+                    <th> Type chambre </th>
+                    <th> Nombre chambre diponible </th>
+                    <th> Petit dejeuner </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for hotel in hotels%}
+                <tr>
+                    <td>{{hotel.id_hotel}} </td> 
+                    <td>{{hotel.nom_hotel}} </td> 
+                    <td>{{hotel.prix_nuit}} </td> 
+                    <td>{{hotel.type_chambre}} </td> 
+                    <td>{{hotel.n_chambreDispo}} </td> 
+                    <td>{{hotel.petit_dejeuner}} </td> 
+                    <td><button>Supprimer</button><button>Modifier</button></td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <form action="{% url 'villes_gestion' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">ajouter</button>
+    </form>
+{% endblock main %}

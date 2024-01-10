@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'
+    'app',
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+   'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -133,4 +135,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 import os
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'app', 'static')
+]
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse,request
-
+from django.db.models import *
 from app.forms import PaysForm
 from . import models
 from datetime import datetime
@@ -372,3 +372,18 @@ def vols_gestion(request):
 def promotions_gestion(request):
     promotions = models.Promotion.objects.all()
     return render(request, 'admin_pages/promotions_gestion.html',{'promotions' : promotions})
+def hotels_gestion(request):
+    hotels = models.Hotel.objects.all()
+    return render(request, 'admin_pages/hotels_gestion.html',{'hotels' : hotels})
+def voyages_gestion(request):
+    voyages = models.Voyage.objects.all()
+    return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages})
+def dashboard_gestion(request):
+    nbr_reservations = models.ReserverVoyage.objects.count()
+    reservations = models.ReserverVoyage.objects.all()
+    total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
+    client_nb = models.Utilisateur.objects.filter(est_admin = 0).count()
+    nb_voyage = models.Voyage.objects.count()
+    Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
+    return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
+
