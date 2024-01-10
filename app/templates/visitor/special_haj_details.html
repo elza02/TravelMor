@@ -1,60 +1,63 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block url_7_class %}active{% endblock url_7_class %}
-{% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
+{% block title %} voyage asie details - {{ id_voyage }} {% endblock title %}
 {% block block_css %}
 <style>
     body .container {
-        height: 200px;
         background-color: rgb(255, 255, 255);
     }
 </style>
 {% endblock block_css %}
 {% block main %}
-
-<h1>{{ id_voyage }}</h1>
-{% for avoir in avoir%}
-<div class="detailed-card-voyage">
-    <div class="image">
-        <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
-    </div>
-    <div class="body">
-        <span class="title">{{ avoir.id_voyage.titre_voyage }}</span>
-        <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir.id_ville.id_pays.nom_pays }}, {{ avoir.id_ville.nom_ville }}</span>
-        <span class="price">à partir de <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span>
-        <span class="price">Nom hotel: <span>{{ avoir.id_voyage.id_hotel.nom_hotel }}</span></span>
-        <span class="rating">Durée: <span>{{ avoir.id_voyage.duree_voyage }} jours / {{ avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
-        <form method="get" action="/special_haj_details/{{ avoir.id_voyage.id_voyage }}">
-            <button type="submit">J'en profit</button>
-        </form>
-    </div>            
-</div> 
-{%endfor%}
-<div class = "vols-box">
-    {% for vol in inclure %}
-    <div class="vol">
-        <div class="image-vol"> 
-            <img src="{% static "assets/royal-air-maroc.svg" %}">
-            <div class="from">{{ vol.id_vol.date_d_vol }}</div>
-            <div class="to">{{ vol.id_vol.date_f_vol }}</div>
+<div class="inner-container">
+    <h1>{{ id_voyage }}</h1>
+    {% for avoir in avoir%}
+    <div class="detailed-card-voyage">
+        <div class="image">
+            <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
         </div>
         <div class="body">
-            <p class="descrp">Hotel {{ vol.id_voyage.id_hotel.type_hotel }}etoiles, type de chambre: {{ vol.id_voyage.id_hotel.type_hotel }}</p>
+            <span class="title">{{ avoir.id_voyage.titre_voyage }}</span>
+            <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir.id_ville.id_pays.nom_pays }}, {{ avoir.id_ville.nom_ville }}</span>
+            <span class="price">à partir de <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span>
+            <span class="price">Nom hotel: <span>{{ avoir.id_voyage.id_hotel.nom_hotel }}</span></span>
+            <span class="rating">Durée: <span>{{ avoir.id_voyage.duree_voyage }} jours / {{ avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
+            <form method="get" action="/special_haj_details/{{ avoir.id_voyage.id_voyage }}">
+                <button type="submit">J'en profit</button>
+            </form>
+        </div>            
+    </div> 
+    {%endfor%}
+    <div class = "vols-box">
+        {% for vol in inclure %}
+        <div class="vol">
+            <div class="image-vol"> 
+                <img src="{% static "assets/royal-air-maroc.svg" %}">
+                <div class="from">{{ vol.id_vol.date_d_vol }}</div>
+                <div class="to">{{ vol.id_vol.date_f_vol }}</div>
+            </div>
+            <div class="body">
+                <p class="descrp">Hotel {{ vol.id_voyage.id_hotel.type_hotel }} étoiles, type de chambre: {{ vol.id_voyage.id_hotel.type_hotel }}</p>
+            </div>
+        </div>
+        {% endfor%}
+    </div>
+    <h4>Les commentaire sur ce voyage : </h4>
+    {%for comment in comments%}
+    <div class="comments">
+        <div class="comment">
+            <div class="image-box">
+                <img src="" alt="photo de {{comment.id_utilisateur.nom}} {{comment.id_utilisateur.prenom}}">
+            </div>
+            <div class="author">{{comment.id_utilisateur.nom}} {{comment.id_utilisateur.prenom}}</div>
+            <div class="text">{{comment.text_comment}}</div>
+            <div class="time">{{comment.heure_redaction}}, {{comment.date_redaction}}</div>
+            <div class="evaluation">{{comment.evaluation}}</div>
         </div>
     </div>
-    {% endfor%}
+    {%endfor%}
 </div>
-<h4>Les commentaire sur ce voyage : </h4>
-{%for comment in comments%}
-<div class="comments">
-    <div class="comment">
-        <div class="author">{{comment.id_utilisateur.prenom}}</div>
-        <div class="text">{{comment.text_comment}}</div>
-        <div class="time">{{comment.heure_redaction}}, {{comment.date_redaction}}</div>
-        <div class="evaluation">{{comment.evaluation}}</div>
-    </div>
-</div>
-{%endfor%}
 {% endblock main %}
 {% block js_block %}
 <script>

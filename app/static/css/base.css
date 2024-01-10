@@ -1,6 +1,6 @@
 /* global styles */
 
-@import url('https://fonts.googleapis.com/css2?family=Flow+Circular&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -10,11 +10,9 @@
 :root {
     font-size: 16px;
     --main--green: #3DD6D0;
-    /* --main--green: rgb(242, 70, 70); */
     --main-gray: #808080;
-    /* --main-gray: #fff5f5; */
-    --second-gray: rgb(148, 147, 147);
-    --main-gray-bg: #f7f7f7;
+    --second-gray: #f4f5f7;
+    --main-gray-bg: #ffffff;
     --second-underline: #dddddd;
     --main-border-radius: 30px;
     --main-shadow: 0 2px 6px rgba(180, 177, 177, 0.442);
@@ -24,7 +22,7 @@
 }
 
 body {
-    font-family: Poppins, sans-serif;
+    font-family: 'Rubik', sans-serif;
     scroll-behavior: smooth;
 }
 
@@ -182,7 +180,7 @@ header .inner1 .menu ul li a:hover {
 
 
 header .inner1 .menu ul li:nth-child(2) {
-    border-bottom: 1px solid var(--second-gray);
+    border-bottom: 1px solid rgb(148, 147, 147);
     width: 100%;
     padding-bottom: 14px;
     margin-bottom: 2px;
@@ -378,6 +376,13 @@ body .container {
     align-items: center;
     flex-wrap: wrap;
     gap: 30px;
+    background-color: var(--second-gray);
+}
+
+.inner-container {
+    padding-top: 200px;
+    padding-bottom: 100px;
+    background-color: var(--second-gray);
 }
 
 
@@ -385,17 +390,20 @@ body .container {
 .mini-card-hotel, .mini-card-voyage {
     width: 400px;
     height: 450px;
-    border: 1px solid var(--second-underline);
     border-radius: var(--main-border-radius);
     display: flex;
     flex-direction: column;
-    box-shadow: var(--main-shadow);
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
     overflow: hidden;
     transition: box-shadow .5s ease;
 }
 
 .mini-card-hotel:hover, .mini-card-voyage:hover {
-    box-shadow: var(--main-shadow-hovered);
+    box-shadow: 0px 0px 62px -4px rgba(165,165,165,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(165,165,165,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(165,165,165,1);
 }
 
 .mini-card-hotel:hover .image img, .mini-card-voyage:hover .image img {
@@ -503,7 +511,6 @@ body .container {
     transition: all .3s ease;
 }
 
-
 .mini-card-hotel .body form button i, .mini-card-voyage .body form button i {
     transition: .3s all ease;
 }
@@ -520,27 +527,39 @@ body .container {
 /* detailed cards styling */
 
 .detailed-card-voyage {
+    background-color: #fff;
     max-width: 100%;
     margin: 20px 100px;
     padding: 20px;
     height: 500px;
-    border: 1px solid var(--second-underline);
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    box-shadow: var(--main-shadow);
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
     overflow: hidden;
 }
 
 .detailed-card-voyage .image {
     width: 100%;
     height: fit-content;
-    /* display: flex;
+    display: flex;
     justify-content: center;
-    align-items: center; */
+    align-items: center;
     position: relative;
     border: 1px solid green;
+}
+
+.detailed-card-voyage .body {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
 }
 
 .detailed-card-voyage .image img {
@@ -554,18 +573,44 @@ body .container {
 /* vols styling */
 
 .vols-box {
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 20px 100px;
-    box-shadow: var(--secondary-shadow-hovered);
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    padding: 10px;
 }
 
 .vols-box .vol {
-    border: 1px solid black; 
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    padding: 10px 20px;
     width: 100%;
-    padding: 10px;
+}
+
+.vols-box .vol:not(:last-child) {
+    border-bottom: 1px solid var(--second-underline);
+}
+
+.vol .image-vol {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8;
+}
+
+.vol .image-vol .from, .vol .image-vol .to {
+    font-weight: 600;
+    font-style: italic;
 }
 
 .vols-box .vol img {
@@ -573,22 +618,80 @@ body .container {
     height: auto;
 }
 
+
 /* comments styling */
 
 .comments {
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 10px;
     align-items: center;
-    margin: 20px 100px;
-    box-shadow: var(--secondary-shadow-hovered);
+    padding: 10px;
+    margin: 20px auto;
+    border-radius: var(--main-border-radius);
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    max-width: 800px;
 }
 
+.comments .comment {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
+    min-height: 150px;
+}
 
-/* .comments .comment {
+.comments .comment:not(:last-child) {
+    border-bottom: 1px solid var(--second-underline);
+}
 
-} */
+.comments .comment .image-box {
+    width: 100px;
+    height: 100px;
+}
+
+.comments .comment .image-box img {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+.comments .comment .author {
+    text-align: center;
+}
+
+.comments .comment .body {
+    margin-left: 20px;
+    width: 100%;
+}
+
+.comments .comment .evaluation-time {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comments .comment .evaluation-time {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comments .comment .evaluation-time .time {
+    color: var(--main-gray);
+}
+
+.comments .comment .evaluation-time .checked {
+    color: orange;
+}
+
 
 /* footer styles */
 

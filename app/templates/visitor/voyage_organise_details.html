@@ -5,12 +5,12 @@
 {% block block_css %}
 <style>
     body .container {
-        height: 200px;
         background-color: rgb(255, 255, 255);
     }
 </style>
 {% endblock block_css %}
 {% block main %}
+<div class="inner-container">
 {% for avoir in avoir%}
 <div class="detailed-card-voyage">
     <div class="image">
@@ -54,6 +54,7 @@
 </div>
 {%endfor%}
 {% endblock main %}
+</div>
 {% block js_block %}
 <script>
     const evaluation_div = document.querySelector('div[class="evaluation"]');

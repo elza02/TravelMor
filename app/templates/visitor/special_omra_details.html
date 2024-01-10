@@ -5,13 +5,12 @@
 {% block block_css %}
 <style>
     body .container {
-        height: 200px;
         background-color: rgb(255, 255, 255);
     }
 </style>
 {% endblock block_css %}
 {% block main %}
-
+<div class="inner-container">
 <h1>{{ id_voyage }}</h1>
 {% for avoir in avoir%}
 <div class="detailed-card-voyage">
@@ -55,6 +54,7 @@
     </div>
 </div>
 {%endfor%}
+</div>
 {% endblock main %}
 {% block js_block %}
 <script>

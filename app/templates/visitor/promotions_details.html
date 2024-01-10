@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block url_8_class %}active{% endblock url_8_class %}
-{% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
+{% block title %} promotions details - {{ id_voyage }} {% endblock title %}
 {% block block_css %}
 <style>
     body .container {
-        height: 200px;
         background-color: rgb(255, 255, 255);
     }
 </style>
 {% endblock block_css %}
 {% block main %}
+<div class="inner-container">
+<div class="inner-container">
 {% for avoir in avoir%}
 <div class="detailed-card-voyage">
     <div class="image">
@@ -53,7 +54,9 @@
     </div>
 </div>
 {%endfor%}
+</div>
 {% endblock main %}
+</div>
 {% block js_block %}
 <script>
     const evaluation_div = document.querySelector('div[class="evaluation"]');

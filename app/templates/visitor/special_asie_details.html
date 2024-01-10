@@ -4,14 +4,14 @@
 {% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
 {% block block_css %}
 <style>
-    body .container {
-        height: 200px;
+    .container {
         background-color: rgb(255, 255, 255);
     }
+    
 </style>
 {% endblock block_css %}
 {% block main %}
-
+<div class="inner-container">
 <h1>{{ id_voyage }}</h1>
 {% for avoir in avoir%}
 <div class="detailed-card-voyage">
@@ -30,43 +30,64 @@
     </div>            
 </div> 
 {%endfor%}
+
+<h4 style="text-align: center;">Les vols de ce voyage : </h4>
 <div class = "vols-box">
     {% for vol in inclure %}
     <div class="vol">
         <div class="image-vol"> 
             <img src="{% static "assets/royal-air-maroc.svg" %}">
             <div class="from">{{ vol.id_vol.date_d_vol }}</div>
+            <div>à</div>
             <div class="to">{{ vol.id_vol.date_f_vol }}</div>
         </div>
         <div class="body">
-            <p class="descrp">Hotel {{ vol.id_voyage.id_hotel.type_hotel }}etoiles, type de chambre: {{ vol.id_voyage.id_hotel.type_hotel }}</p>
+            <p class="descrp">Hotel {{ vol.id_voyage.id_hotel.type_hotel }} étoiles, type de chambre: {{ vol.id_voyage.id_hotel.type_hotel }}</p>
+            <p>Petit dejeuner : <span>{% if hotel.petit_dejeuner%}Inclus{% else %}Non Inclus{% endif %}</p>
         </div>
     </div>
     {% endfor%}
 </div>
-<h4>Les commentaire sur ce voyage : </h4>
-{%for comment in comments%}
+
+<h4 style="text-align: center;">Les commentaire sur ce voyage : </h4>
 <div class="comments">
-    <div class="comment">
-        <div class="author">{{comment.id_utilisateur.prenom}}</div>
+{% for comment in comments %}
+<div class="comment">
+    <div class="image-box">
+        <img src="{% static "assets/no-profile.png" %}" alt="photo of {{comment.id_utilisateur.nom}} {{comment.id_utilisateur.prenom}}">
+        <div class="author">{{comment.id_utilisateur.nom}} {{comment.id_utilisateur.prenom}}</div>
+    </div>
+    <div class="body">
+        <div class="evaluation-time">
+            <div class="evaluation" data-stars="{{comment.evaluation}}">
+                {% for i in "12345" %}
+                    <i class="fa fa-star"></i>
+                {% endfor %}
+            </div>
+            <div class="time">{{comment.heure_redaction}}, {{comment.date_redaction}}</div>
+        </div>
         <div class="text">{{comment.text_comment}}</div>
-        <div class="time">{{comment.heure_redaction}}, {{comment.date_redaction}}</div>
-        <div class="evaluation">{{comment.evaluation}}</div>
     </div>
 </div>
-{%endfor%}
+{% endfor %}
+</div>
+</div>
 {% endblock main %}
 {% block js_block %}
 <script>
-    const evaluation_div = document.querySelector('div[class="evaluation"]');
+    const evaluation_divs = document.querySelectorAll('div[class="evaluation"]');
     document.addEventListener('DOMContentLoaded', function() {
-    let evaluation = evaluation_div.textContent;
-    let text = '';
-    for(let i = 0; i < parseInt(evaluation); i++) {
-        text += '*';
-    }                
-    evaluation_div.innerHTML = text;
-});
+        evaluation_divs.forEach((ev_div) => {
+            let stars = parseInt(ev_div.dataset.stars);
+            let icons = ev_div.querySelectorAll('i');
+            icons.forEach((icon, index) => {
+                if (index < stars) {
+                    icon.classList.add('checked');
+                }
+            });
+        });
+    });
+    
 </script>
 {% endblock js_block %}
 
