@@ -21,7 +21,7 @@
             </div>
             <div class="price"><img src="{% static 'assets/background-pricing.png' %}" alt="background-pricing"><span>{{ hotel.prix_nuit }} MAD/Pers.</span></div>
             <span class="type_ch">Type Chambre : <span>{{hotel.type_chambre}}</span></span>
-            <span class="type_ch">Petit dejeuner : <span>{% if hotel.petit_dejeuner%}Inclus{% else %}Non Inclus{% endif %}</span></span>
+            <span>{% if hotel.petit_dejeuner%}<i class="fa-solid fa-utensils" style="color: gray;"></i>{% endif %}</span>
             <form method="get" action="/hotels_details/{{ hotel.id_hotel }}">
                 <button type="submit"><i class="fa-solid fa-angles-right">&nbsp;&nbsp;</i>Details</button>
             </form>

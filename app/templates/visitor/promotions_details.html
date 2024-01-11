@@ -4,70 +4,108 @@
 {% block title %} promotions details - {{ id_voyage }} {% endblock title %}
 {% block block_css %}
 <style>
-    body .container {
+    .container {
         background-color: rgb(255, 255, 255);
     }
 </style>
 {% endblock block_css %}
 {% block main %}
 <div class="inner-container">
-<div class="inner-container">
-{% for avoir in avoir%}
+
+<h4 style="text-align: center;">Les details de ce voyage : </h4>
+{% for avoir in avoir %}
 <div class="detailed-card-voyage">
-    <div class="image">
-        <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
+    <div class="accordion">
+        <div class="image-box">
+            {% for image in avoir.id_ville.imageville_set.all %}
+            <div class="mySlides">
+                <div class="numbertext">{{ forloop.counter }} / {{ avoir.id_ville.imageville_set.count }}</div>
+                <img src="{% static 'assets/cities/' %}{{ image.id_images.path_image }}" style="width:100%" alt="{{image.id_images.path_image}}">
+            </div>
+            {% endfor %}
+            
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+        </div>
+        <div class="caption-container">
+            <p id="caption"></p>
+        </div>
+        
+        <div class="row">
+            {% for image in avoir.id_ville.imageville_set.all %}
+            <div class="column">
+                <img class="demo cursor" src="{% static 'assets/cities/' %}{{ image.id_images.path_image }}" style="width:100%" onclick="currentSlide({{ forloop.counter }})" alt="{{ image.id_images.path_image }}">
+            </div>
+            {% endfor %}
+        </div>
     </div>
     <div class="body">
         <span class="title">{{ avoir.id_voyage.titre_voyage }}</span>
-        <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir.id_ville.id_pays.nom_pays }}, {{ avoir.id_ville.nom_ville }}</span>
-        <div class="price">à partir de <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></div>
-        <span class="price">Nom hotel: <span>{{ avoir.id_voyage.id_hotel.nom_hotel }}</span></span>
+        <span class="localisation"><i class="fa-solid fa-location-dot"></i> {{ avoir.id_ville.id_pays.nom_pays }}, {{ avoir.id_ville.nom_ville }}</span>
+        <span class="price">à partir de <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span>
         <span class="rating">Durée: <span>{{ avoir.id_voyage.duree_voyage }} jours / {{ avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
-        <form method="get" action="/voyage_organise_details/{{ avoir.id_voyage.id_voyage }}">
-            <button type="submit">J'en profit</button>
+        <form method="get" action="/special_turqie_details/{{ avoir.id_voyage.id_voyage }}">
+            <button type="submit">J'en profite</button>
         </form>
     </div>            
 </div> 
-{%endfor%}
+{% endfor %}
+
+
+
+
+<h4 style="text-align: center;">Les vols de ce voyage : </h4>
 <div class = "vols-box">
     {% for vol in inclure %}
     <div class="vol">
         <div class="image-vol"> 
             <img src="{% static "assets/royal-air-maroc.svg" %}">
-            <div class="from">{{ vol.id_vol.date_d_vol }}</div>
-            <div class="to">{{ vol.id_vol.date_f_vol }}</div>
+            <div class="duration">{{ vol.id_vol.date_d_vol }} <br> {{ vol.id_vol.date_f_vol }}</div>
         </div>
         <div class="body">
-            <p class="descrp">Hotel {{ vol.id_voyage.id_hotel.type_hotel }}etoiles, type de chambre: {{ vol.id_voyage.id_hotel.type_hotel }}</p>
+            <p class="descrp">Hotel {{ vol.id_voyage.id_hotel.type_hotel }} étoiles, type de chambre: {{ vol.id_voyage.id_hotel.type_hotel }}</p>
+            <p>{% if hotel.petit_dejeuner%}<i class="fa-solid fa-utensils"></i>{% endif %}</p>
+            <div class="price">+{{ vol.id_vol.prix_vol }} MAD</div>
         </div>
     </div>
     {% endfor%}
 </div>
-<h4>Les commentaire sur ce voyage : </h4>
-{%for comment in comments%}
+
+<h4 style="text-align: center;">Les commentaire sur ce voyage : </h4>
 <div class="comments">
-    <div class="comment">
-        <div class="author">{{comment.id_utilisateur.prenom}}</div>
-        <div class="text">{{comment.text_comment}}</div>
-        <div class="time">{{comment.heure_redaction}}, {{comment.date_redaction}}</div>
-        <div class="evaluation">{{comment.evaluation}}</div>
+<form action="#" method="GET">
+    <div class="evaluation-interact" data-stars="{{comment.evaluation}}">
+        {% for i in "12345" %}
+            <i class="fa fa-star star"></i>
+        {% endfor %}
     </div>
+    <textarea name="comment" id="add-comment" placeholder="Entrer un commentaire..."></textarea>
+    <button type="submit">Ok</button>
+</form>
+{% for comment in comments %}
+    <div class="comment">
+        <div class="image-box">
+            <img src="{% static "assets/no-profile.png" %}" alt="photo of {{comment.id_utilisateur.nom}} {{comment.id_utilisateur.prenom}}">
+            <div class="author">{{comment.id_utilisateur.nom}} {{comment.id_utilisateur.prenom}}</div>
+        </div>
+        <div class="body">
+            <div class="evaluation-time">
+                <div class="evaluation" data-stars="{{comment.evaluation}}">
+                    {% for i in "12345" %}
+                        <i class="fa fa-star"></i>
+                    {% endfor %}
+                </div>
+                <div class="time">{{comment.heure_redaction}}, {{comment.date_redaction}}</div>
+            </div>
+            <div class="text">{{comment.text_comment}}</div>
+        </div>
+    </div>
+{% endfor %}
 </div>
-{%endfor%}
 </div>
 {% endblock main %}
-</div>
+
 {% block js_block %}
-<script>
-    const evaluation_div = document.querySelector('div[class="evaluation"]');
-    document.addEventListener('DOMContentLoaded', function() {
-    let evaluation = evaluation_div.textContent;
-    let text = '';
-    for(let i = 0; i < parseInt(evaluation); i++) {
-        text += '*';
-    }                
-    evaluation_div.innerHTML = text;
-});
-</script>
+<script src="{% static 'js/detailed_card.js' %}"></script>
 {% endblock js_block %}
 
