@@ -726,24 +726,23 @@ body .container {
 #commentForm {
     position: relative;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    gap: 10px;
     max-width: 800px;
     margin: auto;
 }
 
 #commentForm .add-comment {
-    width: 75%;
-    height: 50px;
+    width: 100%;
+    height: 70px;
     resize: none; 
     border: none;
     outline: none;
-    padding: 15px;
+    padding: 15px ;
+    padding-inline-end: 200px ;
     align-self: flex-start;
+    border-radius: var(--main-border-radius);
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
 }
 
 #commentForm .add-comment:focus {
