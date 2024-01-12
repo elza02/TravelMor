@@ -723,22 +723,7 @@ body .container {
 
 /* comments styling */
 
-.comments {
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    /* padding: 10px; */
-    margin: 20px auto;
-    border-radius: var(--main-border-radius);
-    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
-    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
-    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
-    max-width: 800px;
-}
-
-.comments form {
+#commentForm {
     position: relative;
     width: 100%;
     display: flex;
@@ -747,9 +732,11 @@ body .container {
     align-items: center;
     padding: 10px;
     gap: 10px;
+    max-width: 800px;
+    margin: auto;
 }
 
-#add-comment {
+#commentForm .add-comment {
     width: 75%;
     height: 50px;
     resize: none; 
@@ -759,12 +746,12 @@ body .container {
     align-self: flex-start;
 }
 
-#add-comment:focus {
+#commentForm .add-comment:focus {
     border: none;
     outline: none;
 }
 
-form #add-comment + button {
+#commentForm .add-comment + button {
     position: absolute;
     right: 15px;
     top: 22px;
@@ -777,6 +764,41 @@ form #add-comment + button {
     border-radius: var(--main-border-radius);
     color: #fff;
     font-weight: 600;
+}
+
+#commentForm .evaluation-interact {
+    position: absolute;
+    top: 25px;
+    right: 70px;
+}
+
+#commentForm .evaluation-interact .checked {
+    color: orange;
+}
+
+#commentForm .evaluation-interact .star {
+    cursor: pointer;
+    transition: color .2s  ease-in;
+}
+
+#commentForm .evaluation-interact .star:hover {
+    /* Zoom the star by 1.2 times */
+    transform: scale(1.1);
+    color: orange;
+}
+
+.comments {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    border-radius: var(--main-border-radius);
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    max-width: 800px;
 }
 
 
@@ -837,26 +859,7 @@ form #add-comment + button {
     color: orange;
 }
 
-.comments .evaluation-interact {
-    position: absolute;
-    top: 25px;
-    right: 70px;
-}
 
-.comments .evaluation-interact .checked {
-    color: orange;
-}
-
-.comments .evaluation-interact .star {
-    cursor: pointer;
-    transition: color .2s  ease-in;
-}
-
-.comments .evaluation-interact .star:hover {
-    /* Zoom the star by 1.2 times */
-    transform: scale(1.1);
-    color: orange;
-}
 
 /* footer styles */
 

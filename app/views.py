@@ -1,11 +1,16 @@
-from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse,request
+from django.forms import model_to_dict
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse, request
 from django.db.models import *
 from app.forms import PaysForm
 from . import models
 from datetime import datetime
 from decimal import Decimal
 from django.utils import timezone
+from django.http import JsonResponse
+import json
+from json import JSONEncoder
+from datetime import date, time
 
 def home (request):
     # pays1 = models.Pays.objects.create(nom_pays="France")
@@ -267,7 +272,7 @@ def home (request):
 def voyageDetails(id_voyage):
     avoir = models.Avoir.objects.filter(id_voyage = id_voyage)
     inclure_instance = models.inclure.objects.filter(id_voyage=id_voyage)
-    comment = models.Commentaire.objects.filter(id_voyage = id_voyage)
+    comment = models.Commentaire.objects.filter(id_voyage = id_voyage).order_by('-heure_redaction')
     return avoir, inclure_instance, comment
 
 def voyage_organise(request):
@@ -313,11 +318,58 @@ def special_turqie_details(request, id_voyage):
 
 def special_asie(request):
     query = models.Avoir.objects.all()
-    return render(request, 'visitor/special_asie.html', {'query' :query})
+    imagesvilles = models.ImageVille.objects.all()
+    return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesvilles' : imagesvilles})
 
 def special_asie_details(request, id_voyage):
-    avoir, inclure_instance, comment = voyageDetails(id_voyage)
-    return render(request, 'visitor/special_asie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+    avoir, inclure_instance, comments = voyageDetails(id_voyage)
+    return render(request, 'visitor/special_asie_details.html', {'id_voyage' : id_voyage, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
+
+class CustomJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, date):
+            return obj.isoformat()
+        elif isinstance(obj, time):
+            return obj.isoformat()
+        else:
+            return super().default(obj)
+
+def special_asie_comments(request):
+    try:
+        # Retrieve the JSON data from the request
+        data = json.loads(request.body.decode('utf-8'))
+        print("Received data:", data)  # Add this line for debugging
+        
+        # Get the Voyage and Utilisateur objects from the database or raise Http404
+        voyage = get_object_or_404(models.Voyage, id_voyage=int(data.get('id_voyage', 0)))
+        utilisateur = get_object_or_404(models.Utilisateur, id_utilisateur=int(data.get('id_user', 0)))
+
+        # Create a Commentaire object and save it to the database
+        comment = models.Commentaire(
+            text_comment=data.get('comment', ''),
+            date_redaction=timezone.now().date().isoformat(),
+            heure_redaction=timezone.now().time().isoformat(),
+            evaluation=int(data.get('rating', 0)),
+            id_utilisateur=utilisateur,
+            id_voyage=voyage
+        )
+        comment.save()
+
+        # Convert the Commentaire object to a dictionary
+        new_comment = model_to_dict(comment)
+        utilisateur = model_to_dict(utilisateur)
+
+        # Encode the data as a JSON string
+        response_data = json.dumps({'success': True, 'new_comment': new_comment, 'utilisateur' : utilisateur}, cls=CustomJSONEncoder)
+
+
+        # Return a JsonResponse with the data
+        return JsonResponse(response_data, safe=False)
+    except json.JSONDecodeError as e:
+        print("JSON Decode Error:", e)
+        # Return a JsonResponse with an error message
+        return JsonResponse(json.dumps({'success': False, 'error': str(e)}), safe=False)
+
 
 
 def special_omra(request):

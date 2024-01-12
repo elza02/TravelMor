@@ -49,7 +49,7 @@ star.addEventListener('click', function(event) {
     
     if (target.tagName === 'I') {
         let index = Array.from(target.parentNode.children).indexOf(target);
-        console.log(index);
+        // console.log(index);
         let icons = target.parentNode.querySelectorAll('i');
         icons.forEach((icon, i) => {
             if (i <= index) {
@@ -87,8 +87,8 @@ star.addEventListener('mouseleave', function() {
     }
     });
 });
-star.addEventListener('click', function() {
-    rating = index + 1;
-    document.getElementById('output').innerHTML = 'Rating: ' + rating;
-});
+// star.addEventListener('click', function() {
+//     rating = index + 1;
+//     document.getElementById('output').innerHTML = 'Rating: ' + rating;
+// });
 });

@@ -20,6 +20,7 @@ urlpatterns = [
     
     path('special_asie/', views.special_asie, name="special_asie"),
     path('special_asie/details/<int:id_voyage>/', views.special_asie_details, name="special_asie_details"),
+    path('special_asie/details/comments/', views.special_asie_comments, name="special_asie_comments"),
     
     path('special_omra/', views.special_omra, name="special_omra"),
     path('special_omra_details/<int:id_voyage>/', views.special_omra_details, name="special_omra_details"),
