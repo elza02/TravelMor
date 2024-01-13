@@ -2,6 +2,9 @@
 {% load static %}
 {% block url_4_class %} active {% endblock url_4_class %}
 {% block title %} special_asie {% endblock title %}
+{% block block_css %}
+<link rel="stylesheet" href="{% static 'css/card.css' %}">
+{% endblock block_css %}
 {% block main %}
 
 <section class="second">
@@ -33,3 +36,11 @@
     {% endfor %}
 </section>
 {% endblock main %}
+
+{% block js_block %}
+<script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('heart')
+    })
+</script>
+{% endblock js_block %}

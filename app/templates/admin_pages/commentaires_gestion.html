@@ -1,6 +1,7 @@
 {% extends 'admin_pages/base.html' %}
 {% block title %} Commentraires {% endblock title %}
 {% block main %}
+<div class="container">
     <h1>administration Commentraires</h1>
     <div>
         <form action="" method="GET" class="filter">
@@ -38,4 +39,6 @@
         {{ form.as_p }}
         <button type="submit">ajouter</button>
     </form>
+<div class="container">
+
 {% endblock main %}

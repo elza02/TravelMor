@@ -272,7 +272,7 @@ def home (request):
 def voyageDetails(id_voyage):
     avoir = models.Avoir.objects.filter(id_voyage = id_voyage)
     inclure_instance = models.inclure.objects.filter(id_voyage=id_voyage)
-    comment = models.Commentaire.objects.filter(id_voyage = id_voyage).order_by('-heure_redaction')
+    comment = models.Commentaire.objects.filter(id_voyage = id_voyage).order_by('-date_redaction', '-heure_redaction')
     return avoir, inclure_instance, comment
 
 def voyage_organise(request):
@@ -317,9 +317,13 @@ def special_turqie_details(request, id_voyage):
 
 
 def special_asie(request):
+    # ville = models.Ville.filter(nom_ville='tokyo')
     query = models.Avoir.objects.all()
-    imagesvilles = models.ImageVille.objects.all()
-    return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesvilles' : imagesvilles})
+    # print(query)
+    # imageville = models.ImageVille.objects.filter(ville=query.Avoir.id_ville).first()
+    # imageville =1
+    # return render(request, 'visitor/special_asie.html', {'query' :query, 'imageville' : imageville})
+    return render(request, 'visitor/special_asie.html', {'query' :query})
 
 def special_asie_details(request, id_voyage):
     avoir, inclure_instance, comments = voyageDetails(id_voyage)

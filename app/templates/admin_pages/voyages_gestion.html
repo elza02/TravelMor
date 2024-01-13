@@ -1,6 +1,7 @@
 {% extends 'admin_pages/base.html' %}
 {% block title %} voyages {% endblock title %}
 {% block main %}
+<div class="container">
     <h1>administration voyages</h1>
     <div>
         <table border = 1>
@@ -44,4 +45,5 @@
         {{ form.as_p }}
         <button type="submit">ajouter</button>
     </form>
+</div>
 {% endblock main %}

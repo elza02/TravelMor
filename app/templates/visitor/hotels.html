@@ -3,7 +3,9 @@
 {% block url_2_class %} active {% endblock url_2_class %}
 {% block title %} voyage-organise {% endblock title %}
 {% block main %}
-
+{% block block_css %}
+<link rel="stylesheet" href="{% static 'css/card.css' %}">
+{% endblock block_css %}
 <section class="second">
     {% for hotel in query %}
          
