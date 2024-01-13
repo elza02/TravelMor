@@ -1,16 +1,13 @@
-from django.forms import model_to_dict
-from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse, request
+from django.shortcuts import get_object_or_404, render, redirect
+from django.http import HttpResponse,request
 from django.db.models import *
 from app.forms import PaysForm
 from . import models
 from datetime import datetime
 from decimal import Decimal
 from django.utils import timezone
-from django.http import JsonResponse
-import json
-from json import JSONEncoder
-from datetime import date, time
+from django.contrib.auth import authenticate, login
+#from .forms import RegistrationForm, UserLoginForm
 
 def home (request):
     # pays1 = models.Pays.objects.create(nom_pays="France")
@@ -272,7 +269,7 @@ def home (request):
 def voyageDetails(id_voyage):
     avoir = models.Avoir.objects.filter(id_voyage = id_voyage)
     inclure_instance = models.inclure.objects.filter(id_voyage=id_voyage)
-    comment = models.Commentaire.objects.filter(id_voyage = id_voyage).order_by('-heure_redaction')
+    comment = models.Commentaire.objects.filter(id_voyage = id_voyage)
     return avoir, inclure_instance, comment
 
 def voyage_organise(request):
@@ -318,58 +315,11 @@ def special_turqie_details(request, id_voyage):
 
 def special_asie(request):
     query = models.Avoir.objects.all()
-    imagesvilles = models.ImageVille.objects.all()
-    return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesvilles' : imagesvilles})
+    return render(request, 'visitor/special_asie.html', {'query' :query})
 
 def special_asie_details(request, id_voyage):
-    avoir, inclure_instance, comments = voyageDetails(id_voyage)
-    return render(request, 'visitor/special_asie_details.html', {'id_voyage' : id_voyage, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
-
-class CustomJSONEncoder(JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, date):
-            return obj.isoformat()
-        elif isinstance(obj, time):
-            return obj.isoformat()
-        else:
-            return super().default(obj)
-
-def special_asie_comments(request):
-    try:
-        # Retrieve the JSON data from the request
-        data = json.loads(request.body.decode('utf-8'))
-        print("Received data:", data)  # Add this line for debugging
-        
-        # Get the Voyage and Utilisateur objects from the database or raise Http404
-        voyage = get_object_or_404(models.Voyage, id_voyage=int(data.get('id_voyage', 0)))
-        utilisateur = get_object_or_404(models.Utilisateur, id_utilisateur=int(data.get('id_user', 0)))
-
-        # Create a Commentaire object and save it to the database
-        comment = models.Commentaire(
-            text_comment=data.get('comment', ''),
-            date_redaction=timezone.now().date().isoformat(),
-            heure_redaction=timezone.now().time().isoformat(),
-            evaluation=int(data.get('rating', 0)),
-            id_utilisateur=utilisateur,
-            id_voyage=voyage
-        )
-        comment.save()
-
-        # Convert the Commentaire object to a dictionary
-        new_comment = model_to_dict(comment)
-        utilisateur = model_to_dict(utilisateur)
-
-        # Encode the data as a JSON string
-        response_data = json.dumps({'success': True, 'new_comment': new_comment, 'utilisateur' : utilisateur}, cls=CustomJSONEncoder)
-
-
-        # Return a JsonResponse with the data
-        return JsonResponse(response_data, safe=False)
-    except json.JSONDecodeError as e:
-        print("JSON Decode Error:", e)
-        # Return a JsonResponse with an error message
-        return JsonResponse(json.dumps({'success': False, 'error': str(e)}), safe=False)
-
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    return render(request, 'visitor/special_asie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 
 def special_omra(request):
@@ -439,3 +389,61 @@ def dashboard_gestion(request):
     Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
     return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
 
+
+from .forms import SimpleForm
+
+def simple_form_view(request):
+    if request.method == 'POST':
+        form = SimpleForm(request.POST)
+        if form.is_valid():
+            # Récupérer les données du formulaire
+            passwd = form.cleaned_data['password']
+            email = form.cleaned_data['email']
+            for usr in models.Utilisateur.objects.all():
+                if passwd == usr.mot_d_passe and email == usr.email:
+                    if usr.est_admin != 1:
+                        return profile_view(request,usr.id_utilisateur)
+                        break
+                    else:
+                        return dashboard_gestion(request)
+                        break
+    else:
+        form = SimpleForm()
+
+    return render(request, 'login.html', {'form': form})
+
+
+
+def profile_view(request, user_id):
+    utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+    return render(request, 'client/profile.html', {'utilisateur': utilisateur})
+#from django.contrib.auth.forms import UserCreationForm
+# def login(request):
+#     form = UserCreationForm()
+#     return render(request, 'login.html',{'form':form})
+
+# def user_registration(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             #form.save()
+#             # Continue with login logic if needed
+#             return redirect('login')  # Redirect to login page after successful registration
+#     else:
+#         form = RegistrationForm()
+
+#     return render(request, 'registration.html', {'form': form})
+
+# def user_login(request):
+#     if request.method == 'POST':
+#         form = UserLoginForm(request, request.POST)
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password']
+#             for user in models.Utilisateur.objects.all():
+#                 if username == user.id_utilisateur and password == user.mot_d_passe:
+#                     usr = {'name' : username, 'password':password}
+#                     return render(request, 'test.html',usr)  # Redirect to the dashboard or any desired page
+#     else:
+#         form = UserLoginForm()
+#         return render(request, 'login.html', {'form': form})

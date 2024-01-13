@@ -20,7 +20,6 @@ urlpatterns = [
     
     path('special_asie/', views.special_asie, name="special_asie"),
     path('special_asie/details/<int:id_voyage>/', views.special_asie_details, name="special_asie_details"),
-    path('special_asie/details/comments/', views.special_asie_comments, name="special_asie_comments"),
     
     path('special_omra/', views.special_omra, name="special_omra"),
     path('special_omra_details/<int:id_voyage>/', views.special_omra_details, name="special_omra_details"),
@@ -39,5 +38,10 @@ urlpatterns = [
     path('admin_page/hotels/', views.hotels_gestion, name="hotels_gestion"),
     path('admin_page/voyages/', views.voyages_gestion, name="voyages_gestion"),
     path('admin_page/dashboard/', views.dashboard_gestion, name="dashboard_gestion"),
+    path('login/', views.simple_form_view, name="simple_form"),
+    path('client/profile/<int:user_id>/', views.profile_view, name='profile'),
+
+   # path('registration/', views.user_registration, name="registration_login"),
+
     
 ]
