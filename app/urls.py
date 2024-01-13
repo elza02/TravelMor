@@ -39,5 +39,8 @@ urlpatterns = [
     path('admin_page/hotels/', views.hotels_gestion, name="hotels_gestion"),
     path('admin_page/voyages/', views.voyages_gestion, name="voyages_gestion"),
     path('admin_page/dashboard/', views.dashboard_gestion, name="dashboard_gestion"),
-    
+    path('login/', views.simple_form_view, name="simple_form"),
+    path('client/profile/<int:user_id>/', views.profile_view, name='profile'),
+
+   # path('registration/', views.user_registration, name="registration_login"),
 ]

@@ -443,3 +443,60 @@ def dashboard_gestion(request):
     Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
     return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
 
+from .forms import SimpleForm
+
+def simple_form_view(request):
+    if request.method == 'POST':
+        form = SimpleForm(request.POST)
+        if form.is_valid():
+            # Récupérer les données du formulaire
+            passwd = form.cleaned_data['password']
+            email = form.cleaned_data['email']
+            for usr in models.Utilisateur.objects.all():
+                if passwd == usr.mot_d_passe and email == usr.email:
+                    if usr.est_admin != 1:
+                        return profile_view(request,usr.id_utilisateur)
+                        break
+                    else:
+                        return dashboard_gestion(request)
+                        break
+    else:
+        form = SimpleForm()
+
+    return render(request, 'login.html', {'form': form})
+
+
+
+def profile_view(request, user_id):
+    utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+    return render(request, 'client/profile.html', {'utilisateur': utilisateur})
+#from django.contrib.auth.forms import UserCreationForm
+# def login(request):
+#     form = UserCreationForm()
+#     return render(request, 'login.html',{'form':form})
+
+# def user_registration(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             #form.save()
+#             # Continue with login logic if needed
+#             return redirect('login')  # Redirect to login page after successful registration
+#     else:
+#         form = RegistrationForm()
+
+#     return render(request, 'registration.html', {'form': form})
+
+# def user_login(request):
+#     if request.method == 'POST':
+#         form = UserLoginForm(request, request.POST)
+#         if form.is_valid():
+#             username = form.cleaned_data['username']
+#             password = form.cleaned_data['password']
+#             for user in models.Utilisateur.objects.all():
+#                 if username == user.id_utilisateur and password == user.mot_d_passe:
+#                     usr = {'name' : username, 'password':password}
+#                     return render(request, 'test.html',usr)  # Redirect to the dashboard or any desired page
+#     else:
+#         form = UserLoginForm()
+#         return render(request, 'login.html', {'form': form})
