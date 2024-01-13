@@ -3,6 +3,7 @@
 {% block url_6_class %}active{% endblock url_6_class %}
 {% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
 {% block block_css %}
+<link rel="stylesheet" href="{% static 'css/detailed_card.css' %}">
 <style>
     .container {
         background-color: rgb(255, 255, 255);
@@ -72,16 +73,19 @@
 </div>
 
 <h4 style="text-align: center;">Les commentaire sur ce voyage : </h4>
-<div class="comments">
-<form action="#" method="GET">
-    <div class="evaluation-interact" data-stars="{{comment.evaluation}}">
+<form id="commentForm" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="id_voyage" value="{{id_voyage}}">
+    <input type="hidden" name="id_user" value="{{ comment.id_utilisateur.id_utilisateur }}">
+    <div class="evaluation-interact">
         {% for i in "12345" %}
-            <i class="fa fa-star star"></i>
+            <i class="fa fa-star star" data-star={{i}}></i>
         {% endfor %}
     </div>
-    <textarea name="comment" class="add-comment" placeholder="Entrer un commentaire..."></textarea>
+    <textarea name="comment" class="add-comment" placeholder="Ecrire un commentaire..."></textarea>
     <button type="submit">Ok</button>
 </form>
+<div class="comments">
 {% for comment in comments %}
     <div class="comment">
         <div class="image-box">
@@ -106,6 +110,131 @@
 {% endblock main %}
 
 {% block js_block %}
-<script src="{% static 'js/detailed_card.js' %}"></script>
+<script defer src="{% static 'js/detailed_card.js' %}"></script>
+
+<script defer>
+    document.addEventListener('DOMContentLoaded', function () {
+        let selectedStars = 0;
+
+        // Event handler for star ratings
+        document.querySelectorAll('.star').forEach(function (star) {
+            star.addEventListener('click', function () {
+                selectedStars = parseInt(this.dataset.star);
+                document.querySelectorAll('.star').forEach(function (s) {
+                    s.classList.remove('checked');
+                });
+                this.classList.add('checked');
+            });
+        });
+
+
+        // Get the CSRF token from the cookie
+        function getCSRFToken() {
+            const csrfCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
+            if (csrfCookie) {
+                return csrfCookie.split('=')[1];
+            }
+            return null;
+        }
+
+        // Event handler for form submission
+
+        document.getElementById('commentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Fetch the comment text and voyage id
+            const commentText = document.querySelector('.add-comment').value;
+            const id_voyage = document.querySelector('#commentForm input[name="id_voyage"]').value;
+            const id_user = document.querySelector('#commentForm input[name="id_user"]').value;
+
+            const csrfToken = getCSRFToken();
+
+            // Check if at least one star is checked
+            if (selectedStars === 0) {
+                alert('Please select a rating before submitting.');
+                return;
+            }
+
+            // Prepare data for submission
+            const formData = {
+                comment: commentText,
+                rating: selectedStars,
+                id_voyage: parseInt(id_voyage),
+                id_user: 1,
+            };
+
+           // console.log(formData);
+
+            document.querySelector('.add-comment').value = ''
+            document.querySelectorAll('.star').forEach(function (s) {
+                s.classList.remove('checked');
+            });
+            selectedStars = 0 // modify this
+
+            //Perform an asynchronous POST request to your backend
+            fetch('/special_asie/details/comments/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,   
+                },
+                body: JSON.stringify(formData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                //Handle the response from the backend (if needed)
+                    data = JSON.parse(data)
+                    //console.log(data.new_comment.id_utilisateur.nom)
+                    //console.log(data["new_comment"]["id_utilisateur"])
+                    console.log(data)
+                    //console.log(data['new_comment']['id_utilisateur']['nom'])
+                    updateCommentsSection(data.new_comment, data.utilisateur);
+            }).catch(error => {
+                //Handle errors (if any)
+                console.error(error);
+           });
+       });
+    });
+
+// Function to update the comments section
+function updateCommentsSection(newComment, utilisateur) {
+    // Create a new comment element
+    const commentElement = document.createElement('div');
+    commentElement.classList.add('comment');
+
+    // Construct the HTML structure for the new comment
+    commentElement.innerHTML = `
+        <div class="image-box">
+            <img src="{% static "assets/no-profile.png" %}" alt="photo of ${utilisateur.nom} ${utilisateur.prenom}">
+            <div class="author">${utilisateur.nom} ${utilisateur.prenom}</div>
+        </div>
+        <div class="body">
+            <div class="evaluation-time">
+                <div class="evaluation" data-stars="${newComment.evaluation}">
+                    ${generateStarIcons(newComment.evaluation)}
+                </div>
+                <div class="time">${newComment.heure_redaction}, ${newComment.date_redaction}</div>
+            </div>
+            <div class="text">${newComment.text_comment}</div>
+        </div>
+    `;
+
+    // Insert the new comment at the beginning of the comments section
+    const commentSection = document.querySelector('.comments');
+    commentSection.insertBefore(commentElement, commentSection.firstChild);
+}
+
+// Function to generate star icons based on the rating
+function generateStarIcons(rating) {
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+        const starClass = i <= rating ? 'fa-star checked' : 'fa-star';
+        starsHtml += `<i class="fa ${starClass}"></i>&nbsp;`;
+    }
+    return starsHtml;
+}
+
+</script>
+
 {% endblock js_block %}
 

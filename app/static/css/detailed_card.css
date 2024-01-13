@@ -1,0 +1,332 @@
+/* detailed cards styling */
+
+.detailed-card-voyage {
+    background-color: #fff;
+    max-width: 100%;
+    margin: 20px 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    overflow: hidden;
+}
+
+.detailed-card-voyage .accordion {
+    width: 100%;
+    height: 650px;
+    position: relative;
+}
+
+
+.detailed-card-voyage .accordion .mySlides {
+    display: none;
+}
+
+.detailed-card-voyage .accordion .mySlides img {
+    vertical-align: middle;
+    width: auto;
+    height: 500px;
+}
+  
+.detailed-card-voyage .accordion .cursor {
+    cursor: pointer;
+}
+  
+.detailed-card-voyage .accordion .prev,
+.detailed-card-voyage .accordion .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+  
+.detailed-card-voyage .accordion .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+  
+.detailed-card-voyage .accordion .prev:hover,
+.detailed-card-voyage .accordion .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+  
+.detailed-card-voyage .accordion .numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+}
+  
+.detailed-card-voyage .accordion .caption-container {
+    text-align: center;
+    background-color: #222;
+    padding: 2px 16px;
+    color: white;
+}
+
+.detailed-card-voyage .accordion .row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detailed-card-voyage .accordion .row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+  
+.detailed-card-voyage .accordion .column {
+    float: left;
+    width: 16.66%;
+}
+  
+.detailed-card-voyage .accordion .demo {
+    opacity: 0.6;
+}
+  
+.detailed-card-voyage .accordion .active,
+.detailed-card-voyage .accordion .demo:hover {
+    opacity: 1;
+}
+
+.detailed-card-voyage .body {
+    padding: 10px 20px;
+    width: 400px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 20px;
+    font-size: 1.5rem;
+}
+
+.detailed-card-voyage .body .title {
+    font-weight: bold;
+}
+
+.detailed-card-voyage .body .title {
+    font-weight: bold;
+}
+
+.detailed-card-voyage .body form {
+    width: 100%;
+}
+
+.detailed-card-voyage .body button {
+    padding: 10px 20px;
+    outline: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+    background-color: var(--main--green);
+    font-weight: 600;
+    margin: auto;
+    transition: all .2s ease;
+}
+
+.detailed-card-voyage .body button:hover {
+    opacity: .9;
+}
+
+/* vols styling */
+
+.vols-box {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 100px;
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    padding: 10px;
+}
+
+.vols-box .vol {
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.vols-box .vol:not(:last-child) {
+    border-bottom: 1px solid var(--second-underline);
+}
+
+.vol .image-vol {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.vol .image-vol .duration {
+    padding-top: 5px;
+    margin-top: 10px;
+    border-top: 1px solid var(--second-underline);
+    font-weight: 600;
+    font-style: italic;
+}
+
+
+.vols-box .vol img {
+    width: 100px;
+    height: auto;
+}
+
+
+/* comments styling */
+
+#commentForm {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+#commentForm .add-comment {
+    width: 100%;
+    height: 70px;
+    resize: none; 
+    border: none;
+    outline: none;
+    padding: 15px ;
+    padding-inline-end: 200px ;
+    align-self: flex-start;
+    border-radius: var(--main-border-radius);
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+}
+
+#commentForm .add-comment:focus {
+    border: none;
+    outline: none;
+}
+
+#commentForm .add-comment + button {
+    position: absolute;
+    right: 15px;
+    top: 22px;
+    width: fit-content;
+    padding: 5px 10px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: var(--main--green);
+    border-radius: var(--main-border-radius);
+    color: #fff;
+    font-weight: 600;
+}
+
+#commentForm .evaluation-interact {
+    position: absolute;
+    top: 25px;
+    right: 70px;
+}
+
+#commentForm .evaluation-interact .checked {
+    color: orange;
+}
+
+#commentForm .evaluation-interact .star {
+    cursor: pointer;
+    transition: color .2s  ease-in;
+}
+
+#commentForm .evaluation-interact .star:hover {
+    /* Zoom the star by 1.2 times */
+    transform: scale(1.1);
+    color: orange;
+}
+
+.comments {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    border-radius: var(--main-border-radius);
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    max-width: 800px;
+}
+
+
+.comments .comment {
+    display: flex;
+    align-items: center;
+    padding-inline: 15px;
+    width: 100%;
+    min-height: 150px;
+}
+
+.comments .comment:not(:last-child) {
+    border-bottom: 1px solid var(--second-underline);
+}
+
+.comments .comment .image-box {
+    width: 100px;
+    height: 100px;
+}
+
+.comments .comment .image-box img {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 50%;
+}
+
+.comments .comment .author {
+    text-align: center;
+}
+
+.comments .comment .body {
+    margin-left: 20px;
+    width: 100%;
+}
+
+.comments .comment .evaluation-time {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comments .comment .evaluation-time {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comments .comment .evaluation-time .time {
+    color: var(--main-gray);
+}
+
+.comments .comment .evaluation-time .checked {
+    color: orange;
+}

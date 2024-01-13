@@ -92,3 +92,4 @@ star.addEventListener('mouseleave', function() {
 //     document.getElementById('output').innerHTML = 'Rating: ' + rating;
 // });
 });
+

@@ -1,0 +1,137 @@
+/* minimal hotel's and travel's cards styles */
+.mini-card-hotel, .mini-card-voyage {
+    width: 400px;
+    height: 450px;
+    border-radius: var(--main-border-radius);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195,195,195,1);
+    overflow: hidden;
+    transition: box-shadow .5s ease;
+}
+
+.mini-card-hotel:hover, .mini-card-voyage:hover {
+    box-shadow: 0px 0px 62px -4px rgba(165,165,165,1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(165,165,165,1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(165,165,165,1);
+}
+
+.mini-card-hotel:hover .image img, .mini-card-voyage:hover .image img {
+    scale: 1.05;
+}
+
+.mini-card-hotel .image, .mini-card-voyage .image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-right-radius: var(--main-border-radius);
+    border-top-left-radius: var(--main-border-radius);
+    position: relative;
+    overflow: hidden;
+}
+
+.mini-card-hotel .image img, .mini-card-voyage .image img {
+    border-top-right-radius: var(--main-border-radius);
+    border-top-left-radius: var(--main-border-radius);
+    overflow: hidden;
+    width: 500px; 
+    height: 250px; 
+    display: block;
+    object-fit: cover;
+    transition: scale 0.3s ease-in-out;
+}
+
+
+.mini-card-hotel .image .reaction img, .mini-card-voyage .image .reaction img {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px; 
+    height: 40px;
+    cursor: pointer; 
+    transition: scale .2s ease;
+}
+
+.mini-card-hotel .image .reaction img:hover, .mini-card-voyage .image .reaction img:hover {
+    scale: 1.2;
+}
+
+
+.mini-card-hotel .body, .mini-card-voyage .body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+    gap: 15px;
+    height: 100%;
+    background-color: var(--main-background-card);
+    border-bottom-left-radius: var(--main-border-radius);
+    border-bottom-right-radius: var(--main-border-radius);
+
+}
+
+.mini-card-hotel .body .title-localisation, .mini-card-voyage .body .title-localisation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.mini-card-hotel .body .title-localisation .title, .mini-card-voyage .body .title-localisation .title {
+    font-weight: 500;
+}
+
+.mini-card-hotel .body .title-localisation .localisation, .mini-card-voyage .body .title-localisation .localisation {
+    font-style: italic;
+    color: var(--main-gray);
+}
+
+.mini-card-hotel .body .price, .mini-card-voyage .body .price {
+    position: relative;
+    z-index: 0;
+    margin-block: 10px;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+
+.mini-card-hotel .body .price img, .mini-card-voyage .body .price img {
+    position: absolute;
+    top:-20px ;
+    left:-30px ;
+    width: 210px;
+    z-index: -1;
+    transform: rotate(-2deg);
+}
+
+.mini-card-hotel .body form button, .mini-card-voyage .body form button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    padding: 10px 15px;
+    border-radius: var(--main-border-radius);
+    font-weight: 600;
+    background-color: var(--main--green);
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.mini-card-hotel .body form button i, .mini-card-voyage .body form button i {
+    transition: .3s all ease;
+}
+
+.mini-card-hotel .body form button:hover i, .mini-card-voyage .body form button:hover i {
+    transform: translateX(3px);
+}
+
+
+.mini-card-hotel .body form button:hover, .mini-card-voyage .body form button:hover {
+    box-shadow: var(--secondary-shadow-hovered);
+}

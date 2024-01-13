@@ -1,16 +1,15 @@
 {% extends 'admin_pages/base.html' %}
+{% load static %}
 {% block title %} dashboard {% endblock title %}
+{% block css_block %}
+<link rel="stylesheet" href="{% static 'admin_styles/card.css' %}">
+{% endblock css_block %}
 {% block main %}
+<div class="container">
     <h1>admin dashboard</h1>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travel Agency Dashboard</title>
-    <div class="dashboard">
+    <div class="cards">
         <div class="card">
-            <h2>Total Reservations</h2>
+            <h2>Total de reservations</h2>
             <p>{{reservations_nbr}}</p>
         </div>
 
@@ -20,11 +19,11 @@
         </div>
 
         <div class="card">
-            <h2>Nombre de client</h2>
+            <h2>Nombre de clients</h2>
             <p>{{client_nb}} </p>
         </div>
         <div class="card">
-            <h2>Nombre de Voyage</h2>
+            <h2>Nombre de Voyages</h2>
             <p>{{nb_voyages}} </p>
         </div>
         <div class="card">
@@ -33,28 +32,28 @@
         </div>
     </div>
     <div>
-        <h1> Liste des reservations</h1>
-        <table border = 1>
-            <thead>
-                <tr>
-                    <th> Voyage ID </th>
-                    <th> Client ID </th>
-                    <th> Client nom </th>
-                    <th> Duree de voyage </th>
-                </tr>
-            </thead>
-            <tbody>
-                {%for reservation in reservations%}
-                <tr>
-                    <td>{{reservation.id_voyage.id_voyage}} </td> 
-                    <td>{{reservation.id_utilisateur_1.id_utilisateur}} </td> 
-                    <td>{{reservation.id_utilisateur_1.nom}} {{reservation.id_utilisateur_1.prenom}} </td> 
-                    <td>{{reservation.id_voyage.duree_voyage}} jours </td> 
-                </tr>
+    <h1> Liste des reservations</h1>
+    <table border = 1>
+        <thead>
+            <tr>
+                <th> Voyage ID </th>
+                <th> Client ID </th>
+                <th> Client nom </th>
+                <th> Duree de voyage </th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for reservation in reservations%}
+            <tr>
+                <td>{{reservation.id_voyage.id_voyage}} </td> 
+                <td>{{reservation.id_utilisateur_1.id_utilisateur}} </td> 
+                <td>{{reservation.id_utilisateur_1.nom}} {{reservation.id_utilisateur_1.prenom}} </td> 
+                <td>{{reservation.id_voyage.duree_voyage}} jours </td> 
+            </tr>
 
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock main %}
