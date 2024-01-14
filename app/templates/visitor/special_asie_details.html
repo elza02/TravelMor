@@ -151,7 +151,7 @@
 
             // Check if at least one star is checked
             if (selectedStars === 0) {
-                alert('Please select a rating before submitting.');
+                    alert('Please select a rating before submitting.');
                 return;
             }
 
@@ -186,22 +186,30 @@
                     // Extract and format the date
                     data = JSON.parse(data);
                     const receivedDate = data.new_comment.date_redaction;
-                    const [time, date] = receivedDate.split(', ');
+                    const receivedHour = data.new_comment.heure_redaction;
 
                     // Parse the date string
-                    const parsedDate = new Date(`${date} ${time}`);
+                    const parsedDate = new Date(`${receivedDate} ${receivedHour}`);
+                    const parsedHour = new Date(`${receivedDate} ${receivedHour}`);
 
                     // Format the date using Intl.DateTimeFormat
-                    const formattedDate = new Intl.DateTimeFormat('en-US', {
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        hour12: true,
+                    const formattedDate = new Intl.DateTimeFormat('fr-fr', {
                         year: 'numeric',
-                        month: 'short',
+                        month: 'long',
                         day: 'numeric',
                     }).format(parsedDate);
 
-                    console.log(formattedDate);
+                    const formattedHour = new Intl.DateTimeFormat('fr-fr', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: false,
+                    }).format(parsedHour);
+
+                    console.log(formattedDate)
+                    console.log(formattedHour)
+                    
+                    data["new_comment"]["date_redaction"] = formattedDate;
+                    data["new_comment"]["heure_redaction"] = formattedHour;
 
                     // Assuming you have a function to update comments
                     updateCommentsSection(data.new_comment, data.utilisateur);

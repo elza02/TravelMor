@@ -315,19 +315,35 @@ def special_turqie_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
     return render(request, 'visitor/special_turqie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
+# def special_asie(request):
+#     query = models.Avoir.objects.all()
+#     imagesville = models.ImageVille.objects.all()
+#     qur
+#     for imageville, avoir_instance in zip(imagesville, query):
+#         if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville:
+#             query_image = ()
+#             print(imageville.id_images.path_image)
+            
+#     return render(request, 'visitor/special_asie.html', {'query_image' :query_image})
+    # return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesville' : imagesville})
+    
+from .models import Avoir, ImageVille
 
 def special_asie(request):
-    # ville = models.Ville.filter(nom_ville='tokyo')
-    query = models.Avoir.objects.all()
-    # print(query)
-    # imageville = models.ImageVille.objects.filter(ville=query.Avoir.id_ville).first()
-    # imageville =1
-    # return render(request, 'visitor/special_asie.html', {'query' :query, 'imageville' : imageville})
-    return render(request, 'visitor/special_asie.html', {'query' :query})
+    # Get all voyages
+    voyages = Avoir.objects.filter(id_voyage__id_categorie__nom_categorie="special_asie")
+
+    # Retrieve the first image for each corresponding ville
+    ville_images = {}
+    ville_images = {str(image.id_ville.id_ville): image.id_images.path_image for image in images_ville}
+
+    return render(request, 'visitor/special_asie.html', {'voyages': voyages, 'ville_images': ville_images})
+
 
 def special_asie_details(request, id_voyage):
     avoir, inclure_instance, comments = voyageDetails(id_voyage)
     return render(request, 'visitor/special_asie_details.html', {'id_voyage' : id_voyage, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
+
 
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -337,6 +353,7 @@ class CustomJSONEncoder(JSONEncoder):
             return obj.isoformat()
         else:
             return super().default(obj)
+
 
 def special_asie_comments(request):
     try:
@@ -351,8 +368,8 @@ def special_asie_comments(request):
         # Create a Commentaire object and save it to the database
         comment = models.Commentaire(
             text_comment=data.get('comment', ''),
-            date_redaction=timezone.now().date().isoformat(),
-            heure_redaction=timezone.now().time().isoformat(),
+            date_redaction=timezone.now().date(),
+            heure_redaction=timezone.now().time(),
             evaluation=int(data.get('rating', 0)),
             id_utilisateur=utilisateur,
             id_voyage=voyage
@@ -375,7 +392,10 @@ def special_asie_comments(request):
         # Return a JsonResponse with an error message
         return JsonResponse(json.dumps({'success': False, 'error': str(e)}), safe=False)
 
-
+def special_asie_like(request):
+    data = json.loads(request.body.decode('utf-8'))
+    print("Received data:", data)  # Add this line for debugging
+    return JsonResponse(json.dumps({'success': True}), safe=False)
 
 def special_omra(request):
     query = models.Avoir.objects.all()

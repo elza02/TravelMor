@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_filters %}
+
 {% block url_4_class %} active {% endblock url_4_class %}
 {% block title %} special_asie {% endblock title %}
 {% block block_css %}
@@ -8,39 +10,66 @@
 {% block main %}
 
 <section class="second">
-    {% for avoir_instance in query %}
-        {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "special_asie"%} 
+    {% for avoir_instance in voyages %}
     <div class="mini-card-voyage">
         <div class="image">
-            <img src="{% static "assets/cities/" %}" alt="">
+            {% with avoir_instance.id_ville.id_ville|dict_lookup:ville_images as image_path %}
+                {% if image_path %}
+                    <img src="{% static 'assets/cities/' %}{{ image_path }}" alt="">
+                {% endif %}
+            {% endwith %}
             <span class="reaction">
-                <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
+                <!-- Rest of your HTML -->
             </span>
         </div>
         <div class="body">
-            <div class="title-localisation">
-                <span class="title">{{ avoir_instance.id_voyage.titre_voyage }}</span>
-                <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
-                <span>{{avoir_instance.id_voyage.id_ville.imageville__set}}</span>
-            </div>
-            <span class="price"><img src="{% static 'assets/background-pricing.png' %}" alt="background-pricing">Prix: <span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs</span></span>
-            <span class="nom-hotel">Nom hotel: <span>{{ avoir_instance.id_voyage.id_hotel.nom_hotel }}</span></span>
-            <span class="rating">Durée: <span>{{ avoir_instance.id_voyage.duree_voyage }} jours / {{ avoir_instance.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
-            <form method="get" action="{% url 'special_asie_details' avoir_instance.id_voyage.id_voyage %}">
-                <button type="submit"><i class="fa-solid fa-angles-right">&nbsp;&nbsp;</i>Details</button>
-            </form>
-                     
+            <!-- Rest of your HTML -->
         </div>        
-    </div> 
-     {% endif%} 
-    {% endfor %}
+    </div>
+{% endfor %}
+
 </section>
 {% endblock main %}
 
 {% block js_block %}
 <script defer>
+
+    function toggleLike(heart) {
+        if (heart.src.includes('{% static "assets/like-full.svg" %}')) {
+            heart.src = '{% static "assets/like-empty.svg" %}';
+        } else {
+            heart.src = '{% static "assets/like-full.svg" %}';
+        }
+    }
+
+    function getCSRFToken() {
+        const csrfCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
+        if (csrfCookie) {
+            return csrfCookie.split('=')[1];
+        }
+        return null;
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('heart')
-    })
+        //document.getElementById('heart')
+        const id_user = document.querySelector('#likeForm input[name="id_user"]').value;
+        const id_voyage = document.querySelector('#likeForm input[name="id_voyage"]').value;
+
+        formData = {id_user : 1, id_voyage : id_voyage};
+        
+        csrfToken = getCSRFToken();
+
+        fetch('/special_asie/like/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(formData),})
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+    });
 </script>
 {% endblock js_block %}
