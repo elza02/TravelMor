@@ -315,30 +315,15 @@ def special_turqie_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
     return render(request, 'visitor/special_turqie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
-# def special_asie(request):
-#     query = models.Avoir.objects.all()
-#     imagesville = models.ImageVille.objects.all()
-#     qur
-#     for imageville, avoir_instance in zip(imagesville, query):
-#         if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville:
-#             query_image = ()
-#             print(imageville.id_images.path_image)
-            
-#     return render(request, 'visitor/special_asie.html', {'query_image' :query_image})
-    # return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesville' : imagesville})
-    
-from .models import Avoir, ImageVille
-
 def special_asie(request):
-    # Get all voyages
-    voyages = Avoir.objects.filter(id_voyage__id_categorie__nom_categorie="special_asie")
-
-    # Retrieve the first image for each corresponding ville
-    ville_images = {}
-    ville_images = {str(image.id_ville.id_ville): image.id_images.path_image for image in images_ville}
-
-    return render(request, 'visitor/special_asie.html', {'voyages': voyages, 'ville_images': ville_images})
-
+    query = models.Avoir.objects.all()
+    imagesville = models.ImageVille.objects.all()
+    for imageville, avoir_instance in zip(imagesville, query):
+        if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville:
+            print(imageville.id_images.path_image)
+            
+    return render(request, 'visitor/special_asie.html', {'query' :query})
+    # return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesville' : imagesville})
 
 def special_asie_details(request, id_voyage):
     avoir, inclure_instance, comments = voyageDetails(id_voyage)

@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load custom_filters %}
-
 {% block url_4_class %} active {% endblock url_4_class %}
 {% block title %} special_asie {% endblock title %}
 {% block block_css %}
@@ -10,24 +8,41 @@
 {% block main %}
 
 <section class="second">
-    {% for avoir_instance in voyages %}
-    <div class="mini-card-voyage">
-        <div class="image">
-            {% with avoir_instance.id_ville.id_ville|dict_lookup:ville_images as image_path %}
-                {% if image_path %}
-                    <img src="{% static 'assets/cities/' %}{{ image_path }}" alt="">
-                {% endif %}
-            {% endwith %}
-            <span class="reaction">
-                <!-- Rest of your HTML -->
-            </span>
-        </div>
-        <div class="body">
-            <!-- Rest of your HTML -->
-        </div>        
-    </div>
-{% endfor %}
+    {% for avoir_instance in query %}
+        {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "special_asie"%} 
+        <div class="mini-card-voyage">
+            <div class="image">
+                 {% for imageville in imagesville %} 
+                    {% if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville  %}
+                    <img src="{% static "assets/cities/"%}{{ imageville.id_images.path_image }}" alt="">
+                    {{ "<!--" }}{%endif%} 
+                {%endfor%}{{ "-->" }} 
 
+                <span class="reaction">
+                    <img id="heart" src="#" onclick="toggleLike(this)">
+                    <form id="likeForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="id_user" value=1> {% comment %} {% id_utilisateur %} l'utilisateur connecté ! {% endcomment %}
+                        <input type="hidden" name="id_user" value=1> {% comment %} {% id_utilisateur %} l'utilisateur connecté ! {% endcomment %}
+                        <input type="hidden" name="id_voyage" value={{ avoir_instance.id_voyage.id_voyage }}>
+                    </form>
+                </span>
+            </div>
+            <div class="body">
+                <div class="title-localisation">
+                    <span class="title">{{ avoir_instance.id_voyage.titre_voyage }}</span>
+                    <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
+                </div>
+                <span class="price"><img src="{% static 'assets/background-pricing.png' %}" alt="background-pricing">Prix: <span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs</span></span>
+                <span class="nom-hotel">Nom hotel: <span>{{ avoir_instance.id_voyage.id_hotel.nom_hotel }}</span></span>
+                <span class="rating">Durée: <span>{{ avoir_instance.id_voyage.duree_voyage }} jours / {{ avoir_instance.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
+                <form method="get" action="{% url 'special_asie_details' avoir_instance.id_voyage.id_voyage %}">
+                    <button type="submit"><i class="fa-solid fa-angles-right">&nbsp;&nbsp;</i>Details</button>
+                </form>
+            </div>        
+        </div> 
+        {% endif%} 
+    {% endfor %}
 </section>
 {% endblock main %}
 
