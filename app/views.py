@@ -315,19 +315,20 @@ def special_turqie_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
     return render(request, 'visitor/special_turqie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
-
 def special_asie(request):
-    # ville = models.Ville.filter(nom_ville='tokyo')
     query = models.Avoir.objects.all()
-    # print(query)
-    # imageville = models.ImageVille.objects.filter(ville=query.Avoir.id_ville).first()
-    # imageville =1
-    # return render(request, 'visitor/special_asie.html', {'query' :query, 'imageville' : imageville})
+    # imagesville = models.ImageVille.filter(i want to have one record of each id_ville)
+    # for imageville, avoir_instance in zip(imagesville, query):
+    #     if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville:
+    #         print(imageville.id_images.path_image)
+            
     return render(request, 'visitor/special_asie.html', {'query' :query})
+    # return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesville' : imagesville})
 
 def special_asie_details(request, id_voyage):
     avoir, inclure_instance, comments = voyageDetails(id_voyage)
     return render(request, 'visitor/special_asie_details.html', {'id_voyage' : id_voyage, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
+
 
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
@@ -337,6 +338,7 @@ class CustomJSONEncoder(JSONEncoder):
             return obj.isoformat()
         else:
             return super().default(obj)
+
 
 def special_asie_comments(request):
     try:
@@ -351,8 +353,8 @@ def special_asie_comments(request):
         # Create a Commentaire object and save it to the database
         comment = models.Commentaire(
             text_comment=data.get('comment', ''),
-            date_redaction=timezone.now().date().isoformat(),
-            heure_redaction=timezone.now().time().isoformat(),
+            date_redaction=timezone.now().date(),
+            heure_redaction=timezone.now().time(),
             evaluation=int(data.get('rating', 0)),
             id_utilisateur=utilisateur,
             id_voyage=voyage
@@ -369,12 +371,16 @@ def special_asie_comments(request):
 
         # Return a JsonResponse with the data
         return JsonResponse(response_data, safe=False)
+    
     except json.JSONDecodeError as e:
         print("JSON Decode Error:", e)
         # Return a JsonResponse with an error message
         return JsonResponse(json.dumps({'success': False, 'error': str(e)}), safe=False)
 
-
+def special_asie_like(request):
+    data = json.loads(request.body.decode('utf-8'))
+    print("Received data:", data)  # Add this line for debugging
+    return JsonResponse(json.dumps({'success': True}), safe=False)
 
 def special_omra(request):
     query = models.Avoir.objects.all()
@@ -443,9 +449,9 @@ def dashboard_gestion(request):
     Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
     return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
 
-from .forms import SimpleForm
+from .forms import SimpleForm,RegistrationForm
 
-def simple_form_view(request):
+def login(request):
     if request.method == 'POST':
         form = SimpleForm(request.POST)
         if form.is_valid():
@@ -454,49 +460,47 @@ def simple_form_view(request):
             email = form.cleaned_data['email']
             for usr in models.Utilisateur.objects.all():
                 if passwd == usr.mot_d_passe and email == usr.email:
+                    request.session['code_session'] = 1
                     if usr.est_admin != 1:
                         return profile_view(request,usr.id_utilisateur)
                         break
                     else:
+                        request.session['est_admin'] = 1
                         return dashboard_gestion(request)
                         break
+            error_message = "Identifiants incorrects. Veuillez réessayer."
+            return render(request, 'login.html', {'form': form,'error_message': error_message})
     else:
         form = SimpleForm()
-
-    return render(request, 'login.html', {'form': form})
-
-
-
+        return render(request, 'login.html', {'form': form})
+def logout(request):
+    request.session.clear()
+    return redirect('/')
 def profile_view(request, user_id):
-    utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
-    return render(request, 'client/profile.html', {'utilisateur': utilisateur})
-#from django.contrib.auth.forms import UserCreationForm
-# def login(request):
-#     form = UserCreationForm()
-#     return render(request, 'login.html',{'form':form})
+    if request.session.get('code_session',None) != None:
+        utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+        return render(request, 'client/profile.html', {'utilisateur': utilisateur})
+    else:
+        return redirect('/')
 
-# def user_registration(request):
-#     if request.method == 'POST':
-#         form = RegistrationForm(request.POST)
-#         if form.is_valid():
-#             #form.save()
-#             # Continue with login logic if needed
-#             return redirect('login')  # Redirect to login page after successful registration
-#     else:
-#         form = RegistrationForm()
-
-#     return render(request, 'registration.html', {'form': form})
-
-# def user_login(request):
-#     if request.method == 'POST':
-#         form = UserLoginForm(request, request.POST)
-#         if form.is_valid():
-#             username = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
-#             for user in models.Utilisateur.objects.all():
-#                 if username == user.id_utilisateur and password == user.mot_d_passe:
-#                     usr = {'name' : username, 'password':password}
-#                     return render(request, 'test.html',usr)  # Redirect to the dashboard or any desired page
-#     else:
-#         form = UserLoginForm()
-#         return render(request, 'login.html', {'form': form})
+def registration(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST,request.FILES)
+        if form.is_valid():
+            nom = form.cleaned_data['nom']
+            prenom = form.cleaned_data['prenom']
+            email = form.cleaned_data['email']
+            num_tele = form.cleaned_data['num_telephone']
+            passwd = form.cleaned_data['mot_d_passe']
+            image_filename = form.cleaned_data['path_img_profile'].name
+            # if 'path_img_profile' in request.FILES:
+            #     image_filename = request.FILES['path_img_profile'].path
+            #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'mot_d_passe' : passwd,'image_filename':image_filename}
+            # Faire quelque chose après l'enregistrement, par exemple, rediriger vers une page de confirmation
+            user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,mot_d_passe = passwd)
+            user.save()
+            return profile_view(request,user.id_utilisateur)
+            #return render(request, 'test.html',{'utilisateur': utilisateur})
+    else:
+        form = RegistrationForm()
+    return render(request, 'registration.html', {'form': form})
