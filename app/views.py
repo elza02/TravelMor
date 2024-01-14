@@ -317,10 +317,12 @@ def special_turqie_details(request, id_voyage):
 
 def special_asie(request):
     query = models.Avoir.objects.all()
-    imagesville = models.ImageVille.objects.all()
-    for imageville, avoir_instance in zip(imagesville, query):
-        if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville:
-            print(imageville.id_images.path_image)
+
+    # imagesville = models.ImageVille.filter(i want to have one record of each id_ville)
+    # for imageville, avoir_instance in zip(imagesville, query):
+    #     if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville:
+    #         print(imageville.id_images.path_image)
+
             
     return render(request, 'visitor/special_asie.html', {'query' :query})
     # return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesville' : imagesville})
