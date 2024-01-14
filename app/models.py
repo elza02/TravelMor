@@ -65,7 +65,7 @@ class Utilisateur(models.Model):
     num_telephone = models.CharField(max_length=12)
     email = models.EmailField()
     path_img_profile = models.CharField(max_length=100)
-    id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True)
 
 class Voyage(models.Model):
     id_voyage = models.AutoField(primary_key=True)

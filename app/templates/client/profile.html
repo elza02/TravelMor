@@ -1,17 +1,21 @@
-<!-- profile.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>User Profile</title>
 </head>
 <body>
+    {% load static %}
     <h1>User Profile</h1>
     <p><strong>Nom:</strong> {{ utilisateur.nom }}</p>
     <p><strong>Prenom:</strong> {{ utilisateur.prenom }}</p>
     <p><strong>Admin:</strong> {% if utilisateur.est_admin %} Yes {% else %} No {% endif %}</p>
     <p><strong>Email:</strong> {{ utilisateur.email }}</p>
     <p><strong>Numéro de téléphone:</strong> {{ utilisateur.num_telephone }}</p>
-    <p><strong>Image Profile:</strong> <img src="{{ utilisateur.path_img_profile }}" alt="Profile Image"></p>
+    <p><strong>Image Profile:</strong> <img src="{% static 'assets/imgs_profile/' %}{{ utilisateur.path_img_profile }}" alt="Profile Image"></p>
     <p><strong>Hotel:</strong> {{ utilisateur.id_hotel.nom_hotel }}</p>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">deconnexion</button>
+    </form>
 </body>
 </html>

@@ -29,7 +29,7 @@ urlpatterns = [
     path('special_haj/details/<int:id_voyage>/', views.special_haj_details, name="special_haj_details"),
 
     # admin urls
-    path('admin_page/', views.admin_view, name="admin"),
+    path('admin_page/', views.dashboard_gestion, name="admin"),
     path('admin_page/pays/', views.pays_gestion, name="pays_gestion"),
     path('admin_page/villes/', views.villes_gestion, name="villes_gestion"),
     path('admin_page/commentaires/', views.commentaires_gestion, name="commentaires_gestion"),
@@ -39,8 +39,10 @@ urlpatterns = [
     path('admin_page/hotels/', views.hotels_gestion, name="hotels_gestion"),
     path('admin_page/voyages/', views.voyages_gestion, name="voyages_gestion"),
     path('admin_page/dashboard/', views.dashboard_gestion, name="dashboard_gestion"),
-    path('login/', views.simple_form_view, name="simple_form"),
+    path('login/', views.login, name="login"),
+    path('registration/', views.registration, name="registration"),
     path('client/profile/<int:user_id>/', views.profile_view, name='profile'),
+    path('logout/', views.logout, name='logout'),
 
    # path('registration/', views.user_registration, name="registration_login"),
 ]

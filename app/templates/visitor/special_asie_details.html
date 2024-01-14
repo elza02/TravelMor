@@ -172,27 +172,45 @@
             selectedStars = 0 // modify this
 
             //Perform an asynchronous POST request to your backend
+            //Perform an asynchronous POST request to your backend
             fetch('/special_asie/details/comments/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,   
+                    'X-CSRFToken': csrfToken,
                 },
                 body: JSON.stringify(formData),
             })
-            .then(response => response.json())
-            .then(data => {
-                //Handle the response from the backend (if needed)
-                    data = JSON.parse(data)
-                    //console.log(data.new_comment.id_utilisateur.nom)
-                    //console.log(data["new_comment"]["id_utilisateur"])
-                    console.log(data)
-                    //console.log(data['new_comment']['id_utilisateur']['nom'])
+                .then(response => response.json())
+                .then(data => {
+                    // Extract and format the date
+                    data = JSON.parse(data);
+                    const receivedDate = data.new_comment.date_redaction;
+                    const [time, date] = receivedDate.split(', ');
+
+                    // Parse the date string
+                    const parsedDate = new Date(`${date} ${time}`);
+
+                    // Format the date using Intl.DateTimeFormat
+                    const formattedDate = new Intl.DateTimeFormat('en-US', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                    }).format(parsedDate);
+
+                    console.log(formattedDate);
+
+                    // Assuming you have a function to update comments
                     updateCommentsSection(data.new_comment, data.utilisateur);
-            }).catch(error => {
-                //Handle errors (if any)
-                console.error(error);
-           });
+                })
+                .catch(error => {
+                    // Handle errors (if any)
+                    console.error(error);
+                });
+
        });
     });
 

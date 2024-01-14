@@ -369,6 +369,7 @@ def special_asie_comments(request):
 
         # Return a JsonResponse with the data
         return JsonResponse(response_data, safe=False)
+    
     except json.JSONDecodeError as e:
         print("JSON Decode Error:", e)
         # Return a JsonResponse with an error message
@@ -443,9 +444,9 @@ def dashboard_gestion(request):
     Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
     return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
 
-from .forms import SimpleForm
+from .forms import SimpleForm,RegistrationForm
 
-def simple_form_view(request):
+def login(request):
     if request.method == 'POST':
         form = SimpleForm(request.POST)
         if form.is_valid():
@@ -454,49 +455,47 @@ def simple_form_view(request):
             email = form.cleaned_data['email']
             for usr in models.Utilisateur.objects.all():
                 if passwd == usr.mot_d_passe and email == usr.email:
+                    request.session['code_session'] = 1
                     if usr.est_admin != 1:
                         return profile_view(request,usr.id_utilisateur)
                         break
                     else:
+                        request.session['est_admin'] = 1
                         return dashboard_gestion(request)
                         break
+            error_message = "Identifiants incorrects. Veuillez réessayer."
+            return render(request, 'login.html', {'form': form,'error_message': error_message})
     else:
         form = SimpleForm()
-
-    return render(request, 'login.html', {'form': form})
-
-
-
+        return render(request, 'login.html', {'form': form})
+def logout(request):
+    request.session.clear()
+    return redirect('/')
 def profile_view(request, user_id):
-    utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
-    return render(request, 'client/profile.html', {'utilisateur': utilisateur})
-#from django.contrib.auth.forms import UserCreationForm
-# def login(request):
-#     form = UserCreationForm()
-#     return render(request, 'login.html',{'form':form})
+    if request.session.get('code_session',None) != None:
+        utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+        return render(request, 'client/profile.html', {'utilisateur': utilisateur})
+    else:
+        return redirect('/')
 
-# def user_registration(request):
-#     if request.method == 'POST':
-#         form = RegistrationForm(request.POST)
-#         if form.is_valid():
-#             #form.save()
-#             # Continue with login logic if needed
-#             return redirect('login')  # Redirect to login page after successful registration
-#     else:
-#         form = RegistrationForm()
-
-#     return render(request, 'registration.html', {'form': form})
-
-# def user_login(request):
-#     if request.method == 'POST':
-#         form = UserLoginForm(request, request.POST)
-#         if form.is_valid():
-#             username = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
-#             for user in models.Utilisateur.objects.all():
-#                 if username == user.id_utilisateur and password == user.mot_d_passe:
-#                     usr = {'name' : username, 'password':password}
-#                     return render(request, 'test.html',usr)  # Redirect to the dashboard or any desired page
-#     else:
-#         form = UserLoginForm()
-#         return render(request, 'login.html', {'form': form})
+def registration(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST,request.FILES)
+        if form.is_valid():
+            nom = form.cleaned_data['nom']
+            prenom = form.cleaned_data['prenom']
+            email = form.cleaned_data['email']
+            num_tele = form.cleaned_data['num_telephone']
+            passwd = form.cleaned_data['mot_d_passe']
+            image_filename = form.cleaned_data['path_img_profile'].name
+            # if 'path_img_profile' in request.FILES:
+            #     image_filename = request.FILES['path_img_profile'].path
+            #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'mot_d_passe' : passwd,'image_filename':image_filename}
+            # Faire quelque chose après l'enregistrement, par exemple, rediriger vers une page de confirmation
+            user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,mot_d_passe = passwd)
+            user.save()
+            return profile_view(request,user.id_utilisateur)
+            #return render(request, 'test.html',{'utilisateur': utilisateur})
+    else:
+        form = RegistrationForm()
+    return render(request, 'registration.html', {'form': form})

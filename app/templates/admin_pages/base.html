@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADMIN - {% block title %}{% endblock title %}</title>
+    <link rel="icon" href="{% static "assets/travelmor-icon.png" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static "admin_styles/base.css" %}">
     {% block css_block %}{% endblock css_block %}
 </head>
@@ -13,23 +15,27 @@
         <nav class="main-menu">
             <div class="logo">
                 <img src="{% static 'assets/travelMor-logo-black.png' %}" alt="LOGO TRAVEL MOR">
+                <i class="fa fa-spin fa-gear"></i>
             </div>
             <ul>
-                <li><a href="{% url "dashboard_gestion" %}">Dashboard</a></li>
-                <li><a href="{% url "voyages_gestion" %}">Voyages</a></li>
-                <li><a href="{% url "hotels_gestion" %}">Hotels</a></li>
-                <li><a href="{% url "promotions_gestion" %}">Promotions</a></li>
-                <li><a href="{% url "vols_gestion" %}">Vols</a></li>
-                <li><a href="{% url "notifications_gestion" %}">Notifications</a></li>
-                <li><a href="{% url "commentaires_gestion" %}">Commentaires</a></li>
-                <li><a href="{% url "villes_gestion" %}">Villes</a></li>
-                <li><a href="{% url "pays_gestion" %}">Pays</a></li>
+                <li><a href="{% url "dashboard_gestion" %}"><i class="fa fa-bar-chart"></i></i></i>Dashboard</a></li>
+                <li><a href="{% url "voyages_gestion" %}"><i class="fa-solid fa-person-walking-luggage"></i></i>Voyages</a></li>
+                <li><a href="{% url "hotels_gestion" %}"><i class="fa fa-building"></i>Hotels</a></li>
+                <li><a href="{% url "promotions_gestion" %}"><i class="fa fa-percent"></i>Promotions</a></li>
+                <li><a href="{% url "vols_gestion" %}"><i class="fa-solid fa-plane-departure"></i>Vols</a></li>
+                <li><a href="{% url "notifications_gestion" %}"><i class="fa fa-bell"></i>Notifications</a></li>
+                <li><a href="{% url "commentaires_gestion" %}"><i class="fa fa-comments"></i>Commentaires</a></li>
+                <li><a href="{% url "villes_gestion" %}"><i class="fa fa-location-arrow"></i>Villes</a></li>
+                <li><a href="{% url "pays_gestion" %}"><i class="fa fa-location-arrow"></i>Pays</a></li>
             </ul>
         </nav>
         <div class="inner-container">
             <div class="secondary-menu">
                 menu
-                <h3>deconnexion</h3>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">deconnexion</button>
+                </form>
             </div>
             {% block main %} 
             {% endblock main %}

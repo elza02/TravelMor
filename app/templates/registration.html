@@ -1,5 +1,6 @@
 <div>
-    <form action="POST">
+    <form method="post" action="{% url 'registration'%}" enctype="multipart/form-data">
+    {% csrf_token %}
     {{form.as_p}}
     <input type="submit" name = "submit">
     </form>
