@@ -1,8 +1,7 @@
+from decimal import Decimal
 from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404, redirect, render
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -17,41 +16,6 @@ from json import JSONEncoder
 from datetime import date, time
 
 def home (request):
-    
-    # utilisateur1 = models.Utilisateur(
-    #     est_admin=True,
-    #     nom="John",
-    #     prenom="Doe",
-    #     num_telephone="123456789",
-    #     email="admin@admin.com",
-    #     path_img_profile="john_profile.jpg",
-    # )
-    # utilisateur1.set_password('admin')  
-    # utilisateur1.save()
-
-
-    # utilisateur2 = models.Utilisateur(
-    #     est_admin=False,
-    #     nom="John",
-    #     prenom="Doe",
-    #     num_telephone="123456789",
-    #     email="example@example.com",
-    #     path_img_profile="john_profile.jpg",
-    # )
-    # utilisateur2.set_password('exemple')  
-    # utilisateur2.save()
-    
-    # utilisateur3 = models.Utilisateur(
-    #     est_admin=False,
-    #     nom="user3",
-    #     prenom="user3",
-    #     num_telephone="123456789",
-    #     email="user3@user3.com",
-    #     path_img_profile="john_profile.jpg",
-    # )
-    # utilisateur3.set_password('user3')  
-    # utilisateur3.save()
-    
     # pays1 = models.Pays.objects.create(nom_pays="France")
     # pays2 = models.Pays.objects.create(nom_pays="Spain")
     # pays3 = models.Pays.objects.create(nom_pays="Italy")
@@ -157,7 +121,7 @@ def home (request):
 
     # # Create Utilisateur instances
     # utilisateur1 = models.Utilisateur.objects.create(
-    #     password="pord123",
+    #     mot_d_passe="pord123",
     #     est_admin=True,
     #     nom="John",
     #     prenom="Doe",
@@ -167,7 +131,7 @@ def home (request):
     #     id_hotel=hotel1,
     # )
     # utilisateur2 = models.Utilisateur.objects.create(
-    #     password="pass4",
+    #     mot_d_passe="pass4",
     #     est_admin=False,
     #     nom="Alice",
     #     prenom="Smith",
@@ -177,7 +141,7 @@ def home (request):
     #     id_hotel=hotel2,
     # )
     # utilisateur3 = models.Utilisateur.objects.create(
-    #     password="user",
+    #     mot_d_passe="user",
     #     est_admin=False,
     #     nom="Bob",
     #     prenom="Johnson",
@@ -342,11 +306,16 @@ def promotions_details(request, id_voyage):
 def hotels(request):
     try:
         pays = models.Pays.objects.get(nom_pays='Maroc')
+    except models.Pays.DoesNotExist:
+        # Handle the case where 'Maroc' does not exist
+        pays = None
+
+    if pays:
         villes = models.Ville.objects.filter(id_pays=pays).values_list('id_ville', flat=True)
         query = models.Hotel.objects.filter(id_ville__in=villes)
-    except ObjectDoesNotExist:
-        # Handle the case when the objects don't exist
-        query = None  # or any other default value or action you want
+    else:
+        # Handle the case where 'Maroc' does not exist (query would be empty)
+        query = []
 
     return render(request, 'visitor/hotels.html', {'query': query})
 
@@ -383,7 +352,7 @@ class CustomJSONEncoder(JSONEncoder):
             return super().default(obj)
 
 
-def special_asie_comments(request):
+def retrieve_comments(request):
     try:
         # Retrieve the JSON data from the request
         data = json.loads(request.body.decode('utf-8'))
@@ -415,29 +384,35 @@ def special_asie_comments(request):
         # Return a JsonResponse with an error message
         return JsonResponse(json.dumps({'success': False, 'error': str(e)}), safe=False)
 
-def special_asie_like(request):
+def retrieve_likes(request):
     data = json.loads(request.body.decode('utf-8'))
+    print("Received data:", data)  # Add this line for debugging
+    
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
-    if models.Aimer.objects.filter(id_utilisateur=utilisateur, id_voyage=voyage):
+    if models.Aimer.objects.filter(id_utilisateur_1=utilisateur, id_voyage=voyage):
         existe = True
     else : existe = False
     print("Received data:", data)  # Add this line for debugging
     return JsonResponse(json.dumps({'fetch': True, 'id_user' : data.get('id_user', 0), 'id_voyage' : data.get('id_voyage', 0), 'existe' : existe  }), safe=False)
 
-def special_asie_like_del(request):
+def delete_like(request):
     data = json.loads(request.body.decode('utf-8'))
+    print("Received del data:", data)  # Add this line for debugging
+    
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
-    models.Aimer.objects.filter(id_utilisateur=utilisateur, id_voyage=voyage).delete()
+    models.Aimer.objects.filter(id_utilisateur_1=utilisateur, id_voyage=voyage).delete()
     return JsonResponse(json.dumps({'existe' : False, 'delete': True}), safe=False)
 
 
-def special_asie_like_add(request):
+def add_like(request):
     data = json.loads(request.body.decode('utf-8'))
+    print("Received add data:", data)  # Add this line for debugging
+    
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
-    aimer = models.Aimer(id_utilisateur=utilisateur, id_voyage=voyage)
+    aimer = models.Aimer(id_utilisateur_1=utilisateur, id_voyage=voyage)
     aimer.save()
     return JsonResponse(json.dumps({'existe' : True, 'add': True}), safe=False)
 
@@ -508,116 +483,58 @@ def dashboard_gestion(request):
     Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
     return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
 
-# from .forms import SimpleForm,RegistrationForm
+from .forms import SimpleForm,RegistrationForm
 
-# def login(request):
-#     if request.method == 'POST':
-#         form = SimpleForm(request.POST)
-#         if form.is_valid():
-#             # Récupérer les données du formulaire
-#             passwd = form.cleaned_data['password']
-#             email = form.cleaned_data['email']
-#             for usr in models.Utilisateur.objects.all():
-#                 if passwd == usr.password and email == usr.email:
-#                     request.session['code_session'] = 1
-#                     if usr.est_admin != 1:
-#                         return profile_view(request,usr.id_utilisateur)
-#                         break
-#                     else:
-#                         request.session['est_admin'] = 1
-#                         return dashboard_gestion(request)
-#                         break
-#             error_message = "Identifiants incorrects. Veuillez réessayer."
-#             return render(request, 'login.html', {'form': form,'error_message': error_message})
-#     else:
-#         form = SimpleForm()
-#         return render(request, 'login.html', {'form': form})
-# def logout(request):
-#     request.session.clear()
-#     return redirect('/')
-# def profile_view(request, user_id):
-#     if request.session.get('code_session',None) != None:
-#         utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
-#         return render(request, 'client/profile.html', {'utilisateur': utilisateur})
-#     else:
-#         return redirect('/')
-
-# def registration(request):
-#     if request.method == 'POST':
-#         form = RegistrationForm(request.POST,request.FILES)
-#         if form.is_valid():
-#             nom = form.cleaned_data['nom']
-#             prenom = form.cleaned_data['prenom']
-#             email = form.cleaned_data['email']
-#             num_tele = form.cleaned_data['num_telephone']
-#             passwd = form.cleaned_data['password']
-#             image_filename = form.cleaned_data['path_img_profile'].name
-#             # if 'path_img_profile' in request.FILES:
-#             #     image_filename = request.FILES['path_img_profile'].path
-#             #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'password' : passwd,'image_filename':image_filename}
-#             # Faire quelque chose après l'enregistrement, par exemple, rediriger vers une page de confirmation
-#             user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,password = passwd)
-#             user.save()
-#             return profile_view(request,user.id_utilisateur)
-#             #return render(request, 'test.html',{'utilisateur': utilisateur})
-#     else:
-#         form = RegistrationForm()
-#     return render(request, 'registration.html', {'form': form})
-
-
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.urls import reverse
-
-def admin_login(request):
+def login(request):
     if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['mot_d_passe']
-        user = authenticate(request, email=email, mot_de_passe=password)
+        form = SimpleForm(request.POST)
+        if form.is_valid():
+            # Récupérer les données du formulaire
+            passwd = form.cleaned_data['password']
+            email = form.cleaned_data['email']
+            for usr in models.Utilisateur.objects.all():
+                if passwd == usr.password and email == usr.email:
+                    request.session['code_session'] = 1
+                    if usr.est_admin != 1:
+                        return profile_view(request,usr.id_utilisateur)
+                        break
+                    else:
+                        request.session['est_admin'] = 1
+                        return dashboard_gestion(request)
+                        break
+            error_message = "Identifiants incorrects. Veuillez réessayer."
+            return render(request, 'login.html', {'form': form,'error_message': error_message})
+    else:
+        form = SimpleForm()
+        return render(request, 'login.html', {'form': form})
+def logout(request):
+    request.session.clear()
+    return redirect('/')
+def profile_view(request, user_id):
+    if request.session.get('code_session',None) != None:
+        utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+        return render(request, 'client/profile.html', {'utilisateur': utilisateur})
+    else:
+        return redirect('/')
 
-        if user is not None and user.est_admin:
-            login(request, user)
-            return redirect('admin_dashboard')  # Redirect to admin dashboard
-        else:
-            messages.error(request, 'Invalid admin login credentials.')
-
-    return render(request, 'admin_login.html')
-
-def client_login(request):
+def registration(request):
     if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        user = authenticate(request, email=email, mot_de_passe=password)
-
-        if user is not None and not user.est_admin:
-            login(request, user)
-            return redirect('client_dashboard')  # Redirect to client dashboard
-        else:
-            messages.error(request, 'Invalid client login credentials.')
-
-    return render(request, 'client_login.html')
-
-@login_required(login_url='admin_login')
-def admin_dashboard(request):
-    # View for admin
-    return render(request, 'admin_dashboard.html')
-
-@login_required(login_url='client_login')
-def client_dashboard(request):
-    # View for client
-    return render(request, 'client_dashboard.html')
-
-@login_required(login_url='admin_login')
-def admin_logout(request):
-    if request.user.is_authenticated and request.user.est_admin:
-        logout(request)
-    return redirect(reverse('admin_login'))  # Redirect to the admin login page after logout
-
-@login_required(login_url='client_login')
-def client_logout(request):
-    if request.user.is_authenticated and not request.user.est_admin:
-        logout(request)
-    return redirect(reverse('client_login'))  # Redirect to the client login page after logout
-
+        form = RegistrationForm(request.POST,request.FILES)
+        if form.is_valid():
+            nom = form.cleaned_data['nom']
+            prenom = form.cleaned_data['prenom']
+            email = form.cleaned_data['email']
+            num_tele = form.cleaned_data['num_telephone']
+            passwd = form.cleaned_data['password']
+            image_filename = form.cleaned_data['path_img_profile'].name
+            # if 'path_img_profile' in request.FILES:
+            #     image_filename = request.FILES['path_img_profile'].path
+            #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'password' : passwd,'image_filename':image_filename}
+            # Faire quelque chose après l'enregistrement, par exemple, rediriger vers une page de confirmation
+            user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,password = passwd)
+            user.save()
+            return profile_view(request,user.id_utilisateur)
+            #return render(request, 'test.html',{'utilisateur': utilisateur})
+    else:
+        form = RegistrationForm()
+    return render(request, 'registration.html', {'form': form})

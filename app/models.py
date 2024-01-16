@@ -56,56 +56,16 @@ class Vol(models.Model):
     date_f_vol = models.DateField()
     prix_vol = models.DecimalField(max_digits=15, decimal_places=2)
 
-from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
-
-class UtilisateurManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
-
-class Utilisateur(AbstractBaseUser, PermissionsMixin):
+class Utilisateur(models.Model):
     id_utilisateur = models.AutoField(primary_key=True)
-    email = models.EmailField(unique=True)
-    est_admin = models.BooleanField(default=False)
     nom = models.CharField(max_length=15)
     prenom = models.CharField(max_length=15)
-    # mot_d_passe = models.CharField(max_length=128)  # Use CharField for hashed password
+    est_admin = models.BooleanField()
+    mot_d_passe = models.CharField(max_length=10)
     num_telephone = models.CharField(max_length=12)
+    email = models.EmailField()
     path_img_profile = models.CharField(max_length=100)
     id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True)
-
-    # You can customize other fields as needed
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='utilisateur_groups',
-        blank=True,
-        help_text='The groups this utilisateur belongs to.',
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='utilisateur_user_permissions',
-        blank=True,
-        help_text='Specific permissions for this utilisateur.',
-    )
-    objects = UtilisateurManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['nom', 'prenom', 'est_admin']  # Add other required fields for create_user
-
-    def __str__(self):
-        return self.email
-
 
 class Voyage(models.Model):
     id_voyage = models.AutoField(primary_key=True)
@@ -128,11 +88,11 @@ class Commentaire(models.Model):
     
 
 class Recevoir(models.Model):
-    id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     id_notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
 
 class ReserverVoyage(models.Model):
-    id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
 
 class Avoir(models.Model):
@@ -140,7 +100,7 @@ class Avoir(models.Model):
     id_ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
 
 class Aimer(models.Model):
-    id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
 
 class inclure(models.Model):

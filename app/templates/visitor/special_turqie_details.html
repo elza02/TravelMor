@@ -151,7 +151,7 @@
 
             // Check if at least one star is checked
             if (selectedStars === 0) {
-                alert('Please select a rating before submitting.');
+                    alert('Please select a rating before submitting.');
                 return;
             }
 
@@ -172,27 +172,53 @@
             selectedStars = 0 // modify this
 
             //Perform an asynchronous POST request to your backend
-            fetch('/special_asie/details/comments/', {
+            //Perform an asynchronous POST request to your backend
+            fetch('/comments/retrieve/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,   
+                    'X-CSRFToken': csrfToken,
                 },
                 body: JSON.stringify(formData),
             })
-            .then(response => response.json())
-            .then(data => {
-                //Handle the response from the backend (if needed)
-                    data = JSON.parse(data)
-                    //console.log(data.new_comment.id_utilisateur.nom)
-                    //console.log(data["new_comment"]["id_utilisateur"])
-                    console.log(data)
-                    //console.log(data['new_comment']['id_utilisateur']['nom'])
+                .then(response => response.json())
+                .then(data => {
+                    // Extract and format the date
+                    data = JSON.parse(data);
+                    const receivedDate = data.new_comment.date_redaction;
+                    const receivedHour = data.new_comment.heure_redaction;
+
+                    // Parse the date string
+                    const parsedDate = new Date(`${receivedDate} ${receivedHour}`);
+                    const parsedHour = new Date(`${receivedDate} ${receivedHour}`);
+
+                    // Format the date using Intl.DateTimeFormat
+                    const formattedDate = new Intl.DateTimeFormat('fr-fr', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                    }).format(parsedDate);
+
+                    const formattedHour = new Intl.DateTimeFormat('fr-fr', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: false,
+                    }).format(parsedHour);
+
+                    console.log(formattedDate)
+                    console.log(formattedHour)
+                    
+                    data["new_comment"]["date_redaction"] = formattedDate;
+                    data["new_comment"]["heure_redaction"] = formattedHour;
+
+                    // Assuming you have a function to update comments
                     updateCommentsSection(data.new_comment, data.utilisateur);
-            }).catch(error => {
-                //Handle errors (if any)
-                console.error(error);
-           });
+                })
+                .catch(error => {
+                    // Handle errors (if any)
+                    console.error(error);
+                });
+
        });
     });
 
@@ -237,4 +263,3 @@ function generateStarIcons(rating) {
 </script>
 
 {% endblock js_block %}
-

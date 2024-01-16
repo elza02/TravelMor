@@ -19,11 +19,11 @@ urlpatterns = [
     path('special_turqie/details/<int:id_voyage>/', views.special_turqie_details, name="special_turqie_details"),
     
     path('special_asie/', views.special_asie, name="special_asie"),
-    path('special_asie/like/', views.special_asie_like, name="special_asie_like"),
-    path('special_asie/delete/', views.special_asie_like_del, name="special_asie_like_del"),
-    path('special_asie/add/', views.special_asie_like_add, name="special_asie_like_add"),
+    path('likes/retrieve/', views.retrieve_likes, name="retrieve_likes"),
+    path('likes/delete/', views.delete_like, name="delete_like"),
+    path('likes/add/', views.add_like, name="add_like"),
     path('special_asie/details/<int:id_voyage>/', views.special_asie_details, name="special_asie_details"),
-    path('special_asie/details/comments/', views.special_asie_comments, name="special_asie_comments"),
+    path('comments/retrieve/', views.retrieve_comments, name="retrieve_comments"),
     
     path('special_omra/', views.special_omra, name="special_omra"),
     path('special_omra_details/<int:id_voyage>/', views.special_omra_details, name="special_omra_details"),
@@ -49,10 +49,10 @@ urlpatterns = [
 
    # path('registration/', views.user_registration, name="registration_login"),
    
-    path('admin_login/', views.admin_login, name='admin_login'),
-    path('client_login/', views.client_login, name='client_login'),
-    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
-    path('client_dashboard/', views.client_dashboard, name='client_dashboard'),
-    path('admin_logout/', views.admin_logout, name='admin_logout'),
-    path('client_logout/', views.client_logout, name='client_logout'),
+    # path('admin_login/', views.admin_login, name='admin_login'),
+    # path('client_login/', views.client_login, name='client_login'),
+    # path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    # path('client_dashboard/', views.client_dashboard, name='client_dashboard'),
+    # path('admin_logout/', views.admin_logout, name='admin_logout'),
+    # path('client_logout/', views.client_logout, name='client_logout'),
 ]
