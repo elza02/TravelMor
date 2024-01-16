@@ -17,17 +17,35 @@
                 <tr>
                     <td>{{p.id_pays}} </td> 
                     <td>{{p.nom_pays}} </td> 
-                    <td><button>editer</button> <button>supprimer</button></td>
+                    <td><button><a href="{% url 'modif_pays' p.id_pays%}">editer</a></button> <button><a href="{% url 'supp_pays' p.id_pays%}">supprimer</a></button></td>
                 </tr>
 
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <form action="{% url 'pays_gestion' %}" method="POST">
+    {% if messageSupp %}
+    <p style="color: red;">{{ messageSupp }}</p>
+{% endif %}
+{% if messageEdit %}
+    <p style="color: green;">{{ messageEdit }}</p>
+{% endif %}
+
+{% if form_modif %}
+    <form action="{% url 'modif_pays' pays.id_pays%}" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">ajouter</button>
+        {{ form_modif.as_p }}
+        <button type="submit">Enregistré</button>
     </form>
+  
+{% elif form_ajout %}
+<form action="{% url 'ajout_pays'%}" method="POST">
+    {% csrf_token %}
+    {{ form_ajout.as_p }}
+    <button type="submit">Enregistré</button>
+</form>
+{% else %}
+    <button type="submit"><a href="{% url 'ajout_pays'%}">ajouter</a></button>
+{% endif %}
 </div>
 {% endblock main %}

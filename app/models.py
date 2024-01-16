@@ -13,20 +13,25 @@ class Promotion(models.Model):
     heure_d_promos = models.TimeField()
     heure_f_promos = models.TimeField()
     pourcentage = models.DecimalField(max_digits=4, decimal_places=2)
-
+    def __str__(self):
+        return f'{self.pourcentage}'
 class Categorie(models.Model):
     id_categorie = models.AutoField(primary_key=True)
     nom_categorie = models.CharField(max_length=50)
+    def __str__(self):
+        return f"{self.nom_categorie}"
 
 class Pays(models.Model):
     id_pays = models.AutoField(primary_key=True)
     nom_pays = models.CharField(max_length=50)
-
+    def __str__(self):
+        return f"{self.nom_pays}"
 class Ville(models.Model):
     id_ville = models.AutoField(primary_key=True)
     nom_ville = models.CharField(max_length=50)
     id_pays = models.ForeignKey(Pays, on_delete=models.CASCADE)
-
+    def __str__(self):
+        return f"{self.nom_ville}"
 class Hotel(models.Model):
     id_hotel = models.AutoField(primary_key=True)
     prix_nuit = models.DecimalField(max_digits=15, decimal_places=2)
@@ -36,7 +41,8 @@ class Hotel(models.Model):
     petit_dejeuner = models.BooleanField(default=False)
     nom_hotel = models.CharField(max_length=50)
     id_ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
-    
+    def __str__(self):
+        return f"{self.nom_hotel}"
 
 class Image(models.Model):
     id_images = models.AutoField(primary_key=True)
@@ -55,7 +61,8 @@ class Vol(models.Model):
     date_d_vol = models.DateField()
     date_f_vol = models.DateField()
     prix_vol = models.DecimalField(max_digits=15, decimal_places=2)
-
+    def __str__(self):
+        return f"{self.id_vol}"
 class Utilisateur(models.Model):
     id_utilisateur = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=15)
@@ -66,7 +73,9 @@ class Utilisateur(models.Model):
     email = models.EmailField()
     path_img_profile = models.CharField(max_length=100)
     id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, null=True)
-
+    def __str__(self):
+        return f"{self.nom} {self.prenom}"
+    
 class Voyage(models.Model):
     id_voyage = models.AutoField(primary_key=True)
     titre_voyage = models.CharField(max_length = 50)
@@ -74,9 +83,10 @@ class Voyage(models.Model):
     duree_voyage = models.IntegerField()
     transport = models.BooleanField()
     id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    id_promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE,null=True)
+    id_promotion = models.ForeignKey(Promotion,on_delete=models.CASCADE,null=True)
     id_categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
-
+    def __str__(self):
+        return self.titre_voyage
 class Commentaire(models.Model):
     id_comment = models.AutoField(primary_key=True)
     text_comment = models.CharField(max_length=150)
@@ -85,7 +95,8 @@ class Commentaire(models.Model):
     evaluation = models.IntegerField()
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
-    
+    def __str__(self):
+        return self.text_comment
 
 class Recevoir(models.Model):
     id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
@@ -106,5 +117,4 @@ class Aimer(models.Model):
 class inclure(models.Model):
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     id_vol = models.ForeignKey(Vol, on_delete=models.CASCADE)
-
 

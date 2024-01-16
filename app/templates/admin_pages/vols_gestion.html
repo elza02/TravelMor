@@ -21,17 +21,35 @@
                     <td>{{vol.date_d_vol}} </td> 
                     <td>{{vol.date_f_vol}} </td> 
                     <td>{{vol.prix_vol}} </td> 
-                    <td><button>Supprimer</button><button>Modifier</button></td>
+                    <td><button><a href="{% url 'supp_vol' vol.id_vol%}">Supprimer</a></button><button><a href="{% url 'modif_vol' vol.id_vol%}"> Modifier</a></button></td>
                 </tr>
 
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <form action="{% url 'villes_gestion' %}" method="POST">
+{% if messageSupp %}
+    <p style="color: red;">{{ messageSupp }}</p>
+{% endif %}
+{% if messageEdit %}
+    <p style="color: green;">{{ messageEdit }}</p>
+{% endif %}
+
+{% if form_modif %}
+    <form action="{% url 'modif_vol' vol.id_vol%}" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">ajouter</button>
+        {{ form_modif.as_p }}
+        <button type="submit">Enregistré</button>
     </form>
+  
+{% elif form_ajout %}
+<form action="{% url 'ajout_vol'%}" method="POST">
+    {% csrf_token %}
+    {{ form_ajout.as_p }}
+    <button type="submit">Enregistré</button>
+</form>
+{% else %}
+    <button type="submit"><a href="{% url 'ajout_vol'%}">ajouter</a></button>
+{% endif %}
 </div>
 {% endblock main %}

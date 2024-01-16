@@ -27,18 +27,16 @@
                     <td>{{Commentaire.id_utilisateur.nom}} {{Commentaire.id_utilisateur.prenom}} </td> 
                     <td>{{Commentaire.text_comment}} </td> 
                     <td>{{Commentaire.date_redaction}} {{Commentaire.heure_redaction}} </td> 
-                    <td><button>supprimer</button></td>
+                    <td><button><a href="{% url 'supp_commentaire' Commentaire.id_comment%}">supprimer</a></button></td>
                 </tr>
 
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <form action="{% url 'villes_gestion' %}" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">ajouter</button>
-    </form>
+    {% if messageSupp %}
+    <p style="color: red;">{{ messageSupp }}</p>
+{% endif %}
 <div class="container">
 
 {% endblock main %}

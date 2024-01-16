@@ -6,11 +6,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import *
+from .forms import *
 from django.urls import reverse
-from app.forms import PaysForm
+# from app.forms import PaysForm
 from . import models
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 import json
 from json import JSONEncoder
 from datetime import date, time
@@ -436,82 +437,128 @@ def special_haj_details(request, id_voyage):
 
 # admin views
 def admin_view(request):
-    return render(request, 'admin_pages/dashboard.html', {})
-
-def pays_gestion(request):
-    if request.method == 'POST':
-        form = PaysForm(request.POST)
-        if form.is_valid():
-            form.save()
-            # return redirect('success')  # Redirect to a success page
-            return render(request, 'admin_pages/pays_gestion.html', {'form' : form, 'form_msg' : 'succes'})  # Redirect to a success page
+    if request.session.get('est_admin',None) != None:
+        return render(request, 'admin_pages/dashboard.html', {})
     else:
-        form = PaysForm()
-    pays = models.Pays.objects.all()
-    return render(request, 'admin_pages/pays_gestion.html', {'form': form, 'pays' : pays})
+        return redirect('login')
+def pays_gestion(request):
+    if request.session.get('est_admin',None) != None:
+        pays = models.Pays.objects.all()
+        return render(request, 'admin_pages/pays_gestion.html', {'pays' : pays})
+    else:
+        return redirect('login')
+
 def villes_gestion(request):
-    villes = models.Ville.objects.all()
-    return render(request,'admin_pages/villes_gestion.html',{'villes' : villes})
+    if request.session.get('est_admin',None) != None:
+        villes = models.Ville.objects.all()
+        return render(request,'admin_pages/villes_gestion.html',{'villes' : villes})
+    else:
+        return redirect('login')
 
 def commentaires_gestion(request):
-    commentaires = models.Commentaire.objects.all()
-    return render(request, 'admin_pages/commentaires_gestion.html',{'commentaires' : commentaires})
+    if request.session.get('est_admin',None) != None:
+        commentaires = models.Commentaire.objects.all()
+        return render(request, 'admin_pages/commentaires_gestion.html',{'commentaires' : commentaires})
+    else:
+        return redirect('login')
 
 def notifications_gestion(request):
-    notifications = models.Notification.objects.all()
-    return render(request, 'admin_pages/notifications_gestion.html',{'notifications' : notifications})
+    if request.session.get('est_admin',None) != None:
+        notifications = models.Notification.objects.all()
+        return render(request, 'admin_pages/notifications_gestion.html',{'notifications' : notifications})
+    else:
+        return redirect('login')
 
 def vols_gestion(request):
-    vols = models.Vol.objects.all()
-    return render(request, 'admin_pages/vols_gestion.html',{'vols' : vols})
-
+    if request.session.get('est_admin',None) != None:
+        vols = models.Vol.objects.all()
+        return render(request, 'admin_pages/vols_gestion.html',{'vols' : vols})
+    else:
+        return redirect('login')
 def promotions_gestion(request):
-    promotions = models.Promotion.objects.all()
-    return render(request, 'admin_pages/promotions_gestion.html',{'promotions' : promotions})
+    if request.session.get('est_admin',None) != None:
+        promotions = models.Promotion.objects.all()
+        return render(request, 'admin_pages/promotions_gestion.html',{'promotions' : promotions})
+    else:
+        return redirect('login')
 def hotels_gestion(request):
-    hotels = models.Hotel.objects.all()
-    return render(request, 'admin_pages/hotels_gestion.html',{'hotels' : hotels})
+    if request.session.get('est_admin',None) != None:
+        hotels = models.Hotel.objects.all()
+        return render(request, 'admin_pages/hotels_gestion.html',{'hotels' : hotels})
+    else:
+        return redirect('login')
 def voyages_gestion(request):
-    voyages = models.Voyage.objects.all()
-    return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages})
+    if request.session.get('est_admin',None) != None:
+        voyages = models.Voyage.objects.all()
+        return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages})
+    else:
+        return redirect('login')
 def dashboard_gestion(request):
-    nbr_reservations = models.ReserverVoyage.objects.count()
-    reservations = models.ReserverVoyage.objects.all()
-    total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
-    client_nb = models.Utilisateur.objects.filter(est_admin = 0).count()
-    nb_voyage = models.Voyage.objects.count()
-    Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
-    return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
+    if request.session.get('est_admin',None) != None:
+        nbr_reservations = models.ReserverVoyage.objects.count()
+        reservations = models.ReserverVoyage.objects.all()
+        total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
+        client_nb = models.Utilisateur.objects.filter(est_admin = 0).count()
+        nb_voyage = models.Voyage.objects.count()
+        Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
+        return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
+    else:
+        return redirect('login')
 
-from .forms import SimpleForm,RegistrationForm
 
 def login(request):
     if request.method == 'POST':
-        form = SimpleForm(request.POST)
-        if form.is_valid():
-            # Récupérer les données du formulaire
-            passwd = form.cleaned_data['password']
-            email = form.cleaned_data['email']
-            for usr in models.Utilisateur.objects.all():
-                if passwd == usr.password and email == usr.email:
-                    request.session['code_session'] = 1
+        # form = SimpleForm(request.POST)
+        # if form.is_valid():
+        #     # Récupérer les données du formulaire
+        #     passwd = form.cleaned_data['password']
+        #     email = form.cleaned_data['email']
+        #     for usr in models.Utilisateur.objects.all():
+        #         if passwd == usr.mot_d_passe and email == usr.email:
+                    
+        #             if usr.est_admin != 1:
+        #                 request.session['code_session'] = usr.id_utilisateur
+        #                 #return redirect('client/profile/'+str(usr.id_utilisateur))
+        #                 return profile_view(request,usr.id_utilisateur)
+        #                 break
+        #             else:
+        #                 request.session['est_admin'] = usr.id_utilisateur
+        #                 return dashboard_gestion(request)
+        #                 break
+        #     error_message = "Identifiants incorrects. Veuillez réessayer."
+        #     return render(request, 'login.html', {'form': form,'error_message': error_message})
+        email = request.POST['email']
+        password = request.POST['password']
+        # return HttpResponse(email+' '+password)
+        for usr in models.Utilisateur.objects.all():
+                if password == usr.mot_d_passe and email == usr.email:
+                    
                     if usr.est_admin != 1:
+                        request.session['code_session'] = usr.id_utilisateur
+                        #return redirect('client/profile/'+str(usr.id_utilisateur))
                         return profile_view(request,usr.id_utilisateur)
                         break
                     else:
-                        request.session['est_admin'] = 1
+                        request.session['est_admin'] = usr.id_utilisateur
                         return dashboard_gestion(request)
                         break
-            error_message = "Identifiants incorrects. Veuillez réessayer."
-            return render(request, 'login.html', {'form': form,'error_message': error_message})
-    else:
-        form = SimpleForm()
-        return render(request, 'login.html', {'form': form})
+                # else: 
+                    # error_message = "Identifiants incorrects. Veuillez réessayer."
+                    # return render(request, 'login.html', {'form': form,'error_message': error_message})
+                    # break
+    # else:
+    #     return render(request, 'login.html', {'form': form})
+        
 def logout(request):
-    request.session.clear()
+    if request.session.get('code_session', None) != None:
+        del request.session['code_session']
+    elif request.session.get('est_admin', None) != None:
+        del request.session['est_admin']
+        
+    #request.session.clear()
     return redirect('/')
 def profile_view(request, user_id):
-    if request.session.get('code_session',None) != None:
+    if request.session.get('code_session',None) == user_id:
         utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
         return render(request, 'client/profile.html', {'utilisateur': utilisateur})
     else:
@@ -525,16 +572,233 @@ def registration(request):
             prenom = form.cleaned_data['prenom']
             email = form.cleaned_data['email']
             num_tele = form.cleaned_data['num_telephone']
-            passwd = form.cleaned_data['password']
-            image_filename = form.cleaned_data['path_img_profile'].name
+            passwd = form.cleaned_data['mot_d_passe']
+            uploaded_image = form.cleaned_data['path_img_profile']
+            image_filename = uploaded_image.name
             # if 'path_img_profile' in request.FILES:
             #     image_filename = request.FILES['path_img_profile'].path
-            #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'password' : passwd,'image_filename':image_filename}
+            #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'mot_d_passe' : passwd,'image_filename':image_filename}
             # Faire quelque chose après l'enregistrement, par exemple, rediriger vers une page de confirmation
-            user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,password = passwd)
+            image_path = f'./app/static/assets/imgs_profile/{image_filename}'
+            with open(image_path, 'wb') as destination:
+                for chunk in uploaded_image.chunks():
+                    destination.write(chunk)
+
+            user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,mot_d_passe = passwd)
             user.save()
             return profile_view(request,user.id_utilisateur)
             #return render(request, 'test.html',{'utilisateur': utilisateur})
     else:
         form = RegistrationForm()
     return render(request, 'registration.html', {'form': form})
+
+def supp_voyage(request,id_voyage):
+    voyage = models.Voyage.objects.get(id_voyage = id_voyage)
+    voyage.delete()
+    voyages = models.Voyage.objects.all()
+    message_supp = "Voyage id: "+str(id_voyage)+" est supprimée!"
+    return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'messageSupp' : message_supp})
+
+def modif_voyage(request,id_voyage):
+    voyage = get_object_or_404(models.Voyage, id_voyage=id_voyage)
+    voyages = models.Voyage.objects.all()
+    if request.method == 'POST':
+        form = VoyageModificationForm(request.POST,instance = voyage)
+        if form.is_valid():
+            form.save()
+            message = "Voyage id: "+str(id_voyage)+" est modifiée!"
+            return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        
+        form = VoyageModificationForm(instance = voyage)
+        return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'voyage' : voyage,'form_modif':form})
+        
+def ajout_voyage(request):
+    if request.method == 'POST':
+        form = VoyageAjoutForm(request.POST)
+        if form.is_valid():
+            #form.save()
+            titre_voyage = form.cleaned_data['titre_voyage']
+            prix_voyage = form.cleaned_data['prix_voyage']
+            duree_voyage = form.cleaned_data['duree_voyage']
+            transport = form.cleaned_data['transport']
+            id_hotel = form.cleaned_data['id_hotel']
+            #hotel = models.Hotel.objects.get(id_hotel = id_hotel)
+            id_promotion = form.cleaned_data['id_promotion']
+            id_categorie = form.cleaned_data['id_categorie']
+            #strin = titre_voyage+" "+str(prix_voyage)+" "+str(duree_voyage)+" "+str(transport)+" "+str(id_hotel)+" "+str(id_promotion)+" "+str(id_categorie)
+            #"return HttpResponse(strin)
+            voyage = models.Voyage.objects.create(id_promotion = id_promotion,titre_voyage = titre_voyage,prix_voyage=prix_voyage,duree_voyage=duree_voyage,transport=transport,id_hotel=id_hotel,id_categorie=id_categorie)
+            #voyage.id_promotion.set(id_promotion)
+            voyage.save()
+            voyage.id_promotion = id_promotion
+            voyage.save()
+            return voyages_gestion(request)
+    else:    
+        voyages = models.Voyage.objects.all()
+        form = VoyageAjoutForm()
+        return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'form_ajout':form})
+        
+def supp_hotel(request,id_hotel):
+    hotel = models.Hotel.objects.get(id_hotel = id_hotel)
+    hotel.delete()
+    hotels = models.Hotel.objects.all()
+    message_supp = "Hotels id: "+str(id_hotel)+" est supprimée!"
+    return  render(request,'admin_pages/hotels_gestion.html',{'hotels' : hotels,'messageSupp' : message_supp})
+
+def modif_hotel(request,id_hotel):
+    hotel = get_object_or_404(models.Hotel, id_hotel=id_hotel)
+    hotels = models.Hotel.objects.all()
+    if request.method == 'POST':
+        form = HotelModificationForm(request.POST,instance = hotel)
+        if form.is_valid():
+            form.save()
+            message = "Voyage id: "+str(id_hotel)+" est modifiée!"
+            return  render(request,'admin_pages/hotels_gestion.html',{'hotels' : hotels,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = HotelModificationForm(instance = hotel)
+        return  render(request,'admin_pages/hotels_gestion.html',{'hotels' : hotels,'hotel' : hotel,'form_modif':form})
+
+def ajout_hotel(request):
+    hotels = models.Hotel.objects.all()
+    if request.method == 'POST':
+        form = HotelAjoutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Nouvelle hotel est ajouté avec succée!"
+            return  render(request,'admin_pages/hotels_gestion.html',{'hotels' : hotels,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = HotelAjoutForm()
+        return  render(request,'admin_pages/hotels_gestion.html',{'hotels' : hotels,'form_ajout':form})
+
+def supp_promotion(request,id_promotion):
+    promotion = models.Promotion.objects.get(id_promotion = id_promotion)
+    promotion.delete()
+    promotions = models.Promotion.objects.all()
+    message_supp = "promotions id: "+str(id_promotion)+" est supprimée!"
+    return  render(request,'admin_pages/promotions_gestion.html',{'promotions' : promotions,'messageSupp' : message_supp})
+
+def modif_promotion(request,id_promotion):
+    promotion = get_object_or_404(models.Promotion, id_promotion=id_promotion)
+    promotions = models.Promotion.objects.all()
+    if request.method == 'POST':
+        form = PromotionModificationForm(request.POST,instance = promotion)
+        if form.is_valid():
+            form.save()
+            message = "Promotion id: "+str(id_promotion)+" est modifiée!"
+            return  render(request,'admin_pages/promotions_gestion.html',{'promotions' : promotions,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = PromotionModificationForm(instance = promotion)
+        return  render(request,'admin_pages/promotions_gestion.html',{'promotions' : promotions,'promotion' : promotion,'form_modif':form})
+
+def ajout_promotion(request):
+    promotions = models.Promotion.objects.all()
+    if request.method == 'POST':
+        form = PromotionAjoutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Nouvelle promotion est ajouté avec succée!"
+            return  render(request,'admin_pages/promotions_gestion.html',{'promotions' : promotions,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = PromotionAjoutForm()
+        return  render(request,'admin_pages/promotions_gestion.html',{'promotions' : promotions,'form_ajout':form})
+
+def supp_vol(request,id_vol):
+    vol = models.Vol.objects.get(id_vol = id_vol)
+    vol.delete()
+    vols = models.Vol.objects.all()
+    message_supp = "vols id: "+id_vol+" est supprimée!"
+    return  render(request,'admin_pages/vols_gestion.html',{'vols' : vols,'messageSupp' : message_supp})
+
+def modif_vol(request,id_vol):
+    vol = get_object_or_404(models.Vol, id_vol=id_vol)
+    vols = models.Vol.objects.all()
+    if request.method == 'POST':
+        form = VolModificationForm(request.POST,instance = vol)
+        if form.is_valid():
+            form.save()
+            message = "vol id: "+id_vol+" est modifiée!"
+            return  render(request,'admin_pages/vols_gestion.html',{'vols' : vols,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = VolModificationForm(instance = vol)
+        return  render(request,'admin_pages/vols_gestion.html',{'vols' : vols,'vol' : vol,'form_modif':form})
+
+def ajout_vol(request):
+    vols = models.Vol.objects.all()
+    if request.method == 'POST':
+        form = VolAjoutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Nouvelle vol est ajouté avec succée!"
+            return  render(request,'admin_pages/vols_gestion.html',{'vols' : vols,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = VolAjoutForm()
+        return  render(request,'admin_pages/vols_gestion.html',{'vols' : vols,'form_ajout':form})
+
+def supp_ville(request,id_ville):
+    ville = models.Ville.objects.get(id_ville = id_ville)
+    ville.delete()
+    villes = models.Ville.objects.all()
+    message_supp = "ville id: "+str(id_ville)+" est supprimée!"
+    return  render(request,'admin_pages/villes_gestion.html',{'villes' : villes,'messageSupp' : message_supp})
+
+def ajout_ville(request):
+    villes = models.Ville.objects.all()
+    if request.method == 'POST':
+        form = VilleAjoutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Nouvelle ville est ajouté avec succée!"
+            return  render(request,'admin_pages/villes_gestion.html',{'villes' : villes,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = VilleAjoutForm()
+        return  render(request,'admin_pages/villes_gestion.html',{'villes' : villes,'form_ajout':form})
+    
+
+def supp_pays(request,id_pays):
+    pays = models.Pays.objects.get(id_pays = id_pays)
+    pays.delete()
+    pays = models.Pays.objects.all()
+    message_supp = "pays id: "+str(id_pays)+" est supprimée!"
+    return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'messageSupp' : message_supp})
+def modif_pays(request,id_pays):
+    pays = get_object_or_404(models.Pays, id_pays=id_pays)
+    if request.method == 'POST':
+        form = PaysAjoutForm(request.POST,instance=pays)
+        if form.is_valid():
+            form.save()
+            message = "Nouvelle pays est ajouté avec succée!"
+            return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = PaysAjoutForm(instance = pays)
+        return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'form_ajout':form})
+
+def ajout_pays(request):
+    pays = models.Pays.objects.all()
+    if request.method == 'POST':
+        form = PaysAjoutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Nouvelle pays est ajouté avec succée!"
+            return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = PaysAjoutForm()
+        return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'form_ajout':form})
+
+
+def supp_commentaire(request,id_commentaire):
+    c = models.Commentaire.objects.get(id_comment = id_commentaire)
+    c.delete()
+    commentaires = models.Commentaire.objects.all()
+    message_supp = "Commentaire id: "+str(id_commentaire)+" est supprimée!"
+    return  render(request,'admin_pages/commentaires_gestion.html',{'commentaires' : commentaires,'messageSupp' : message_supp})

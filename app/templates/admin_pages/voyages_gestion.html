@@ -33,17 +33,39 @@
                     <td>{{voyage.id_promotion.id_promotion}} </td> 
                     <td>{{voyage.id_promotion.pourcentage}} </td> 
                     <td>{{voyage.id_categorie.nom_categorie}} </td> 
-                    <td><button>Supprimer</button><button>Modifier</button></td>
+                    <td><button><a href="{% url 'supp_voyage' voyage.id_voyage%}">Supprimer</a></button><button><a href="{% url 'modif_voyage' voyage.id_voyage%}"> Modifier</a></button></td>
                 </tr>
 
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <form action="{% url 'villes_gestion' %}" method="POST">
+{% if messageSupp %}
+    <p style="color: red;">{{ messageSupp }}</p>
+{% endif %}
+{% if messageEdit %}
+    <p style="color: green;">{{ messageEdit }}</p>
+{% endif %}
+
+{% if form_modif %}
+    <form action="{% url 'modif_voyage' voyage.id_voyage%}" method="POST">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">ajouter</button>
+        {{ form_modif.as_p }}
+        <button type="submit">Enregistré</button>
     </form>
+
+
+{% elif form_ajout %}
+    <form action="{% url 'ajout_voyage'%}" method="POST">
+        {% csrf_token %}
+        {{ form_ajout.as_p }}
+        <button type="submit">Enregistré</button>
+    </form>
+
+{% else %}
+<button type="submit"><a href="{% url 'ajout_voyage'%}">ajouter</a></button>
+
+{% endif %}
+    
 </div>
 {% endblock main %}

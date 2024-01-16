@@ -283,14 +283,15 @@
     </div>
 
     <div id="login-form-modal" class="modal">
-        <form class="modal-content animate" action="#" method="post"> {% comment %} entrer le lien de la view {% endcomment %}
+        <form class="modal-content animate" method="POST" action="{% url 'login' %}"> {% comment %} entrer le lien de la view {% endcomment %}
+            {% csrf_token %}
             <div class="head">
                 <h1>Authentification</h3>
                 <span onclick="document.getElementById('login-form-modal').style.display='none'" class="close" title="Close Modal">&times;</span>
             </div>
             <div class="container-login">
-                <input type="text" placeholder="Entrer le nom d'utilisateur" name="uname" required>
-                <input type="password" placeholder="Entrer le mot de pass" name="psw" required>
+                <input type="email" placeholder="Entrer votre email.." name="email" required>
+                <input type="password" placeholder="Entrer le mot de pass" name="password" required>
                 <label style="margin: auto;">
                     <input type="checkbox" checked="checked" name="remember"> Rester connecté
                 </label>
