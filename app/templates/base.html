@@ -418,5 +418,80 @@
         prevScrollpos = currentScrollPos;
         }
     </script>
+
+    <script defer>
+        const hearts = document.querySelectorAll('.heart');
+        const inputLike = document.querySelector('input[name="inputLike"]');
+    // on veut utiliser data- of script pour passer la valeur id_user au script
+        function getCSRFToken() {
+            const csrfCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
+            if (csrfCookie) {
+                return csrfCookie.split('=')[1];
+            }
+            return null;
+        }
+    
+        function fetchLikes(voyageId) {
+            const formData = { id_user: 1, id_voyage: voyageId };
+            const csrfToken = getCSRFToken();
+            fetch('/special_asie/like/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify(formData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the UI based on the like status for the specific voyage
+                    data = JSON.parse(data);
+                    const isLiked = data["existe"];
+                    hearts.forEach(heart => {
+                        console.log(heart.id);
+                        if(heart.id == voyageId){
+                            heart.src = isLiked ? '{% static "assets/like-full.svg" %}' : '{% static "assets/like-empty.svg" %}';
+                            inputLike.value = isLiked ? 'true' : 'false';
+                        }
+                    });
+                });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            hearts.forEach(heart => {
+                const voyageId = heart.id;
+                fetchLikes(voyageId);
+                console.log(heart.id);
+    
+            });
+        });
+    
+        function toggleLike(heart) {
+            const voyageId = heart.id;
+            console.log('toggle: ' + inputLike.value);
+            const isLiked = inputLike.value === 'true';
+    
+            const formData = { id_user: 1, id_voyage: voyageId };
+            const csrfToken = getCSRFToken();
+    
+            const endpoint = isLiked ? '/special_asie/delete/' : '/special_asie/add/';
+    
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify(formData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    data = JSON.parse(data);
+                    const updatedIsLiked = data["existe"];
+                    heart.src = updatedIsLiked ? '{% static "assets/like-full.svg" %}' : '{% static "assets/like-empty.svg" %}';
+                    inputLike.value = updatedIsLiked ? 'true' : 'false';
+                });
+        }
+    </script>
 </body>
 </html>

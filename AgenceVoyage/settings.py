@@ -30,6 +30,14 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+AUTHENTICATION_BACKENDS = ['app.backends.EmailMotDePasseBackend']
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     # other backends...
+# ]
+
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -54,7 +62,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'AgenceVoyage.urls'
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+ESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_NAME = 'your_session_cookie_name'
+SESSION_SAVE_EVERY_REQUEST = True  # Forces session update on every request
+
+
 
 SESSION_COOKIE_AGE = 3600
 

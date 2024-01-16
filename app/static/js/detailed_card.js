@@ -87,9 +87,5 @@ star.addEventListener('mouseleave', function() {
     }
     });
 });
-// star.addEventListener('click', function() {
-//     rating = index + 1;
-//     document.getElementById('output').innerHTML = 'Rating: ' + rating;
-// });
 });
 

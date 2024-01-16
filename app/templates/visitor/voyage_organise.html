@@ -12,9 +12,15 @@
         {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "voyage_organise"%} 
     <div class="mini-card-voyage">
         <div class="image">
-            <img src="{% static 'assets/hotel.png' %}" alt="image-hotel">
+            <img src="{% static "assets/cities/"%}{{ avoir_instance.id_ville.imageville_set.first.id_images.path_image }}" alt="">
             <span class="reaction">
-                <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
+                <img class="heart" src="#" data-voyage="{{ avoir_instance.id_voyage.id_voyage }}" id="{{ avoir_instance.id_voyage.id_voyage }}" onclick="toggleLike(this)">
+                <form>
+                    {% csrf_token %}
+                    <input type="hidden" name="id_user" value=1>
+                    <input type="hidden" name="id_voyage" value={{ avoir_instance.id_voyage.id_voyage }}>
+                    <input type="hidden" name="inputLike" value="#">
+                </form>
             </span>
         </div>
         <div class="body">

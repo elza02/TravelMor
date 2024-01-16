@@ -20,6 +20,8 @@ urlpatterns = [
     
     path('special_asie/', views.special_asie, name="special_asie"),
     path('special_asie/like/', views.special_asie_like, name="special_asie_like"),
+    path('special_asie/delete/', views.special_asie_like_del, name="special_asie_like_del"),
+    path('special_asie/add/', views.special_asie_like_add, name="special_asie_like_add"),
     path('special_asie/details/<int:id_voyage>/', views.special_asie_details, name="special_asie_details"),
     path('special_asie/details/comments/', views.special_asie_comments, name="special_asie_comments"),
     
@@ -40,10 +42,17 @@ urlpatterns = [
     path('admin_page/hotels/', views.hotels_gestion, name="hotels_gestion"),
     path('admin_page/voyages/', views.voyages_gestion, name="voyages_gestion"),
     path('admin_page/dashboard/', views.dashboard_gestion, name="dashboard_gestion"),
-    path('login/', views.login, name="login"),
-    path('registration/', views.registration, name="registration"),
-    path('client/profile/<int:user_id>/', views.profile_view, name='profile'),
-    path('logout/', views.logout, name='logout'),
+    # path('login/', views.login, name="login"),
+    # path('registration/', views.registration, name="registration"),
+    # path('client/profile/<int:user_id>/', views.profile_view, name='profile'),
+    # path('logout/', views.logout, name='logout'),
 
    # path('registration/', views.user_registration, name="registration_login"),
+   
+    path('admin_login/', views.admin_login, name='admin_login'),
+    path('client_login/', views.client_login, name='client_login'),
+    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('client_dashboard/', views.client_dashboard, name='client_dashboard'),
+    path('admin_logout/', views.admin_logout, name='admin_logout'),
+    path('client_logout/', views.client_logout, name='client_logout'),
 ]

@@ -1,11 +1,15 @@
 from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse, request
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import make_password
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db.models import *
+from django.urls import reverse
 from app.forms import PaysForm
 from . import models
-from datetime import datetime
-from decimal import Decimal
 from django.utils import timezone
 from django.http import JsonResponse
 import json
@@ -13,6 +17,41 @@ from json import JSONEncoder
 from datetime import date, time
 
 def home (request):
+    
+    # utilisateur1 = models.Utilisateur(
+    #     est_admin=True,
+    #     nom="John",
+    #     prenom="Doe",
+    #     num_telephone="123456789",
+    #     email="admin@admin.com",
+    #     path_img_profile="john_profile.jpg",
+    # )
+    # utilisateur1.set_password('admin')  
+    # utilisateur1.save()
+
+
+    # utilisateur2 = models.Utilisateur(
+    #     est_admin=False,
+    #     nom="John",
+    #     prenom="Doe",
+    #     num_telephone="123456789",
+    #     email="example@example.com",
+    #     path_img_profile="john_profile.jpg",
+    # )
+    # utilisateur2.set_password('exemple')  
+    # utilisateur2.save()
+    
+    # utilisateur3 = models.Utilisateur(
+    #     est_admin=False,
+    #     nom="user3",
+    #     prenom="user3",
+    #     num_telephone="123456789",
+    #     email="user3@user3.com",
+    #     path_img_profile="john_profile.jpg",
+    # )
+    # utilisateur3.set_password('user3')  
+    # utilisateur3.save()
+    
     # pays1 = models.Pays.objects.create(nom_pays="France")
     # pays2 = models.Pays.objects.create(nom_pays="Spain")
     # pays3 = models.Pays.objects.create(nom_pays="Italy")
@@ -118,7 +157,7 @@ def home (request):
 
     # # Create Utilisateur instances
     # utilisateur1 = models.Utilisateur.objects.create(
-    #     mot_d_passe="pord123",
+    #     password="pord123",
     #     est_admin=True,
     #     nom="John",
     #     prenom="Doe",
@@ -128,7 +167,7 @@ def home (request):
     #     id_hotel=hotel1,
     # )
     # utilisateur2 = models.Utilisateur.objects.create(
-    #     mot_d_passe="pass4",
+    #     password="pass4",
     #     est_admin=False,
     #     nom="Alice",
     #     prenom="Smith",
@@ -138,7 +177,7 @@ def home (request):
     #     id_hotel=hotel2,
     # )
     # utilisateur3 = models.Utilisateur.objects.create(
-    #     mot_d_passe="user",
+    #     password="user",
     #     est_admin=False,
     #     nom="Bob",
     #     prenom="Johnson",
@@ -299,13 +338,23 @@ def promotions_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
     return render(request, 'visitor/promotions_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
+
 def hotels(request):
-    query = models.Hotel.objects.all()
-    return render(request, 'visitor/hotels.html', {'query' :query})
+    try:
+        pays = models.Pays.objects.get(nom_pays='Maroc')
+        villes = models.Ville.objects.filter(id_pays=pays).values_list('id_ville', flat=True)
+        query = models.Hotel.objects.filter(id_ville__in=villes)
+    except ObjectDoesNotExist:
+        # Handle the case when the objects don't exist
+        query = None  # or any other default value or action you want
+
+    return render(request, 'visitor/hotels.html', {'query': query})
+
+
 
 def hotels_details(request, id_hotel):
-    hotels = models.Hotel.objects.filter(id_hotel=id_hotel)
-    return render(request, 'visitor/hotels_details.html', {'hotels' : hotels})
+    hotel = models.Hotel.objects.filter(id_hotel=id_hotel)
+    return render(request, 'visitor/hotels_details.html', {'hotel' : hotel})
 
 def special_turqie(request):
     query = models.Avoir.objects.all()
@@ -317,15 +366,7 @@ def special_turqie_details(request, id_voyage):
 
 def special_asie(request):
     query = models.Avoir.objects.all()
-
-    # imagesville = models.ImageVille.filter(i want to have one record of each id_ville)
-    # for imageville, avoir_instance in zip(imagesville, query):
-    #     if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville:
-    #         print(imageville.id_images.path_image)
-
-            
     return render(request, 'visitor/special_asie.html', {'query' :query})
-    # return render(request, 'visitor/special_asie.html', {'query' :query, 'imagesville' : imagesville})
 
 def special_asie_details(request, id_voyage):
     avoir, inclure_instance, comments = voyageDetails(id_voyage)
@@ -362,18 +403,13 @@ def special_asie_comments(request):
             id_voyage=voyage
         )
         comment.save()
-
         # Convert the Commentaire object to a dictionary
         new_comment = model_to_dict(comment)
         utilisateur = model_to_dict(utilisateur)
-
         # Encode the data as a JSON string
         response_data = json.dumps({'success': True, 'new_comment': new_comment, 'utilisateur' : utilisateur}, cls=CustomJSONEncoder)
-
-
         # Return a JsonResponse with the data
         return JsonResponse(response_data, safe=False)
-    
     except json.JSONDecodeError as e:
         print("JSON Decode Error:", e)
         # Return a JsonResponse with an error message
@@ -381,8 +417,29 @@ def special_asie_comments(request):
 
 def special_asie_like(request):
     data = json.loads(request.body.decode('utf-8'))
+    utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
+    voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
+    if models.Aimer.objects.filter(id_utilisateur=utilisateur, id_voyage=voyage):
+        existe = True
+    else : existe = False
     print("Received data:", data)  # Add this line for debugging
-    return JsonResponse(json.dumps({'success': True}), safe=False)
+    return JsonResponse(json.dumps({'fetch': True, 'id_user' : data.get('id_user', 0), 'id_voyage' : data.get('id_voyage', 0), 'existe' : existe  }), safe=False)
+
+def special_asie_like_del(request):
+    data = json.loads(request.body.decode('utf-8'))
+    utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
+    voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
+    models.Aimer.objects.filter(id_utilisateur=utilisateur, id_voyage=voyage).delete()
+    return JsonResponse(json.dumps({'existe' : False, 'delete': True}), safe=False)
+
+
+def special_asie_like_add(request):
+    data = json.loads(request.body.decode('utf-8'))
+    utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
+    voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
+    aimer = models.Aimer(id_utilisateur=utilisateur, id_voyage=voyage)
+    aimer.save()
+    return JsonResponse(json.dumps({'existe' : True, 'add': True}), safe=False)
 
 def special_omra(request):
     query = models.Avoir.objects.all()
@@ -451,58 +508,116 @@ def dashboard_gestion(request):
     Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
     return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
 
-from .forms import SimpleForm,RegistrationForm
+# from .forms import SimpleForm,RegistrationForm
 
-def login(request):
-    if request.method == 'POST':
-        form = SimpleForm(request.POST)
-        if form.is_valid():
-            # Récupérer les données du formulaire
-            passwd = form.cleaned_data['password']
-            email = form.cleaned_data['email']
-            for usr in models.Utilisateur.objects.all():
-                if passwd == usr.mot_d_passe and email == usr.email:
-                    request.session['code_session'] = 1
-                    if usr.est_admin != 1:
-                        return profile_view(request,usr.id_utilisateur)
-                        break
-                    else:
-                        request.session['est_admin'] = 1
-                        return dashboard_gestion(request)
-                        break
-            error_message = "Identifiants incorrects. Veuillez réessayer."
-            return render(request, 'login.html', {'form': form,'error_message': error_message})
-    else:
-        form = SimpleForm()
-        return render(request, 'login.html', {'form': form})
-def logout(request):
-    request.session.clear()
-    return redirect('/')
-def profile_view(request, user_id):
-    if request.session.get('code_session',None) != None:
-        utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
-        return render(request, 'client/profile.html', {'utilisateur': utilisateur})
-    else:
-        return redirect('/')
+# def login(request):
+#     if request.method == 'POST':
+#         form = SimpleForm(request.POST)
+#         if form.is_valid():
+#             # Récupérer les données du formulaire
+#             passwd = form.cleaned_data['password']
+#             email = form.cleaned_data['email']
+#             for usr in models.Utilisateur.objects.all():
+#                 if passwd == usr.password and email == usr.email:
+#                     request.session['code_session'] = 1
+#                     if usr.est_admin != 1:
+#                         return profile_view(request,usr.id_utilisateur)
+#                         break
+#                     else:
+#                         request.session['est_admin'] = 1
+#                         return dashboard_gestion(request)
+#                         break
+#             error_message = "Identifiants incorrects. Veuillez réessayer."
+#             return render(request, 'login.html', {'form': form,'error_message': error_message})
+#     else:
+#         form = SimpleForm()
+#         return render(request, 'login.html', {'form': form})
+# def logout(request):
+#     request.session.clear()
+#     return redirect('/')
+# def profile_view(request, user_id):
+#     if request.session.get('code_session',None) != None:
+#         utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+#         return render(request, 'client/profile.html', {'utilisateur': utilisateur})
+#     else:
+#         return redirect('/')
 
-def registration(request):
+# def registration(request):
+#     if request.method == 'POST':
+#         form = RegistrationForm(request.POST,request.FILES)
+#         if form.is_valid():
+#             nom = form.cleaned_data['nom']
+#             prenom = form.cleaned_data['prenom']
+#             email = form.cleaned_data['email']
+#             num_tele = form.cleaned_data['num_telephone']
+#             passwd = form.cleaned_data['password']
+#             image_filename = form.cleaned_data['path_img_profile'].name
+#             # if 'path_img_profile' in request.FILES:
+#             #     image_filename = request.FILES['path_img_profile'].path
+#             #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'password' : passwd,'image_filename':image_filename}
+#             # Faire quelque chose après l'enregistrement, par exemple, rediriger vers une page de confirmation
+#             user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,password = passwd)
+#             user.save()
+#             return profile_view(request,user.id_utilisateur)
+#             #return render(request, 'test.html',{'utilisateur': utilisateur})
+#     else:
+#         form = RegistrationForm()
+#     return render(request, 'registration.html', {'form': form})
+
+
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.urls import reverse
+
+def admin_login(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST,request.FILES)
-        if form.is_valid():
-            nom = form.cleaned_data['nom']
-            prenom = form.cleaned_data['prenom']
-            email = form.cleaned_data['email']
-            num_tele = form.cleaned_data['num_telephone']
-            passwd = form.cleaned_data['mot_d_passe']
-            image_filename = form.cleaned_data['path_img_profile'].name
-            # if 'path_img_profile' in request.FILES:
-            #     image_filename = request.FILES['path_img_profile'].path
-            #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'mot_d_passe' : passwd,'image_filename':image_filename}
-            # Faire quelque chose après l'enregistrement, par exemple, rediriger vers une page de confirmation
-            user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,mot_d_passe = passwd)
-            user.save()
-            return profile_view(request,user.id_utilisateur)
-            #return render(request, 'test.html',{'utilisateur': utilisateur})
-    else:
-        form = RegistrationForm()
-    return render(request, 'registration.html', {'form': form})
+        email = request.POST['email']
+        password = request.POST['mot_d_passe']
+        user = authenticate(request, email=email, mot_de_passe=password)
+
+        if user is not None and user.est_admin:
+            login(request, user)
+            return redirect('admin_dashboard')  # Redirect to admin dashboard
+        else:
+            messages.error(request, 'Invalid admin login credentials.')
+
+    return render(request, 'admin_login.html')
+
+def client_login(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(request, email=email, mot_de_passe=password)
+
+        if user is not None and not user.est_admin:
+            login(request, user)
+            return redirect('client_dashboard')  # Redirect to client dashboard
+        else:
+            messages.error(request, 'Invalid client login credentials.')
+
+    return render(request, 'client_login.html')
+
+@login_required(login_url='admin_login')
+def admin_dashboard(request):
+    # View for admin
+    return render(request, 'admin_dashboard.html')
+
+@login_required(login_url='client_login')
+def client_dashboard(request):
+    # View for client
+    return render(request, 'client_dashboard.html')
+
+@login_required(login_url='admin_login')
+def admin_logout(request):
+    if request.user.is_authenticated and request.user.est_admin:
+        logout(request)
+    return redirect(reverse('admin_login'))  # Redirect to the admin login page after logout
+
+@login_required(login_url='client_login')
+def client_logout(request):
+    if request.user.is_authenticated and not request.user.est_admin:
+        logout(request)
+    return redirect(reverse('client_login'))  # Redirect to the client login page after logout
+

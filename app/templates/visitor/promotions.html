@@ -16,16 +16,16 @@
     {% if avoir_instance.id_voyage.id_promotion.pourcentage > 0 %}
     <div class="mini-card-voyage">
         <div class="image">
-            {% for imageville in imagesville %} 
-                                {% if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville  %}
-                                <img src="{% static "assets/cities/"%}{{ imageville.id_images.path_image }}" alt="">
-                                    {{ "<!--" }}
-                                        {%endif%} 
-                                      {%endfor%}     
-                                      {{ "-->" }}
-            <span class="reaction">
-                <img id="heart" src="{% static 'assets/like-empty.svg' %}" onclick="toggleLike(this)">
-            </span>
+            <img src="{% static "assets/cities/"%}{{ avoir_instance.id_ville.imageville_set.first.id_images.path_image }}" alt="">
+                <span class="reaction">
+                    <img class="heart" src="#" data-voyage="{{ avoir_instance.id_voyage.id_voyage }}" id="{{ avoir_instance.id_voyage.id_voyage }}" onclick="toggleLike(this)">
+                    <form>
+                        {% csrf_token %}
+                        <input type="hidden" name="id_user" value=1>
+                        <input type="hidden" name="id_voyage" value={{ avoir_instance.id_voyage.id_voyage }}>
+                        <input type="hidden" name="inputLike" value="#">
+                    </form>
+                </span>
         </div>
         <div class="body">
             <div class="title-localisation">

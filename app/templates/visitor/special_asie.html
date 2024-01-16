@@ -12,19 +12,14 @@
         {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "special_asie"%} 
         <div class="mini-card-voyage">
             <div class="image">
-                 {% for imageville in imagesville %} 
-                    {% if imageville.id_ville.id_ville == avoir_instance.id_ville.id_ville  %}
-                    <img src="{% static "assets/cities/"%}{{ imageville.id_images.path_image }}" alt="">
-                    {{ "<!--" }}{%endif%} 
-                {%endfor%}{{ "-->" }} 
-
+                <img src="{% static "assets/cities/"%}{{ avoir_instance.id_ville.imageville_set.first.id_images.path_image }}" alt="">
                 <span class="reaction">
-                    <img id="heart" src="#" onclick="toggleLike(this)">
-                    <form id="likeForm">
+                    <img class="heart" src="#" data-voyage="{{ avoir_instance.id_voyage.id_voyage }}" id="{{ avoir_instance.id_voyage.id_voyage }}" onclick="toggleLike(this)">
+                    <form>
                         {% csrf_token %}
-                        <input type="hidden" name="id_user" value=1> {% comment %} {% id_utilisateur %} l'utilisateur connecté ! {% endcomment %}
-                        <input type="hidden" name="id_user" value=1> {% comment %} {% id_utilisateur %} l'utilisateur connecté ! {% endcomment %}
+                        <input type="hidden" name="id_user" value=1>
                         <input type="hidden" name="id_voyage" value={{ avoir_instance.id_voyage.id_voyage }}>
+                        <input type="hidden" name="inputLike" value="#">
                     </form>
                 </span>
             </div>
@@ -47,44 +42,4 @@
 {% endblock main %}
 
 {% block js_block %}
-<script defer>
-
-    function toggleLike(heart) {
-        if (heart.src.includes('{% static "assets/like-full.svg" %}')) {
-            heart.src = '{% static "assets/like-empty.svg" %}';
-        } else {
-            heart.src = '{% static "assets/like-full.svg" %}';
-        }
-    }
-
-    function getCSRFToken() {
-        const csrfCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
-        if (csrfCookie) {
-            return csrfCookie.split('=')[1];
-        }
-        return null;
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        //document.getElementById('heart')
-        const id_user = document.querySelector('#likeForm input[name="id_user"]').value;
-        const id_voyage = document.querySelector('#likeForm input[name="id_voyage"]').value;
-
-        formData = {id_user : 1, id_voyage : id_voyage};
-        
-        csrfToken = getCSRFToken();
-
-        fetch('/special_asie/like/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
-            },
-            body: JSON.stringify(formData),})
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            });
-    });
-</script>
 {% endblock js_block %}
