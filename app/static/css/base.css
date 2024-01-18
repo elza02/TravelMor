@@ -422,13 +422,17 @@ footer .Paiement {
     display: flex;
     align-items: center;
     width: 100%;
-
+    position: relative;
 }
 
 footer .Paiement .methods {
     display: flex;
     gap: 20px;
-    margin-left: 280px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    margin-inline: auto;
+    width: fit-content;
 }
 
 footer .Paiement img {
