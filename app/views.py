@@ -270,8 +270,12 @@ def home (request):
     # inclure1.save()
     # inclure2.save()
     # inclure3.save()
-    return render(request, 'visitor/home.html')
-
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/home.html', {'utilisateur': utilisateur})
+    return render(request, 'user/home.html')
 
 def voyageDetails(id_voyage):
     avoir = models.Avoir.objects.filter(id_voyage = id_voyage)
@@ -281,11 +285,21 @@ def voyageDetails(id_voyage):
 
 def voyage_organise(request):
     query = models.Avoir.objects.all()  
-    return render(request, 'visitor/voyage_organise.html', {'query' : query})
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/voyage_organise.html', {'query' : query, 'utilisateur': utilisateur})
+    return render(request, 'user/voyage_organise.html', {'query' : query})
 
 def voyage_organise_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
-    return render(request, 'visitor/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment, 'utilisateur': utilisateur})
+    return render(request, 'user/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 def paysRelatedToVoyage(ville):
     return models.Avoir.objects.get(id_ville = ville).id_ville.id_pays
@@ -297,12 +311,21 @@ def promotions(request):
         'id_voyage__id_categorie',
         'id_ville__id_pays'  # Inclure le pays lié à la ville
         ).all()
-    return render(request, 'visitor/promotions.html', {'query' : query})
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/promotions.html', {'query' : query, 'utilisateur': utilisateur})
+    return render(request, 'user/promotions.html', {'query' : query})
 
 def promotions_details(request, id_voyage):  
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
-    return render(request, 'visitor/promotions_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
-
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/promotions_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+    return render(request, 'user/promotions_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 def hotels(request):
     try:
@@ -317,32 +340,96 @@ def hotels(request):
     else:
         # Handle the case where 'Maroc' does not exist (query would be empty)
         query = []
-
-    return render(request, 'visitor/hotels.html', {'query': query})
-
-
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/hotels.html', {'query': query, 'utilisateur': utilisateur})
+    return render(request, 'user/hotels.html', {'query': query})
 
 def hotels_details(request, id_hotel):
     hotel = models.Hotel.objects.filter(id_hotel=id_hotel)
-    return render(request, 'visitor/hotels_details.html', {'hotel' : hotel})
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/hotels_details.html', {'hotel' : hotel, 'utilisateur': utilisateur})
+    return render(request, 'user/hotels_details.html', {'hotel' : hotel})
 
 def special_turqie(request):
     query = models.Avoir.objects.all()
-    return render(request, 'visitor/special_turqie.html', {'query' :query})
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/special_turqie.html', {'query' :query, 'utilisateur': utilisateur})
+    return render(request, 'user/special_turqie.html', {'query' :query})
 
 def special_turqie_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
-    return render(request, 'visitor/special_turqie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/special_turqie_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+    return render(request, 'user/special_turqie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 def special_asie(request):
     query = models.Avoir.objects.all()
-    return render(request, 'visitor/special_asie.html', {'query' :query})
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/special_asie.html', {'query' :query, 'utilisateur': utilisateur})
+    return render(request, 'user/special_asie.html', {'query' :query})
 
 def special_asie_details(request, id_voyage):
     avoir, inclure_instance, comments = voyageDetails(id_voyage)
-    return render(request, 'visitor/special_asie_details.html', {'id_voyage' : id_voyage, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/special_asie_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
+    return render(request, 'user/special_asie_details.html', {'id_voyage' : id_voyage, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
+
+def special_omra(request):
+    query = models.Avoir.objects.all()
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/special_omra.html', {'query' :query, 'utilisateur': utilisateur})
+    return render(request, 'user/special_omra.html', {'query' :query})
+
+def special_omra_details(request, id_voyage):
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/special_omra_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+    return render(request, 'user/special_omra_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 
+def special_haj(request):
+    query = models.Avoir.objects.all()
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/special_haj.html', {'query' :query, 'utilisateur': utilisateur})
+    return render(request, 'user/special_haj.html', {'query' :query})
+
+def special_haj_details(request, id_voyage):
+    avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    user_id_session = request.session.get('code_session')
+    if user_id_session:
+        utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
+        if utilisateur:
+            return render(request, 'user/special_haj_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+    return render(request, 'user/special_haj_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+
+# comments and like handling
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date):
@@ -417,24 +504,6 @@ def add_like(request):
     aimer.save()
     return JsonResponse(json.dumps({'existe' : True, 'add': True}), safe=False)
 
-def special_omra(request):
-    query = models.Avoir.objects.all()
-    return render(request, 'visitor/special_omra.html', {'query' :query})
-
-def special_omra_details(request, id_voyage):
-    avoir, inclure_instance, comment = voyageDetails(id_voyage)
-    return render(request, 'visitor/special_omra_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
-
-
-def special_haj(request):
-    query = models.Avoir.objects.all()
-    return render(request, 'visitor/special_haj.html', {'query' :query})
-
-def special_haj_details(request, id_voyage):
-    avoir, inclure_instance, comment = voyageDetails(id_voyage)
-    return render(request, 'visitor/special_haj_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
-
-
 # admin views
 def admin_view(request):
     if request.session.get('est_admin',None) != None:
@@ -487,14 +556,16 @@ def hotels_gestion(request):
         return render(request, 'admin_pages/hotels_gestion.html',{'hotels' : hotels})
     else:
         return redirect('login')
+    
 def voyages_gestion(request):
     if request.session.get('est_admin',None) != None:
         voyages = models.Voyage.objects.all()
         return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages})
     else:
         return redirect('login')
+    
 def dashboard_gestion(request):
-    if request.session.get('est_admin',None) != None:
+    if request.session.get('est_admin', None) != None:
         nbr_reservations = models.ReserverVoyage.objects.count()
         reservations = models.ReserverVoyage.objects.all()
         total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
@@ -505,92 +576,84 @@ def dashboard_gestion(request):
     else:
         return redirect('login')
 
-
 def login(request):
     if request.method == 'POST':
-        # form = SimpleForm(request.POST)
-        # if form.is_valid():
-        #     # Récupérer les données du formulaire
-        #     passwd = form.cleaned_data['password']
-        #     email = form.cleaned_data['email']
-        #     for usr in models.Utilisateur.objects.all():
-        #         if passwd == usr.mot_d_passe and email == usr.email:
-                    
-        #             if usr.est_admin != 1:
-        #                 request.session['code_session'] = usr.id_utilisateur
-        #                 #return redirect('client/profile/'+str(usr.id_utilisateur))
-        #                 return profile_view(request,usr.id_utilisateur)
-        #                 break
-        #             else:
-        #                 request.session['est_admin'] = usr.id_utilisateur
-        #                 return dashboard_gestion(request)
-        #                 break
-        #     error_message = "Identifiants incorrects. Veuillez réessayer."
-        #     return render(request, 'login.html', {'form': form,'error_message': error_message})
-        email = request.POST['email']
-        password = request.POST['password']
-        # return HttpResponse(email+' '+password)
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = None
         for usr in models.Utilisateur.objects.all():
-                if password == usr.mot_d_passe and email == usr.email:
-                    
-                    if usr.est_admin != 1:
-                        request.session['code_session'] = usr.id_utilisateur
-                        #return redirect('client/profile/'+str(usr.id_utilisateur))
-                        return profile_view(request,usr.id_utilisateur)
-                        break
-                    else:
-                        request.session['est_admin'] = usr.id_utilisateur
-                        return dashboard_gestion(request)
-                        break
-                # else: 
-                    # error_message = "Identifiants incorrects. Veuillez réessayer."
-                    # return render(request, 'login.html', {'form': form,'error_message': error_message})
-                    # break
-    # else:
-    #     return render(request, 'login.html', {'form': form})
+            if password == usr.mot_d_passe and email == usr.email:
+                user = usr
+                break
+
+        if user is not None:
+            if not user.est_admin:
+                request.session['code_session'] = user.id_utilisateur
+                # return redirect('profile', user.id_utilisateur)
+                return redirect('/')
+            else:
+                request.session['est_admin'] = user.id_utilisateur
+                return redirect('dashboard_gestion')
+
+        error_message = "Identifiants incorrects. Veuillez réessayer."
+        return render(request, 'login.html', {'error_message': error_message})
+
+    return render(request, 'login.html', {})
+
         
+from django.shortcuts import redirect
+
 def logout(request):
-    if request.session.get('code_session', None) != None:
+    if 'code_session' in request.session:
         del request.session['code_session']
-    elif request.session.get('est_admin', None) != None:
+    elif 'est_admin' in request.session:
         del request.session['est_admin']
-        
-    #request.session.clear()
     return redirect('/')
+
+
 def profile_view(request, user_id):
     if request.session.get('code_session',None) == user_id:
         utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
-        return render(request, 'client/profile.html', {'utilisateur': utilisateur})
+        return render(request, 'user/profile.html', {'utilisateur': utilisateur})
     else:
-        return redirect('/')
+        return redirect('login')
+
 
 def registration(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST,request.FILES)
-        if form.is_valid():
-            nom = form.cleaned_data['nom']
-            prenom = form.cleaned_data['prenom']
-            email = form.cleaned_data['email']
-            num_tele = form.cleaned_data['num_telephone']
-            passwd = form.cleaned_data['mot_d_passe']
-            uploaded_image = form.cleaned_data['path_img_profile']
+        nom = request.POST.get('nom')
+        prenom = request.POST.get('prenom')
+        email = request.POST.get('email')
+        num_tele = request.POST.get('num_telephone')
+        passwd = request.POST.get('mot_d_passe')
+        uploaded_image = request.FILES.get('path_img_profile')
+        print(nom+' '+prenom+' '+email+' '+num_tele+' '+passwd+uploaded_image.name )
+        if nom and prenom and email and num_tele and passwd and uploaded_image:
+
             image_filename = uploaded_image.name
-            # if 'path_img_profile' in request.FILES:
-            #     image_filename = request.FILES['path_img_profile'].path
-            #utilisateur = {'nom' : nom,'prenom' : prenom,'email':email,'num_telephone' : num_tele,'mot_d_passe' : passwd,'image_filename':image_filename}
-            # Faire quelque chose après l'enregistrement, par exemple, rediriger vers une page de confirmation
-            image_path = f'./app/static/assets/imgs_profile/{image_filename}'
+            image_path = f'./app/static/assets/profile_imgs/{image_filename}'
+
             with open(image_path, 'wb') as destination:
                 for chunk in uploaded_image.chunks():
                     destination.write(chunk)
 
-            user = models.Utilisateur.objects.create(path_img_profile = image_filename,est_admin = 0,nom = nom,prenom =prenom,email = email,num_telephone = num_tele,mot_d_passe = passwd)
+            user = models.Utilisateur.objects.create(
+                path_img_profile=image_filename,
+                est_admin=0,
+                nom=nom,
+                prenom=prenom,
+                email=email,
+                num_telephone=num_tele,
+                mot_d_passe=passwd
+            )
             user.save()
-            return profile_view(request,user.id_utilisateur)
-            #return render(request, 'test.html',{'utilisateur': utilisateur})
-    else:
-        form = RegistrationForm()
-    return render(request, 'registration.html', {'form': form})
+
+            # Redirect to a success page or profile view
+            return redirect('profile', user.id_utilisateur)
+
+    return render(request, 'registration.html')
+
 
 def supp_voyage(request,id_voyage):
     voyage = models.Voyage.objects.get(id_voyage = id_voyage)

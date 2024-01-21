@@ -5,6 +5,35 @@
 {% block block_css %}
 <link rel="stylesheet" href="{% static 'css/card.css' %}">
 {% endblock block_css %}
+{% block menu_per_log_case %}
+    {% if request.session.code_session %}
+        <div class="log" id="LogMenuButton">
+            <i class="fa-solid fa-bars"></i>
+            <img src="{% static 'assets/profile_imgs/' %}{{ utilisateur.path_img_profile }}">
+            <div class="menu hide" id="LogMenu">
+                <ul>
+                    <li><a href="{% url 'profile' request.session.code_session %}">Profile</a></li>
+                    <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="log" id="LogMenuButton">
+            <i class="fa-solid fa-bars"></i>
+            <i class="fa-solid fa-circle-user"></i>
+            <div class="menu hide" id="LogMenu">
+                <ul>
+                    <li><a href="{% url 'registration' %}">Inscription</a></li>
+                    <li><a href="#" onclick="document.getElementById('login-form-modal').style.display='block'">Connexion</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock menu_per_log_case %}
 {% block main %}
 
 <section class="second">
@@ -14,7 +43,7 @@
             <div class="image">
                 <img src="{% static "assets/cities/"%}{{ avoir_instance.id_ville.imageville_set.first.id_images.path_image }}" alt="">
                 <span class="reaction">
-                    <img class="heart" src="#" data-voyage="{{ avoir_instance.id_voyage.id_voyage }}" id="{{ avoir_instance.id_voyage.id_voyage }}" onclick="toggleLike(this)">
+                    <img class="heart" src="{% static "assets/like-empty.svg" %}" data-voyage="{{ avoir_instance.id_voyage.id_voyage }}" id="{{ avoir_instance.id_voyage.id_voyage }}" onclick="toggleLike(this)">
                     <form>
                         {% csrf_token %}
                         <input type="hidden" name="id_user" value=1>

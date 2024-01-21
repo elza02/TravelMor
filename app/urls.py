@@ -1,8 +1,6 @@
 from django.urls import path
 from . import views
 
-# app_name = 'mon_app'
-
 urlpatterns = [
     path('', views.home, name="home"),
     
@@ -42,10 +40,11 @@ urlpatterns = [
     path('admin_page/hotels/', views.hotels_gestion, name="hotels_gestion"),
     path('admin_page/voyages/', views.voyages_gestion, name="voyages_gestion"),
     path('admin_page/dashboard/', views.dashboard_gestion, name="dashboard_gestion"),
-    path('login/', views.login, name="login"),
+    
+    
     path('registration/', views.registration, name="registration"),
-    path('client/profile/<int:user_id>/', views.profile_view, name='profile'),
-    path('logout/', views.logout, name='logout'),
+    path('profile/<int:user_id>/', views.profile_view, name='profile'),
+    
     path('supp_voyage/<int:id_voyage>/', views.supp_voyage, name='supp_voyage'),
     path('modif_voyage/<int:id_voyage>/', views.modif_voyage, name='modif_voyage'),
     path('ajout_voyage/', views.ajout_voyage, name='ajout_voyage'),
@@ -64,5 +63,8 @@ urlpatterns = [
     path('modif_pays/<int:id_pays>/', views.supp_pays, name='modif_pays'),
     path('ajout_pays/', views.ajout_pays, name='ajout_pays'),
     path('supp_commentaire/<int:id_commentaire>/', views.supp_commentaire, name='supp_commentaire'),
-    # path('client_logout/', views.client_logout, name='client_logout'),
+
+    #login/logout
+    path('login/', views.login, name="login"),
+    path('logout/', views.logout, name='logout'),
 ]

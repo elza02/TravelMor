@@ -42,6 +42,35 @@
         }
     </style>
 {% endblock block_css %}
+{% block menu_per_log_case %}
+    {% if request.session.code_session %}
+        <div class="log" id="LogMenuButton">
+            <i class="fa-solid fa-bars"></i>
+            <img src="{% static 'assets/profile_imgs/' %}{{ utilisateur.path_img_profile }}">
+            <div class="menu hide" id="LogMenu">
+                <ul>
+                    <li><a href="{% url 'profile' request.session.code_session %}">Profile</a></li>
+                    <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="log" id="LogMenuButton">
+            <i class="fa-solid fa-bars"></i>
+            <i class="fa-solid fa-circle-user"></i>
+            <div class="menu hide" id="LogMenu">
+                <ul>
+                    <li><a href="{% url 'registration' %}">Inscription</a></li>
+                    <li><a href="#" onclick="document.getElementById('login-form-modal').style.display='block'">Connexion</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock menu_per_log_case %}
 {% block main %}
     <section class="first">
         <h2>VOTRE AGENCE DE VOYAGE EN LIGNE</h2>
@@ -83,6 +112,12 @@
         </div>
     </section>
     <section class="second">
+        {% if request.session.code_session %}
+        <p>Welcome, user {{ request.session.user_id }}!</p>
+        {% else %}
+            <p>Guest user. Please log in to access more features.</p>
+        {% endif %}
+
         nothing
         <br><br><br><br><br><br><br><br><br><br>
         nothing

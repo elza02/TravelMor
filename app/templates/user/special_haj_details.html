@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block url_7_class %}active{% endblock url_7_class %}
+{% block title %} voyage organise details - {{ id_voyage }} {% endblock title %}
+{% block block_css %}
+<link rel="stylesheet" href="{% static 'css/detailed_card.css' %}">
+<style>
+    .container {
+        background-color: rgb(255, 255, 255);
+    }
+</style>
+{% endblock block_css %}
+{% block menu_per_log_case %}
+    {% if request.session.code_session %}
+        <div class="log" id="LogMenuButton">
+            <i class="fa-solid fa-bars"></i>
+            <img src="{% static 'assets/profile_imgs/' %}{{ utilisateur.path_img_profile }}">
+            <div class="menu hide" id="LogMenu">
+                <ul>
+                    <li><a href="{% url 'profile' request.session.code_session %}">Profile</a></li>
+                    <li><a href="{% url 'logout' %}">Déconnexion</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="log" id="LogMenuButton">
+            <i class="fa-solid fa-bars"></i>
+            <i class="fa-solid fa-circle-user"></i>
+            <div class="menu hide" id="LogMenu">
+                <ul>
+                    <li><a href="{% url 'registration' %}">Inscription</a></li>
+                    <li><a href="#" onclick="document.getElementById('login-form-modal').style.display='block'">Connexion</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock menu_per_log_case %}
+{% block main %}
+<div class="inner-container">
+
+<h4 style="text-align: center;">Les details de ce voyage : </h4>
+{% for avoir in avoir %}
+<div class="detailed-card-voyage">
+    <div class="accordion">
+        <div class="image-box">
+            {% for image in avoir.id_ville.imageville_set.all %}
+            <div class="mySlides">
+                <div class="numbertext">{{ forloop.counter }} / {{ avoir.id_ville.imageville_set.count }}</div>
+                <img src="{% static 'assets/cities/' %}{{ image.id_images.path_image }}" style="width:100%" alt="{{image.id_images.path_image}}">
+            </div>
+            {% endfor %}
+            
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+        </div>
+        <div class="caption-container">
+            <p id="caption"></p>
+        </div>
+        
+        <div class="row">
+            {% for image in avoir.id_ville.imageville_set.all %}
+            <div class="column">
+                <img class="demo cursor" src="{% static 'assets/cities/' %}{{ image.id_images.path_image }}" style="width:100%" onclick="currentSlide({{ forloop.counter }})" alt="{{ image.id_images.path_image }}">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="body">
+        <span class="title">{{ avoir.id_voyage.titre_voyage }}</span>
+        <span class="localisation"><i class="fa-solid fa-location-dot"></i> {{ avoir.id_ville.id_pays.nom_pays }}, {{ avoir.id_ville.nom_ville }}</span>
+        <span class="price">à partir de <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span>
+        <span class="rating">Durée: <span>{{ avoir.id_voyage.duree_voyage }} jours / {{ avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
+        <form method="get" action="/special_turqie_details/{{ avoir.id_voyage.id_voyage }}">
+            <button type="submit">J'en profite</button>
+        </form>
+    </div>            
+</div> 
+{% endfor %}
+
+
+
+
+<h4 style="text-align: center;">Les vols de ce voyage : </h4>
+<div class = "vols-box">
+    {% for vol in inclure %}
+    <div class="vol">
+        <div class="image-vol"> 
+            <img src="{% static "assets/royal-air-maroc.svg" %}">
+            <div class="duration">{{ vol.id_vol.date_d_vol }} <br> {{ vol.id_vol.date_f_vol }}</div>
+        </div>
+        <div class="body">
+            <p class="descrp">Hotel {{ vol.id_voyage.id_hotel.type_hotel }} étoiles, type de chambre: {{ vol.id_voyage.id_hotel.type_hotel }}</p>
+            <p>{% if hotel.petit_dejeuner%}<i class="fa-solid fa-utensils"></i>{% endif %}</p>
+            <div class="price">+{{ vol.id_vol.prix_vol }} MAD</div>
+        </div>
+    </div>
+    {% endfor%}
+</div>
+
+<h4 style="text-align: center;">Les commentaire sur ce voyage : </h4>
+<form id="commentForm" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="id_voyage" value="{{id_voyage}}">
+    {% if request.session.code_session %}
+        <input type="hidden" name="id_user" value="{{ request.session.code_session }}">
+        <input type="hidden" name="is_connected" value="yes">
+    {% else %}
+        <input type="hidden" name="is_connected" value="no">
+    {% endif %}
+    <div class="evaluation-interact">
+        {% for i in "12345" %}
+            <i class="fa fa-star star" data-star={{i}}></i>
+        {% endfor %}
+    </div>
+    <textarea name="comment" class="add-comment" placeholder="Ecrire un commentaire..."></textarea>
+    <button type="submit">Ok</button>
+</form>
+<div class="comments">
+{% for comment in comments %}
+    <div class="comment">
+        <div class="image-box">
+            <img src="{% static "assets/profile_imgs/"%}{{ comment.id_utilisateur.path_img_profile }}" alt="photo of {{comment.id_utilisateur.nom}} {{comment.id_utilisateur.prenom}}">
+            <div class="author">{{comment.id_utilisateur.nom}} {{comment.id_utilisateur.prenom}}</div>
+        </div>
+        <div class="body">
+            <div class="evaluation-time">
+                <div class="evaluation" data-stars="{{comment.evaluation}}">
+                    {% for i in "12345" %}
+                        <i class="fa fa-star"></i>
+                    {% endfor %}
+                </div>
+                <div class="time">{{comment.heure_redaction}}, {{comment.date_redaction}}</div>
+            </div>
+            <div class="text">{{comment.text_comment}}</div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+</div>
+{% endblock main %}
+
+{% block js_block %}
+<script defer src="{% static 'js/detailed_card.js' %}"></script>
+
+<script defer>
+    let selectedStars = 0;
+    document.addEventListener('DOMContentLoaded', function () {
+
+            // Event handler for star ratings
+            document.querySelectorAll('.star').forEach(function (star) {
+                star.addEventListener('click', function () {
+                    selectedStars = parseInt(this.dataset.star);
+                    document.querySelectorAll('.star').forEach(function (s) {
+                        s.classList.remove('checked');
+                    });
+                    this.classList.add('checked');
+                });
+            });
+
+    });
+    // Get the CSRF token from the cookie
+    function getCSRFToken() {
+        const csrfCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
+        if (csrfCookie) {
+            return csrfCookie.split('=')[1];
+        }
+        return null;
+    }
+
+    // Event handler for form submission
+    const is_connected = document.querySelector('#commentForm input[name="is_connected"]').value;
+
+    {% if request.session.code_session %}
+        id_user = {{ request.session.code_session }};
+        console.log(is_connected);
+    {% else %}
+        id_user = false; 
+        console.log(is_connected);
+    {% endif %}
+
+    document.getElementById('commentForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+    if (!is_connected || is_connected !== 'yes') {
+        console.log('You are not connected');
+        document.getElementById('login-form-modal').style.display = 'block';
+        return;
+    }else {
+        // Fetch the comment text and voyage id
+        const commentText = document.querySelector('.add-comment').value;
+        const id_voyage = document.querySelector('#commentForm input[name="id_voyage"]').value;
+        const id_user = document.querySelector('#commentForm input[name="id_user"]').value;
+        console.log(document.querySelector('#commentForm input[name="id_user"]'));
+        const csrfToken = getCSRFToken();
+
+        // Check if at least one star is checked
+        if (selectedStars === 0) {
+            alert('Please select a rating before submitting.');
+            return;
+        }
+
+        
+
+        // Prepare data for submission
+        const formData = {
+            comment: commentText,
+            rating: selectedStars,
+            id_voyage: parseInt(id_voyage),
+            id_user: parseInt(id_user),
+        };
+
+        // Reset input values and selectedStars
+        document.querySelector('.add-comment').value = '';
+        document.querySelectorAll('.star').forEach(function (s) {
+            s.classList.remove('checked');
+        });
+        selectedStars = 0;
+
+        // Perform an asynchronous POST request to your backend
+        fetch('/comments/retrieve/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Extract and format the date
+            data = JSON.parse(data);
+            const receivedDate = data.new_comment.date_redaction;
+            const receivedHour = data.new_comment.heure_redaction;
+
+            // Parse the date string
+            const parsedDate = new Date(`${receivedDate} ${receivedHour}`);
+            const parsedHour = new Date(`${receivedDate} ${receivedHour}`);
+
+            // Format the date using Intl.DateTimeFormat
+            const formattedDate = new Intl.DateTimeFormat('fr-fr', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            }).format(parsedDate);
+
+            const formattedHour = new Intl.DateTimeFormat('fr-fr', {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: false,
+            }).format(parsedHour);
+
+            console.log(formattedDate);
+            console.log(formattedHour);
+
+            data["new_comment"]["date_redaction"] = formattedDate;
+            data["new_comment"]["heure_redaction"] = formattedHour;
+
+            // Assuming you have a function to update comments
+            updateCommentsSection(data.new_comment, data.utilisateur);
+        })
+        .catch(error => {
+            // Handle errors (if any)
+            console.error(error);
+        });
+    }
+});
+
+    
+        
+    // Function to update the comments section
+    function updateCommentsSection(newComment, utilisateur) {
+        // Create a new comment element
+        const commentElement = document.createElement('div');
+        commentElement.classList.add('comment');
+
+        // Construct the HTML structure for the new comment
+        commentElement.innerHTML = `
+            <div class="image-box">
+                <img src="{% static 'assets/profile_imgs/' %}${utilisateur.path_img_profile}" alt="photo of ${utilisateur.nom} ${utilisateur.prenom}">
+                <div class="author">${utilisateur.nom} ${utilisateur.prenom}</div>
+            </div>
+            <div class="body">
+                <div class="evaluation-time">
+                    <div class="evaluation" data-stars="${newComment.evaluation}">
+                        ${generateStarIcons(newComment.evaluation)}
+                    </div>
+                    <div class="time">${newComment.heure_redaction}, ${newComment.date_redaction}</div>
+                </div>
+                <div class="text">${newComment.text_comment}</div>
+            </div>
+        `;
+
+        // Insert the new comment at the beginning of the comments section
+        const commentSection = document.querySelector('.comments');
+        commentSection.insertBefore(commentElement, commentSection.firstChild);
+    }
+
+    // Function to generate star icons based on the rating
+    function generateStarIcons(rating) {
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+            const starClass = i <= rating ? 'fa-star checked' : 'fa-star';
+            starsHtml += `<i class="fa ${starClass}"></i>&nbsp;`;
+        }
+        return starsHtml;
+    }
+
+</script>
+
+{% endblock js_block %}

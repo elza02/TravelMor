@@ -1,8 +1,189 @@
-<form method="post" action="{% url 'login' %}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    body {
+    font-family: 'Rubik', sans-serif;
+    scroll-behavior: smooth;
+    }
+    :root {
+        font-size: 16px;
+        --main--green: #3DD6D0;
+        --main-gray: #808080;
+        --second-gray: #f4f5f7;
+        --main-gray-bg: #ffffff;
+        --second-underline: #dddddd;
+        --main-border-radius: 30px;
+        --main-shadow: 0 2px 6px rgba(180, 177, 177, 0.442);
+        --main-shadow-hovered: 0 2px 20px rgba(180, 177, 177, 0.749);
+        --secondary-shadow-hovered: 0 2px 6px rgba(180, 177, 177, 0.749);
+        --main-background-card: rgb(253, 253, 253);
+}
+    input[type=email], input[type=password] {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 0 auto;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: var(--main-border-radius);
+    }
+
+    button[type="submit"] {
+        background-color: var(--main--green);
+        color: white;
+        padding: 14px 20px;
+        border: none;
+        cursor: pointer;
+        width: 20%;
+        margin: auto;
+        border-radius: var(--main-border-radius);
+    }
+
+    .under-container-login button {
+        margin: 0;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    .cancelbtn {
+        width: auto;
+        padding: 10px 18px;
+        background-color: #f44336;
+        border-radius: var(--main-border-radius);
+    }
+
+    .head {
+        text-align: center;
+        margin: 24px 0 12px 0;
+        position: relative;
+    }
+
+    img.avatar {
+        width: 40%;
+        border-radius: 50%;
+    }
+
+    .container-login { 
+        margin-top:40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start; 
+        gap: 20px;
+        border-radius: var(--main-border-radius);
+    }
+
+    .under-container-login {
+        margin-top: 20px;
+        padding: 8px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: var(--main-border-radius);
+    }
+
+    span.psw a {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    {
+        display: none; 
+        position: fixed; 
+        z-index: 1; 
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: hidden; 
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+        backdrop-filter: blur(30px);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 150px auto; 
+        border: 1px solid #888;
+        width: 50%; 
+        height: fit-content;
+        padding: 30px;
+        border-radius: var(--main-border-radius);
+    }
+
+    .close {
+        position: absolute;
+        right: 15px;
+        top: -30px;
+        color: #000;
+        font-size: 35px;
+        font-weight: bold;
+        transition: all .2s ease;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: red;
+        cursor: pointer;
+    }
+
+    .animate {
+        -webkit-animation: animatezoom 0.6s;
+        animation: animatezoom 0.3s
+    }
+
+    @-webkit-keyframes animatezoom {
+        from {-webkit-transform: scale(0)} 
+        to {-webkit-transform: scale(1)}
+    }
+    
+    @keyframes animatezoom {
+        from {transform: scale(0)} 
+        to {transform: scale(1)}
+    }
+
+    /* Change styles for span and cancel button on extra small screens */
+    @media screen and (max-width: 300px) {
+        span.psw {
+            display: block;
+            float: none;
+        }
+        .cancelbtn {
+            width: 100%;
+        } 
+        .modal-content {
+            width: 100%;
+        }
+    }
+</style>
+</head>
+<body>
+<form class="modal-content animate" method="POST" action="{% url 'login' %}"> {% comment %} entrer le lien de la view {% endcomment %}
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
     {% if error_message %}
     <p style="color: red;">{{ error_message }}</p>
-{% endif %}
+    {% endif %}
+    <div class="head">
+        <h1>Authentification admin</h3>
+    </div>
+    <div class="container-login">
+        <input type="email" placeholder="Entrer votre email.." name="email" required>
+        <input type="password" placeholder="Entrer le mot de pass.." name="password" required>
+        <label style="margin: auto;">
+            <input type="checkbox" checked="checked" name="remember"> Rester connecté
+        </label>
+        <button type="submit">s'authentifier</button>
+    </div>
+    <div class="under-container-login" style="background-color:#f1f1f1">
+        <span class="psw">Vous avez oublier <a href="#">mot de pass ?</a></span>
+    </div>
 </form>
+</body>
