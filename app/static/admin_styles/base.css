@@ -22,13 +22,44 @@ table {
     width: 100%;
 }
 
-table, th, td {
+table,
+th,
+td {
     border: 1px solid black;
     text-align: center;
 }
 
-table, th, td {
-    min-height: 40px;
+.actions {
+    height: 50px;
+    padding: 10px;
+}
+
+.actions a {
+    padding: 5px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+    outline: none;
+    border: none;
+    transition: all .2s ease;
+}
+
+.actions a:first-child {
+    background-color: rgba(255, 0, 0, 0.704);
+
+}
+
+.actions a:first-child:hover {
+    background-color: rgb(255, 0, 0);
+}
+
+.actions a:nth-child(2) {
+    background-color: rgba(8, 237, 35, 0.807);
+}
+
+.actions a:nth-child(2):hover {
+    background-color: rgb(8, 237, 35);
 }
 
 .container-menu {
@@ -62,8 +93,8 @@ table, th, td {
 
 
 /* admin main menu styles */
-.container-menu .main-menu{
-    position: fixed;  
+.container-menu .main-menu {
+    position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -145,6 +176,7 @@ table, th, td {
     justify-content: flex-end;
     align-items: center;
 }
+
 /* form input[type='text'] {
     border: 1px solid red;
     outline: none;

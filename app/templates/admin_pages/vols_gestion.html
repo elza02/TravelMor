@@ -21,7 +21,10 @@
                     <td>{{vol.date_d_vol}} </td> 
                     <td>{{vol.date_f_vol}} </td> 
                     <td>{{vol.prix_vol}} </td> 
-                    <td><button><a href="{% url 'supp_vol' vol.id_vol%}">Supprimer</a></button><button><a href="{% url 'modif_vol' vol.id_vol%}"> Modifier</a></button></td>
+                    <td class="actions">
+                        <a href="{% url 'supp_vol' vol.id_vol%}">Supprimer</a>
+                        <a href="{% url 'modif_vol' vol.id_vol%}"> Modifier</a>
+                    </td>
                 </tr>
 
                 {% endfor %}

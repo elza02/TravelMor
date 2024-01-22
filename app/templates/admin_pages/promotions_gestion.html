@@ -21,7 +21,10 @@
                     <td>{{promotion.date_d_promo}}, {{promotion.heure_d_promos}} </td> 
                     <td>{{promotion.date_f_promo}}, {{promotion.heure_f_promos}}</td> 
                     <td>{{promotion.pourcentage}} </td> 
-                    <td><button><a href="{% url 'supp_promotion' promotion.id_promotion%}">Supprimer</a></button><button><a href="{% url 'modif_promotion' promotion.id_promotion%}"> Modifier</a></button></td>
+                    <td class="actions">
+                        <a href="{% url 'supp_promotion' promotion.id_promotion%}">Supprimer</a>
+                        <a href="{% url 'modif_promotion' promotion.id_promotion%}"> Modifier</a>
+                    </td>
 
                 </tr>
 

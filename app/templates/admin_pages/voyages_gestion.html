@@ -33,7 +33,10 @@
                     <td>{{voyage.id_promotion.id_promotion}} </td> 
                     <td>{{voyage.id_promotion.pourcentage}} </td> 
                     <td>{{voyage.id_categorie.nom_categorie}} </td> 
-                    <td><button><a href="{% url 'supp_voyage' voyage.id_voyage%}">Supprimer</a></button><button><a href="{% url 'modif_voyage' voyage.id_voyage%}"> Modifier</a></button></td>
+                    <td class="actions">
+                        <a href="{% url 'supp_voyage' voyage.id_voyage%}">Supprimer</a>
+                        <a href="{% url 'modif_voyage' voyage.id_voyage%}"> Modifier</a>
+                    </td>
                 </tr>
 
                 {% endfor %}

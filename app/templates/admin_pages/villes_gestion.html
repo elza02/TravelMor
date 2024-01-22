@@ -19,7 +19,9 @@
                     <td>{{v.id_ville}} </td> 
                     <td>{{v.nom_ville}} </td> 
                     <td>{{v.id_pays.nom_pays}} </td> 
-                    <td><button><a href="{% url 'supp_ville' v.id_ville%}">supprimer</a></button></td>
+                    <td class="actions">
+                        <a href="{% url 'supp_ville' v.id_ville%}">supprimer</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

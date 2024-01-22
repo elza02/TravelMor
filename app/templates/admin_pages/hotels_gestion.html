@@ -25,7 +25,10 @@
                     <td>{{hotel.type_chambre}} </td> 
                     <td>{{hotel.n_chambreDispo}} </td> 
                     <td>{{hotel.petit_dejeuner}} </td> 
-                    <td><button><a href="{% url 'supp_hotel' hotel.id_hotel%}">Supprimer</a></button><button><a href="{% url 'modif_hotel' hotel.id_hotel%}"> Modifier</a></button></td>
+                    <td>
+                        <a href="{% url 'supp_hotel' hotel.id_hotel%}">Supprimer</a>
+                        <a href="{% url 'modif_hotel' hotel.id_hotel%}"> Modifier</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

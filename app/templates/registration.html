@@ -1,28 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Inscription utilisateur {% endblock title %}
+{% block block_css %}
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-    body {
-    font-family: 'Rubik', sans-serif;
-    scroll-behavior: smooth;
-    }
-    :root {
-        font-size: 16px;
-        --main--green: #3DD6D0;
-        --main-gray: #808080;
-        --second-gray: #f4f5f7;
-        --main-gray-bg: #ffffff;
-        --second-underline: #dddddd;
-        --main-border-radius: 30px;
-        --main-shadow: 0 2px 6px rgba(180, 177, 177, 0.442);
-        --main-shadow-hovered: 0 2px 20px rgba(180, 177, 177, 0.749);
-        --secondary-shadow-hovered: 0 2px 6px rgba(180, 177, 177, 0.749);
-        --main-background-card: rgb(253, 253, 253);
-}
+
     input {
         width: 80%;
         padding: 12px 20px;
@@ -182,8 +163,39 @@
         outline: -webkit-focus-ring-color auto 5px;
     }
 </style>
-</head>
-<body>
+{% endblock block_css %}
+{% block menu_per_log_case %}
+    {% if request.session.code_session %}
+        <div class="log" id="LogMenuButton">
+            <i class="fa-solid fa-bars"></i>
+            <img src="{% static 'assets/profile_imgs/' %}{{ utilisateur.path_img_profile }}">
+            <div class="menu hide" id="LogMenu">
+                <ul>
+                    <li><a href="{% url 'profile' request.session.code_session %}">Profile</a></li>
+                    <li><a href="{% url 'logout' %}">Deconnexion</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div class="log" id="LogMenuButton">
+            <i class="fa-solid fa-bars"></i>
+            <i class="fa-solid fa-circle-user"></i>
+            <div class="menu hide" id="LogMenu">
+                <ul>
+                    <li><a href="{% url 'registration' %}">Inscription</a></li>
+                    <li><a href="#" onclick="document.getElementById('login-form-modal').style.display='block'">Connexion</a></li>
+                    <li><a href="#">Cartes cadeaux</a></li>
+                    <li><a href="#">Centre d'aide</a></li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock menu_per_log_case %}
+
+{% block main %}
+
 <form class="modal-content animate" method="POST" action="{% url 'registration' %}" enctype="multipart/form-data">
     {% csrf_token %}
     {% if error_message %}
@@ -213,4 +225,4 @@
         <button type="submit">S'inscrire</button>
     </div>
 </form>
-</body>
+{% endblock main %}

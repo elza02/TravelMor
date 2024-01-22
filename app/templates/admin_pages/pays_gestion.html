@@ -17,7 +17,10 @@
                 <tr>
                     <td>{{p.id_pays}} </td> 
                     <td>{{p.nom_pays}} </td> 
-                    <td><button><a href="{% url 'modif_pays' p.id_pays%}">editer</a></button> <button><a href="{% url 'supp_pays' p.id_pays%}">supprimer</a></button></td>
+                    <td class="actions">
+                        <a href="{% url 'modif_pays' p.id_pays%}">editer</a>
+                        <a href="{% url 'supp_pays' p.id_pays%}">supprimer</a>
+                    </td>
                 </tr>
 
                 {% endfor %}

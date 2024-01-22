@@ -655,12 +655,18 @@ def registration(request):
     return render(request, 'registration.html')
 
 
-def supp_voyage(request,id_voyage):
-    voyage = models.Voyage.objects.get(id_voyage = id_voyage)
-    voyage.delete()
-    voyages = models.Voyage.objects.all()
-    message_supp = "Voyage id: "+str(id_voyage)+" est supprimée!"
-    return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'messageSupp' : message_supp})
+from django.contrib import messages
+
+def supp_voyage(request, id_voyage):
+    try:
+        voyage = models.Voyage.objects.get(id_voyage=id_voyage)
+        voyage.delete()
+        messages.success(request, f'Voyage id: {id_voyage} a été supprimé avec succès !')
+    except models.Voyage.DoesNotExist:
+        messages.error(request, f'Le voyage avec l\'identifiant {id_voyage} n\'existe pas.')
+
+    return redirect('voyages_gestion') #hna redirect hssn ms nchofo ki dowzo les msgs
+
 
 def modif_voyage(request,id_voyage):
     voyage = get_object_or_404(models.Voyage, id_voyage=id_voyage)
