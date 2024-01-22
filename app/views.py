@@ -564,6 +564,20 @@ def voyages_gestion(request):
     else:
         return redirect('login')
     
+def utilisateurs_gestion(request):
+    if request.session.get('est_admin',None) != None:
+        utilisateur = models.Utilisateur.objects.all()
+        return render(request, 'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateur})
+    else:
+        return redirect('login')
+    
+def notification_gestion(request):
+    if request.session.get('est_admin',None) != None:
+        notification = models.Notification.objects.all()
+        return render(request, 'admin_pages/notification_gestion.html',{'notification' : notification})
+    else:
+        return redirect('login')
+    
 def dashboard_gestion(request):
     if request.session.get('est_admin', None) != None:
         nbr_reservations = models.ReserverVoyage.objects.count()
@@ -871,3 +885,87 @@ def supp_commentaire(request,id_commentaire):
     commentaires = models.Commentaire.objects.all()
     message_supp = "Commentaire id: "+str(id_commentaire)+" est supprimée!"
     return  render(request,'admin_pages/commentaires_gestion.html',{'commentaires' : commentaires,'messageSupp' : message_supp})
+
+def supp_utilisateur(request,id_utilisateur):
+    utilisateur = models.Utilisateur.objects.get(id_utilisateur = id_utilisateur)
+    utilisateur.delete()
+    utilisateurs = models.Utilisateur.objects.all()
+    message_supp = "utilisateur id: "+str(id_utilisateur)+" est supprimée!"
+    return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateurs,'utilisateur' : utilisateur,'messageSupp' : message_supp})
+def modif_utilisateur(request,id_utilisateur):
+    utilisateur = get_object_or_404(models.Utilisateur, id_utilisateur=id_utilisateur)
+    utilisateurs = models.Utilisateur.objects.all()
+    if request.method == 'POST':
+        form = utilisateurAjoutForm(request.POST,instance=utilisateur)
+        if form.is_valid():
+            form.save()
+            message = "Nouvelle utilisateur est ajouté avec succée!"
+            return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateurs,'utilisateur' : utilisateur,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = utilisateurAjoutForm(instance = utilisateur)
+        return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateur' : utilisateur,'form_ajout':form})
+
+def ajout_utilisateur(request):
+    utilisateurs = models.Utilisateur.objects.all()
+    if request.method == 'POST':
+        form = utilisateurAjoutForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = "Nouvelle utilisateur est ajouté avec succée!"
+            return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateurs,'messageEdit' : message})
+            #redirect('admin_page/voyages/')
+    else:    
+        form = utilisateurAjoutForm()
+        return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateurs,'form_ajout':form})
+
+def notifier(request):
+    if request.method == 'POST':
+        form = NotificationForm(request.POST)
+        if form.is_valid():
+            notification_type = form.cleaned_data['notification_type']
+            selected_users = form.cleaned_data['users']
+            content = form.cleaned_data['content']
+            current_datetime = timezone.now()
+
+            date = current_datetime.date()
+            time = current_datetime.time()
+            notification = models.Notification.objects.create(type=notification_type,content=content,date_notif = date,heure_d_notif = time)
+            for user_id in selected_users:
+                utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+                models.Recevoir.objects.create(id_utilisateur=utilisateur, id_notification=notification)
+            
+            
+            notifications = models.Notification.objects.all()
+            # Optionally, you can redirect to a success page or do something else
+            return redirect('/admin_page/notifications/')
+            #return render(request, 'admin_pages/notifications_gestion.html', {'notifications': notifications})    
+            #return notifications_gestion(request)
+            #notifications = models.Notification.objects.all()
+            #return redirect(reverse('notifications_gestion') + f'?notifications={notifications}')
+    else:
+        form = NotificationForm()
+        notifications = models.Notification.objects.all()
+    return render(request, 'admin_pages/notifications_gestion.html', {'form_notifier': form, 'notifications': notifications})
+def modif_notification(request,id_notification):
+    if request.method == 'POST':
+        notification = get_object_or_404(models.Notification, id_notification=id_notification)
+        form = NotifModificationForm(request.POST,instance = notification)
+        if form.is_valid():
+            form.save()
+            # Optionally, you can redirect to a success page or do something else
+            return redirect('/admin_page/notifications/')
+            #return render(request, 'admin_pages/notifications_gestion.html', {'notifications': notifications})    
+            #return notifications_gestion(request)
+            #notifications = models.Notification.objects.all()
+            #return redirect(reverse('notifications_gestion') + f'?notifications={notifications}')
+    else:
+        form = NotifModificationForm()
+        notifications = models.Notification.objects.all()
+        curr_notifications = models.Notification.objects.get(id_notification = id_notification)
+    return render(request, 'admin_pages/notifications_gestion.html', {'form_modif': form, 'notifications': notifications,'curr_notifications' : curr_notifications})
+
+def supp_notification(request,id_notification):
+    notification = models.Notification.objects.get(id_notification = id_notification)
+    notification.delete()
+    return redirect('/admin_page/notifications/')

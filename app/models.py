@@ -5,6 +5,7 @@ class Notification(models.Model):
     date_notif = models.CharField(max_length=50)
     type = models.CharField(max_length=15)
     heure_d_notif = models.TimeField()
+    content = models.CharField(max_length=100, null = True)
 
 class Promotion(models.Model):
     id_promotion = models.AutoField(primary_key=True)

@@ -10,6 +10,7 @@
                     <th> ID notification </th>
                     <th> Date notification </th>
                     <th> Type </th>
+                    <th> Content </th>
                 </tr>
             </thead>
             <tbody>
@@ -18,38 +19,34 @@
                     <td>{{notification.id_notification}} </td> 
                     <td>{{notification.date_notif}} {{notification.date_notif}}</td> 
                     <td>{{notification.type}}  </td> 
-                    <td class="actions">
-                        <a href="">Supprimer</a>
-                        <a href="">Editer</a>
-                    </td>
+                    <td>{% if  notification.content %} {{notification.content}}  {% endif %}</td> 
+                    <td><button><a href="{% url  'supp_notification' notification.id_notification%}">Supprimer</a></button><button><a href="{% url  'modif_notification' notification.id_notification%}"> Editer</a></button></td>
                 </tr>
 
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    {% if messageSupp %}
-    <p style="color: red;">{{ messageSupp }}</p>
-{% endif %}
-{% if messageEdit %}
-    <p style="color: green;">{{ messageEdit }}</p>
-{% endif %}
 
 {% if form_modif %}
-    <form action="{% url 'modif_vol' vol.id_vol%}" method="POST">
+    <form action="{% url 'modif_notification' curr_notifications.id_notification%}" method="POST">
         {% csrf_token %}
         {{ form_modif.as_p }}
         <button type="submit">Enregistré</button>
     </form>
   
-{% elif form_ajout %}
-<form action="{% url 'ajout_vol'%}" method="POST">
-    {% csrf_token %}
-    {{ form_ajout.as_p }}
-    <button type="submit">Enregistré</button>
-</form>
+{% elif form_notifier %}
+    <form action="{% url 'notifier'%}" method="POST">
+        {% csrf_token %}
+        {{ form_notifier.as_p }}
+        <button type="submit">Enregistrer</button>
+    </form>
 {% else %}
-    <button type="submit"><a href="{% url 'ajout_vol'%}">ajouter</a></button>
+    <button type="submit"><a href="{% url 'notifier'%}">Notifier</a></button>
+
 {% endif %}
 </div>
 {% endblock main %}
+
+
+    

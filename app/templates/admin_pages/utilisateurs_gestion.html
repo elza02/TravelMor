@@ -1,0 +1,54 @@
+{% extends 'admin_pages/base.html' %}
+{% block title %} utilisateurs {% endblock title %}
+{% block main %}
+<div class="container">
+    <h1>administration utilisateurs</h1>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th> ID utilisateur </th>
+                    <th> Nom utilisateur </th>
+                    <th> Status </th>
+                    <th> Action </th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for utilisateur in utilisateurs%}
+                <tr>
+                    <td>{{utilisateur.id_utilisateur}} </td> 
+                    <td>{{utilisateur.nom}} {{utilisateur.prenom}} </td> 
+                    <td>{% if utilisateur.est_admin %} ADMIN {% else %} Utilisateur {% endif %} </td> 
+                    <td><button><a href="{% url 'supp_utilisateur' utilisateur.id_utilisateur%}">Supprimer</a></button><button><a href="{% url 'modif_utilisateur' utilisateur.id_utilisateur%}"> Modifier</a></button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% if messageSupp %}
+    <p style="color: red;">{{ messageSupp }}</p>
+{% endif %}
+{% if messageEdit %}
+    <p style="color: green;">{{ messageEdit }}</p>
+{% endif %}
+
+{% if form_modif %}
+    <form action="{% url 'modif_utilisateur' utilisateur.id_utilisateur%}" method="POST">
+        {% csrf_token %}
+        {{ form_modif.as_p }}
+        <button type="submit">Enregistré</button>
+    </form>
+
+
+{% elif form_ajout %}
+    <form action="{% url 'ajout_utilisateur'%}" method="POST">
+        {% csrf_token %}
+        {{ form_ajout.as_p }}
+        <button type="submit">Enregistré</button>
+    </form>
+{% else %}
+<button type="submit"><a href="{% url 'ajout_utilisateur'%}">ajouter</a></button>
+{% endif %}
+    
+</div>
+{% endblock main %}

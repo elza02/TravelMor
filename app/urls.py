@@ -40,6 +40,8 @@ urlpatterns = [
     path('admin_page/hotels/', views.hotels_gestion, name="hotels_gestion"),
     path('admin_page/voyages/', views.voyages_gestion, name="voyages_gestion"),
     path('admin_page/dashboard/', views.dashboard_gestion, name="dashboard_gestion"),
+    path('admin_page/utilisateurs/', views.utilisateurs_gestion, name="utilisateurs_gestion"),
+    path('admin_page/notification/', views.notification_gestion, name="notification_gestion"),
     
     
     path('registration/', views.registration, name="registration"),
@@ -63,7 +65,12 @@ urlpatterns = [
     path('modif_pays/<int:id_pays>/', views.supp_pays, name='modif_pays'),
     path('ajout_pays/', views.ajout_pays, name='ajout_pays'),
     path('supp_commentaire/<int:id_commentaire>/', views.supp_commentaire, name='supp_commentaire'),
-
+    path('ajout_utilisateur/', views.ajout_utilisateur, name='ajout_utilisateur'),
+    path('supp_utilisateur/<int:id_utilisateur>/', views.supp_utilisateur, name='supp_utilisateur'),
+    path('modif_utilisateur/<int:id_utilisateur>/', views.modif_utilisateur, name='modif_utilisateur'),
+    path('notifier/', views.notifier, name='notifier'),
+    path('supp_notification/<int:id_notification>/', views.supp_notification, name='supp_notification'),
+    path('modif_notification/<int:id_notification>/', views.modif_notification, name='modif_notification'),
     #login/logout
     path('login/', views.login, name="login"),
     path('logout/', views.logout, name='logout'),

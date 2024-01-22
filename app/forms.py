@@ -166,3 +166,69 @@ class PaysAjoutForm(forms.ModelForm):
         labels = {
             'nom_pays': 'Nom Pays',
         }
+
+class utilisateurAjoutForm(forms.ModelForm):
+    class Meta:
+        model = models.Utilisateur
+        fields = ['nom','prenom','est_admin','email','mot_d_passe']
+        labels = {
+            'nom': 'Nom',
+            'prenom': 'Prenom',
+            'est_admin': 'Status',
+            'email': 'Email',
+            'mot_d_passe': 'Mot de passe', 
+        }
+       
+class utilisateurModificationForm(forms.ModelForm):
+    class Meta:
+        model = models.Utilisateur
+        fields = ['id_utilisateur','nom','prenom','est_admin','email','mot_d_passe']
+        labels = {
+            'id_utilisateur': 'Utilisateur ID',
+            'nom': 'Nom',
+            'prenom': 'Prenom',
+            'est_admin': 'Status',
+            'email': 'Email',
+            'mot_d_passe': 'Mot de passe',           
+        }
+       
+class NotificationForm(forms.Form):
+    type_choices = (
+        ('info', 'Information'),
+        ('alert', 'Alert'),
+        ('reminder', 'Reminder'),
+    )
+    
+    content = forms.CharField(widget=forms.Textarea, label='Notification Content')
+    notification_type = forms.ChoiceField(choices=type_choices, label='Notification Type')
+    
+    def __init__(self, *args, **kwargs):
+        super(NotificationForm, self).__init__(*args, **kwargs)
+        
+        # Dynamically populate users from the Utilisateur table
+        #user_choices = [(f"{user.nom} {user.prenom}") for user in models.Utilisateur.objects.all()]
+        user_choices = [(user.id_utilisateur, f"{user.nom} {user.prenom}") for user in models.Utilisateur.objects.all()]
+        self.fields['users'] = forms.MultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple,
+            choices=user_choices,
+            label='Select Users'
+        )
+
+class NotifModificationForm(forms.ModelForm):
+    CHOICES = [
+        ('reminder', 'Reminder'),
+        ('information', 'Information'),
+        ('alert', 'Alert'),
+    ]
+
+    type = forms.ChoiceField(choices=CHOICES, label='Type')
+
+    class Meta:
+        model = models.Notification
+        fields = ['type', 'content']
+        labels = {
+            'content': 'Contenu',  # Changed the label for clarity
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
