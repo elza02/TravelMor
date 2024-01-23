@@ -72,7 +72,7 @@ td {
 }
 
 .inner-container .secondary-menu {
-    width: 83%;
+    width: calc(100% - 250px);
     height: auto;
     display: flex;
     justify-content: flex-end;
@@ -81,15 +81,16 @@ td {
     gap: 20px;
     padding: 10px 20px;
     position: fixed;
+    right: 0;
     z-index: 999;
     top: 0;
     background-color: #fff;
 }
 
 .inner-container .secondary-menu .logoutBtn {
-    background: transparent; 
-    outline: none; 
-    border: none; 
+    background: transparent;
+    outline: none;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
     padding: 10px;
@@ -99,7 +100,7 @@ td {
 
 .inner-container .secondary-menu .logoutBtn:hover {
     background-color: var(--main-background);
-    color: #000; 
+    color: #000;
 }
 
 .inner-container .secondary-menu .logoutBtn i {
@@ -214,15 +215,15 @@ form:not(.logout) label {
 
 form:not(.logout) input {
     border: 1px solid #77777796;
-    border-radius: 10px; 
+    border-radius: 10px;
     margin-left: 15px;
-    padding: 5px 10px;    
+    padding: 5px 10px;
     outline: none;
 }
 
 form:not(.logout) button[type="submit"] {
     border: none;
-    border-radius: 10px;     
+    border-radius: 10px;
     background-color: #fff;
     color: #000;
     outline: none;
@@ -239,7 +240,7 @@ form:not(.logout) button[type="submit"]:hover {
 
 .ajtBtn {
     border: none;
-    border-radius: 10px;     
+    border-radius: 10px;
     background-color: #fff;
     color: #000;
     outline: none;

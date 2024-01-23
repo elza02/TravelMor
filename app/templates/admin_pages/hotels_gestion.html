@@ -21,10 +21,13 @@
         </form>
 
     {% elif form_ajout %}
-    <form action="{% url 'ajout_hotel'%}" method="POST">
-        {% csrf_token %}
-        {{ form_ajout.as_p }}
-        <button type="submit">Enregistrer</button>
+    <form action="{% url 'ajout_hotel' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form_ajout.as_p }}
+    <label for="path_image" class="custom-file-label">Image de profil:
+        <input type="file" name="path_image" multiple accept="image/*" />
+    </label>
+    <button type="submit">Enregistrer</button>
     </form>
     {% else %}
         <a class="ajtBtn" href="{% url 'ajout_hotel'%}">ajouter</a>

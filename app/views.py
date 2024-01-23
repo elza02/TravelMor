@@ -230,16 +230,16 @@ def home (request):
     # )
 
     # # Create Recevoir instances
-    # recevoir1 = models.Recevoir.objects.create(id_utilisateur_1=utilisateur1, id_notification=notification1)
-    # recevoir2 = models.Recevoir.objects.create(id_utilisateur_1=utilisateur2, id_notification=notification2)
-    # recevoir3 = models.Recevoir.objects.create(id_utilisateur_1=utilisateur3, id_notification=notification3)
+    # recevoir1 = models.Recevoir.objects.create(id_utilisateur=utilisateur1, id_notification=notification1)
+    # recevoir2 = models.Recevoir.objects.create(id_utilisateur=utilisateur2, id_notification=notification2)
+    # recevoir3 = models.Recevoir.objects.create(id_utilisateur=utilisateur3, id_notification=notification3)
     # recevoir1.save()
     # recevoir2.save()
     # recevoir3.save()
     # # Create ReserverVoyage instances
-    # reserver_voyage1 = models.ReserverVoyage.objects.create(id_utilisateur_1=utilisateur1, id_voyage=voyage1)
-    # reserver_voyage2 = models.ReserverVoyage.objects.create(id_utilisateur_1=utilisateur2, id_voyage=voyage2)
-    # reserver_voyage3 = models.ReserverVoyage.objects.create(id_utilisateur_1=utilisateur3, id_voyage=voyage3)
+    # reserver_voyage1 = models.ReserverVoyage.objects.create(id_utilisateur=utilisateur1, id_voyage=voyage1)
+    # reserver_voyage2 = models.ReserverVoyage.objects.create(id_utilisateur=utilisateur2, id_voyage=voyage2)
+    # reserver_voyage3 = models.ReserverVoyage.objects.create(id_utilisateur=utilisateur3, id_voyage=voyage3)
     # reserver_voyage1.save()
     # reserver_voyage2.save()
     # reserver_voyage3.save()
@@ -257,9 +257,9 @@ def home (request):
     # avoir5.save()
     # avoir6.save()
     # # Create Aimer instances
-    # aimer1 = models.Aimer.objects.create(id_utilisateur_1=utilisateur1, id_voyage=voyage1)
-    # aimer2 = models.Aimer.objects.create(id_utilisateur_1=utilisateur2, id_voyage=voyage2)
-    # aimer3 = models.Aimer.objects.create(id_utilisateur_1=utilisateur3, id_voyage=voyage3)
+    # aimer1 = models.Aimer.objects.create(id_utilisateur=utilisateur1, id_voyage=voyage1)
+    # aimer2 = models.Aimer.objects.create(id_utilisateur=utilisateur2, id_voyage=voyage2)
+    # aimer3 = models.Aimer.objects.create(id_utilisateur=utilisateur3, id_voyage=voyage3)
     # aimer1.save()
     # aimer2.save()
     # aimer3.save()
@@ -332,14 +332,12 @@ def hotels(request):
     try:
         pays = models.Pays.objects.get(nom_pays='Maroc')
     except models.Pays.DoesNotExist:
-        # Handle the case where 'Maroc' does not exist
         pays = None
 
     if pays:
         villes = models.Ville.objects.filter(id_pays=pays).values_list('id_ville', flat=True)
         query = models.Hotel.objects.filter(id_ville__in=villes)
     else:
-        # Handle the case where 'Maroc' does not exist (query would be empty)
         query = []
     user_id_session = request.session.get('code_session')
     if user_id_session:
@@ -479,7 +477,7 @@ def retrieve_likes(request):
     
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
-    if models.Aimer.objects.filter(id_utilisateur_1=utilisateur, id_voyage=voyage):
+    if models.Aimer.objects.filter(id_utilisateur=utilisateur, id_voyage=voyage):
         existe = True
     else : existe = False
     print("Received data:", data)  # Add this line for debugging
@@ -491,7 +489,7 @@ def delete_like(request):
     
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
-    models.Aimer.objects.filter(id_utilisateur_1=utilisateur, id_voyage=voyage).delete()
+    models.Aimer.objects.filter(id_utilisateur=utilisateur, id_voyage=voyage).delete()
     return JsonResponse(json.dumps({'existe' : False, 'delete': True}), safe=False)
 
 
@@ -501,7 +499,7 @@ def add_like(request):
     
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
-    aimer = models.Aimer(id_utilisateur_1=utilisateur, id_voyage=voyage)
+    aimer = models.Aimer(id_utilisateur=utilisateur, id_voyage=voyage)
     aimer.save()
     return JsonResponse(json.dumps({'existe' : True, 'add': True}), safe=False)
 
@@ -561,7 +559,10 @@ def hotels_gestion(request):
 def voyages_gestion(request):
     if request.session.get('est_admin',None) != None:
         voyages = models.Voyage.objects.all()
-        return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages})
+        villes = models.Ville.objects.all()
+        for ville in villes: 
+            print(ville)
+        return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages, 'villes' : villes})
     else:
         return redirect('login')
     
@@ -732,25 +733,42 @@ def ajout_voyage(request):
             #hotel = models.Hotel.objects.get(id_hotel = id_hotel)
             id_promotion = form.cleaned_data['id_promotion']
             id_categorie = form.cleaned_data['id_categorie']
+
+            id_ville = request.POST.get('ville', '0')
+            ville = models.Ville.objects.get(id_ville=id_ville)
+            
             #strin = titre_voyage+" "+str(prix_voyage)+" "+str(duree_voyage)+" "+str(transport)+" "+str(id_hotel)+" "+str(id_promotion)+" "+str(id_categorie)
             #"return HttpResponse(strin)
             voyage = models.Voyage.objects.create(id_promotion = id_promotion,titre_voyage = titre_voyage,prix_voyage=prix_voyage,duree_voyage=duree_voyage,transport=transport,id_hotel=id_hotel,id_categorie=id_categorie)
             #voyage.id_promotion.set(id_promotion)
             voyage.save()
+            avoir_instance = models.Avoir.objects.create(id_ville=ville, id_voyage=voyage)
+
             voyage.id_promotion = id_promotion
             voyage.save()
-            return voyages_gestion(request)
+            return redirect('voyages_gestion')
+
+            # return voyages_gestion(request)
     else:    
         voyages = models.Voyage.objects.all()
+        villes = models.Ville.objects.all()
         form = VoyageAjoutForm()
-        return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'form_ajout':form})
+        return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'form_ajout':form, 'villes' : villes})
+        # return redirect('voyages_gestion')
         
-def supp_hotel(request,id_hotel):
-    hotel = models.Hotel.objects.get(id_hotel = id_hotel)
+def supp_hotel(request, id_hotel):
+    hotel = models.Hotel.objects.get(id_hotel=id_hotel)
+    image_hotel_entries = models.ImageHotel.objects.filter(id_hotel=hotel)
+    for image_hotel_entry in image_hotel_entries:
+        image_from_images = models.Image.objects.filter(id_images=image_hotel_entry.id_images.id_images)
+        image_from_images.delete()
+        image_hotel_entry.id_images.delete()
+    image_hotel_entries.delete()
     hotel.delete()
     hotels = models.Hotel.objects.all()
-    message_supp = "Hotels id: "+str(id_hotel)+" est supprimée!"
-    return  render(request,'admin_pages/hotels_gestion.html',{'hotels' : hotels,'messageSupp' : message_supp})
+    message_supp = f"Hôtel ID: {id_hotel} a été supprimé avec succès!"
+    return render(request, 'admin_pages/hotels_gestion.html', {'hotels': hotels, 'messageSupp': message_supp})
+
 
 def modif_hotel(request,id_hotel):
     hotel = get_object_or_404(models.Hotel, id_hotel=id_hotel)
@@ -769,15 +787,28 @@ def modif_hotel(request,id_hotel):
 def ajout_hotel(request):
     hotels = models.Hotel.objects.all()
     if request.method == 'POST':
-        form = HotelAjoutForm(request.POST)
+        form = HotelAjoutForm(request.POST, request.FILES)  # Include request.FILES for handling file uploads
         if form.is_valid():
-            form.save()
-            message = "Nouvelle hotel est ajouté avec succée!"
-            return  render(request,'admin_pages/hotels_gestion.html',{'hotels' : hotels,'messageEdit' : message})
-            #redirect('admin_page/voyages/')
-    else:    
+            hotel = form.save()
+            id_hotel = hotel.id_hotel
+            uploaded_images = request.FILES.getlist('path_image')  # Use getlist to get multiple files
+            for uploaded_image in uploaded_images:
+                image_filename = uploaded_image.name
+                image_path = f'./app/static/assets/hotels/{image_filename}'
+                
+                with open(image_path, 'wb') as destination:
+                    for chunk in uploaded_image.chunks():
+                        destination.write(chunk)
+                        
+                image = models.Image.objects.create(path_image=image_filename)
+                images_hotel = models.ImageHotel.objects.create(id_images=image, id_hotel=hotel)
+            
+            message = "Nouvelle hôtel ajoutée avec succès!"
+            return render(request, 'admin_pages/hotels_gestion.html', {'hotels': hotels, 'messageEdit': message})
+    else:
         form = HotelAjoutForm()
-        return  render(request,'admin_pages/hotels_gestion.html',{'hotels' : hotels,'form_ajout':form})
+        return render(request, 'admin_pages/hotels_gestion.html', {'hotels': hotels, 'form_ajout': form})
+
 
 def supp_promotion(request,id_promotion):
     promotion = models.Promotion.objects.get(id_promotion = id_promotion)
