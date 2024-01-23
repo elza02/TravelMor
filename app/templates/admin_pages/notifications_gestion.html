@@ -1,8 +1,28 @@
 {% extends 'admin_pages/base.html' %}
 {% block title %} Notifications {% endblock title %}
+{% block main_menu_link_class7 %}
+    class="active"
+{% endblock main_menu_link_class7 %}
 {% block main %}
 <div class="container">
     <h1>administration ville</h1>
+
+    {% if form_modif %}
+        <form action="{% url 'modif_notification' curr_notifications.id_notification%}" method="POST">
+            {% csrf_token %}
+            {{ form_modif.as_p }}
+            <button type="submit">Enregistrer</button>
+        </form>
+    {% elif form_notifier %}
+        <form action="{% url 'notifier'%}" method="POST">
+            {% csrf_token %}
+            {{ form_notifier.as_p }}
+            <button type="submit">Enregistrer</button>
+        </form>
+    {% else %}
+        <a class="ajtBtn" href="{% url 'notifier'%}">Notifier</a>
+    {% endif %}
+
     <div>
         <table>
             <thead>
@@ -20,7 +40,10 @@
                     <td>{{notification.date_notif}} {{notification.date_notif}}</td> 
                     <td>{{notification.type}}  </td> 
                     <td>{% if  notification.content %} {{notification.content}}  {% endif %}</td> 
-                    <td><button><a href="{% url  'supp_notification' notification.id_notification%}">Supprimer</a></button><button><a href="{% url  'modif_notification' notification.id_notification%}"> Editer</a></button></td>
+                    <td class="actions">
+                        <a href="{% url  'supp_notification' notification.id_notification%}"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>Supprimer</a>
+                        <a href="{% url  'modif_notification' notification.id_notification%}"><i class="fa-solid fa-pen-to-square" style="margin-right: 5px;"></i>Editer</a>
+                    </td>
                 </tr>
 
                 {% endfor %}
@@ -28,23 +51,7 @@
         </table>
     </div>
 
-{% if form_modif %}
-    <form action="{% url 'modif_notification' curr_notifications.id_notification%}" method="POST">
-        {% csrf_token %}
-        {{ form_modif.as_p }}
-        <button type="submit">Enregistré</button>
-    </form>
-  
-{% elif form_notifier %}
-    <form action="{% url 'notifier'%}" method="POST">
-        {% csrf_token %}
-        {{ form_notifier.as_p }}
-        <button type="submit">Enregistrer</button>
-    </form>
-{% else %}
-    <button type="submit"><a href="{% url 'notifier'%}">Notifier</a></button>
 
-{% endif %}
 </div>
 {% endblock main %}
 

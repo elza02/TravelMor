@@ -5,6 +5,9 @@
 {% block block_css %}
 <link rel="stylesheet" href="{% static 'css/card.css' %}">
 {% endblock block_css %}
+{% block bell_notif %}
+<i class="fa-solid fa-bell"><span></span></i>
+{% endblock bell_notif %}
 {% block menu_per_log_case %}
     {% if request.session.code_session %}
         <div class="log" id="LogMenuButton">

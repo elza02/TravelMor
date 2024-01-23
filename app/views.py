@@ -274,7 +274,8 @@ def home (request):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/home.html', {'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/home.html', {'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/home.html')
 
 def voyageDetails(id_voyage):
@@ -615,9 +616,6 @@ def login(request):
 
     return render(request, 'login.html', {})
 
-        
-from django.shortcuts import redirect
-
 def logout(request):
     if 'code_session' in request.session:
         del request.session['code_session']
@@ -625,25 +623,48 @@ def logout(request):
         del request.session['est_admin']
     return redirect('/')
 
-
 def profile_view(request, user_id):
-    if request.session.get('code_session',None) == user_id:
-        utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
-        return render(request, 'user/profile.html', {'utilisateur': utilisateur})
+    if request.session.get('code_session') == user_id:
+        if request.method == 'POST':
+            nom = request.POST.get('nom')
+            prenom = request.POST.get('prenom')
+            nom_utilisateur = request.POST.get('nom_utilisateur')
+            email = request.POST.get('email')
+            num_tele = request.POST.get('num_telephone')
+            uploaded_image = request.FILES.get('path_img_profile')
+
+            user = models.Utilisateur.objects.get(id_utilisateur=user_id)
+            user.nom = nom
+            user.prenom = prenom
+            user.nom_utilisateur = nom_utilisateur
+            user.email = email
+            user.num_telephone = num_tele
+
+            if uploaded_image:
+                user.path_img_profile = uploaded_image
+
+            user.save()
+
+            return render(request, 'user/profile.html', {'utilisateur': user})
+        else:
+            utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+            return render(request, 'user/profile.html', {'utilisateur': utilisateur})
     else:
         return redirect('login')
+
 
 
 def registration(request):
     if request.method == 'POST':
         nom = request.POST.get('nom')
         prenom = request.POST.get('prenom')
+        nom_utilisateur = request.POST.get('nom_utilisateur')
         email = request.POST.get('email')
         num_tele = request.POST.get('num_telephone')
         passwd = request.POST.get('mot_d_passe')
         uploaded_image = request.FILES.get('path_img_profile')
-        print(nom+' '+prenom+' '+email+' '+num_tele+' '+passwd+uploaded_image.name )
-        if nom and prenom and email and num_tele and passwd and uploaded_image:
+        # print(nom+' '+prenom+' '+email+' '+num_tele+' '+passwd+uploaded_image.name )
+        if nom and prenom and nom_utilisateur and email and num_tele and passwd and uploaded_image:
 
             image_filename = uploaded_image.name
             image_path = f'./app/static/assets/profile_imgs/{image_filename}'
@@ -657,6 +678,7 @@ def registration(request):
                 est_admin=0,
                 nom=nom,
                 prenom=prenom,
+                nom_utilisateur=nom_utilisateur,
                 email=email,
                 num_telephone=num_tele,
                 mot_d_passe=passwd

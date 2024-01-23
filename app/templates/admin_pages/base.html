@@ -18,24 +18,24 @@
                 <i class="fa fa-spin fa-gear"></i>
             </div>
             <ul>
-                <li><a href="{% url "dashboard_gestion" %}"><i class="fa fa-bar-chart"></i></i></i>Dashboard</a></li>
-                <li><a href="{% url "voyages_gestion" %}"><i class="fa-solid fa-person-walking-luggage"></i></i>Voyages</a></li>
-                <li><a href="{% url "hotels_gestion" %}"><i class="fa fa-building"></i>Hotels</a></li>
-                <li><a href="{% url "utilisateurs_gestion" %}"><i class="fa fa-building"></i>Utilisateurs</a></li>
-                <li><a href="{% url "promotions_gestion" %}"><i class="fa fa-percent"></i>Promotions</a></li>
-                <li><a href="{% url "vols_gestion" %}"><i class="fa-solid fa-plane-departure"></i>Vols</a></li>
-                <li><a href="{% url "notifications_gestion" %}"><i class="fa fa-bell"></i>Notifications</a></li>
-                <li><a href="{% url "commentaires_gestion" %}"><i class="fa fa-comments"></i>Commentaires</a></li>
-                <li><a href="{% url "villes_gestion" %}"><i class="fa fa-location-arrow"></i>Villes</a></li>
-                <li><a href="{% url "pays_gestion" %}"><i class="fa fa-location-arrow"></i>Pays</a></li>
+                <li><a {% block main_menu_link_class1 %} {% endblock %} href="{% url "dashboard_gestion" %}"><i class="fa fa-bar-chart"></i></i></i>Dashboard</a></li>
+                <li><a {% block main_menu_link_class2 %} {% endblock %} href="{% url "voyages_gestion" %}"><i class="fa-solid fa-person-walking-luggage"></i></i>Voyages</a></li>
+                <li><a {% block main_menu_link_class3 %} {% endblock %} href="{% url "hotels_gestion" %}"><i class="fa fa-building"></i>Hotels</a></li>
+                <li><a {% block main_menu_link_class4 %} {% endblock %} href="{% url "utilisateurs_gestion" %}"><i class="fa fa-building"></i>Utilisateurs</a></li>
+                <li><a {% block main_menu_link_class5 %} {% endblock %} href="{% url "promotions_gestion" %}"><i class="fa fa-percent"></i>Promotions</a></li>
+                <li><a {% block main_menu_link_class6 %} {% endblock %} href="{% url "vols_gestion" %}"><i class="fa-solid fa-plane-departure"></i>Vols</a></li>
+                <li><a {% block main_menu_link_class7 %} {% endblock %} href="{% url "notifications_gestion" %}"><i class="fa fa-bell"></i>Notifications</a></li>
+                <li><a {% block main_menu_link_class8 %} {% endblock %} href="{% url "commentaires_gestion" %}"><i class="fa fa-comments"></i>Commentaires</a></li>
+                <li><a {% block main_menu_link_class9 %} {% endblock %} href="{% url "villes_gestion" %}"><i class="fa fa-location-arrow"></i>Villes</a></li>
+                <li><a {% block main_menu_link_class10 %} {% endblock %} href="{% url "pays_gestion" %}"><i class="fa fa-location-arrow"></i>Pays</a></li>
             </ul>
         </nav>
         <div class="inner-container">
             <div class="secondary-menu">
-                menu
-                <form method="post" action="{% url 'logout' %}">
+                {% comment %} menu {% endcomment %}
+                <form class="logout" method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit">deconnexion</button>
+                    <button class="logoutBtn" type="submit"><i class="fa-solid fa-right-from-bracket"></i>deconnexion</button>
                 </form>
             </div>
             {% block main %} 

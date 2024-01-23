@@ -7,6 +7,9 @@
   }
 </style>
 {% endblock block_css %} 
+{% block bell_notif %}
+<i class="fa-solid fa-bell"><span></span></i>
+{% endblock bell_notif %}
 {% block menu_per_log_case %}
     {% if request.session.code_session %}
         <div class="log" id="LogMenuButton">
@@ -80,20 +83,11 @@
     <div class="body">
       <span class="title">{{ avoir.id_voyage.titre_voyage }}</span>
       <span class="localisation"
-        ><i class="fa-solid fa-location-dot"></i> {{
-        avoir.id_ville.id_pays.nom_pays }}, {{ avoir.id_ville.nom_ville }}</span
-      >
-      <span class="price"
-        >à partir de
-        <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span
-      >
-      <span class="rating"
-        >Durée:
-        <span
-          >{{ avoir.id_voyage.duree_voyage }} jours / {{
-          avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span
-        ></span
-      >
+        ><i class="fa-solid fa-location-dot"></i> {{ avoir.id_ville.id_pays.nom_pays }}, {{ avoir.id_ville.nom_ville }}</span>
+      <span class="price">à partir de
+        <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span>
+      <span class="rating">Durée:
+        <span>{{ avoir.id_voyage.duree_voyage }} jours / {{avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
       <form
         method="get"
         action="/special_turqie_details/{{ avoir.id_voyage.id_voyage }}"

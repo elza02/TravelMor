@@ -1,8 +1,36 @@
 {% extends 'admin_pages/base.html' %}
 {% block title %} Vols {% endblock title %}
+{% block main_menu_link_class6 %}
+    class="active"
+{% endblock main_menu_link_class6 %}
 {% block main %}
 <div class="container">
     <h1>administration vols</h1>
+
+    {% if messageSupp %}
+    <p style="color: red;">{{ messageSupp }}</p>
+    {% endif %}
+    {% if messageEdit %}
+        <p style="color: green;">{{ messageEdit }}</p>
+    {% endif %}
+
+    {% if form_modif %}
+        <form action="{% url 'modif_vol' vol.id_vol%}" method="POST">
+            {% csrf_token %}
+            {{ form_modif.as_p }}
+            <button type="submit">Enregistrer</button>
+        </form>
+    
+    {% elif form_ajout %}
+    <form action="{% url 'ajout_vol'%}" method="POST">
+        {% csrf_token %}
+        {{ form_ajout.as_p }}
+        <button type="submit">Enregistrer</button>
+    </form>
+    {% else %}
+        <a class="ajtBtn" href="{% url 'ajout_vol'%}">ajouter</a>
+    {% endif %}
+
     <div>
         <table>
             <thead>
@@ -22,8 +50,8 @@
                     <td>{{vol.date_f_vol}} </td> 
                     <td>{{vol.prix_vol}} </td> 
                     <td class="actions">
-                        <a href="{% url 'supp_vol' vol.id_vol%}">Supprimer</a>
-                        <a href="{% url 'modif_vol' vol.id_vol%}"> Modifier</a>
+                        <a href="{% url 'supp_vol' vol.id_vol%}"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>Supprimer</a>
+                        <a href="{% url 'modif_vol' vol.id_vol%}"><i class="fa-solid fa-pen-to-square" style="margin-right: 5px;"></i>Modifier</a>
                     </td>
                 </tr>
 
@@ -31,28 +59,5 @@
             </tbody>
         </table>
     </div>
-{% if messageSupp %}
-    <p style="color: red;">{{ messageSupp }}</p>
-{% endif %}
-{% if messageEdit %}
-    <p style="color: green;">{{ messageEdit }}</p>
-{% endif %}
-
-{% if form_modif %}
-    <form action="{% url 'modif_vol' vol.id_vol%}" method="POST">
-        {% csrf_token %}
-        {{ form_modif.as_p }}
-        <button type="submit">Enregistré</button>
-    </form>
-  
-{% elif form_ajout %}
-<form action="{% url 'ajout_vol'%}" method="POST">
-    {% csrf_token %}
-    {{ form_ajout.as_p }}
-    <button type="submit">Enregistré</button>
-</form>
-{% else %}
-    <button type="submit"><a href="{% url 'ajout_vol'%}">ajouter</a></button>
-{% endif %}
 </div>
 {% endblock main %}

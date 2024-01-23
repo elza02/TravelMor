@@ -4,44 +4,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMIN - {% block title %}{% endblock title %}</title>
-    <link rel="icon" href="{% static "assets/travelmor-icon.png" %}">
+    <title>{% block title %} {% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="{% static "admin_styles/base.css" %}">
-    {% block css_block %}{% endblock css_block %}
+    <link rel="icon" href="{% static 'assets/travelmor-icon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <style>
+    .overlay {
+        height: 100%;
+        width: 100%;
+        display: none;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: rgba(200,200,200,  0.7); /* Black with a little bit see-through */
+        backdrop-filter: blur(30px);
+    }
+    
+    .overlay-content {
+        position: relative;
+        top: 46%;
+        width: 80%;
+        text-align: center;
+        margin-top: 30px;
+        margin: auto;
+    }
+    
+    .overlay .closebtn {
+        position: absolute;
+        top: 150px;
+        right: 45px;
+        font-size: 60px;
+        cursor: pointer;
+        color: white;    
+    }
+    
+    .overlay .closebtn:hover {
+        color: #ccc;
+    }
+    
+    .overlay input[type=text] {
+        padding: 15px;
+        font-size: 17px;
+        border: none;
+        float: left;
+        width: 80%;
+        background: white;
+        border-top-left-radius: var(--main-border-radius);
+        border-bottom-left-radius: var(--main-border-radius);
+    }
+    
+    .overlay input[type=text]:hover {
+        background: #f1f1f1;
+    }
+    
+    .overlay button {
+        float: left;
+        width: 20%;
+        padding: 15px;
+        background: #ddd;
+        font-size: 17px;
+        border: none;
+        cursor: pointer;
+        border-top-right-radius: var(--main-border-radius);
+        border-bottom-right-radius: var(--main-border-radius);
+    }
+    
+    .overlay button:hover {
+        background: #bbb;
+    }
+{% comment %} login form modal  {% endcomment %}
+
+    #login-form-modal input[type=email], input[type=password] {
+        width: 80%;
+        padding: 12px 20px;
+        margin: 0 auto;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        border-radius: var(--main-border-radius);
+    }
+
+    #login-form-modal button {
+        background-color: var(--main--green);
+        color: white;
+        padding: 14px 20px;
+        border: none;
+        cursor: pointer;
+        width: 20%;
+        margin: auto;
+        border-radius: var(--main-border-radius);
+    }
+
+    #login-form-modal .under-container-login button {
+        margin: 0;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+
+    #login-form-modal .cancelbtn {
+        width: auto;
+        padding: 10px 18px;
+        background-color: #f44336;
+        border-radius: var(--main-border-radius);
+    }
+
+    #login-form-modal .head {
+        text-align: center;
+        margin: 24px 0 12px 0;
+        position: relative;
+    }
+
+    #login-form-modal img.avatar {
+        width: 40%;
+        border-radius: 50%;
+    }
+
+    #login-form-modal .container-login { 
+        margin-top:40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start; 
+        gap: 20px;
+        border-radius: var(--main-border-radius);
+    }
+
+    #login-form-modal .under-container-login {
+        margin-top: 20px;
+        padding: 8px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: var(--main-border-radius);
+    }
+
+    #login-form-modal span.psw a {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #login-form-modal {
+        display: none; 
+        position: fixed; 
+        z-index: 1; 
+        left: 0;
+        top: 0;
+        width: 100%; 
+        height: 100%; 
+        overflow: hidden; 
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4);
+        padding-top: 60px;
+        backdrop-filter: blur(30px);
+    }
+
+    #login-form-modal .modal-content {
+        background-color: #fefefe;
+        margin: 150px auto; 
+        border: 1px solid #888;
+        width: 50%; 
+        height: fit-content;
+        padding: 30px;
+        border-radius: var(--main-border-radius);
+    }
+
+    #login-form-modal .close {
+        position: absolute;
+        right: 15px;
+        top: -30px;
+        color: #000;
+        font-size: 35px;
+        font-weight: bold;
+        transition: all .2s ease;
+    }
+
+    #login-form-modal .close:hover,
+    #login-form-modal .close:focus {
+        color: red;
+        cursor: pointer;
+    }
+
+    .animate {
+        -webkit-animation: animatezoom 0.6s;
+        animation: animatezoom 0.3s
+    }
+
+    @-webkit-keyframes animatezoom {
+        from {-webkit-transform: scale(0)} 
+        to {-webkit-transform: scale(1)}
+    }
+    
+    @keyframes animatezoom {
+        from {transform: scale(0)} 
+        to {transform: scale(1)}
+    }
+
+    /* Change styles for span and cancel button on extra small screens */
+    @media screen and (max-width: 300px) {
+        span.psw {
+            display: block;
+            float: none;
+        }
+        .cancelbtn {
+            width: 100%;
+        } 
+        #login-form-modal .modal-content {
+            width: 100%;
+        }
+    }
+    </style>
+    
+    {% block block_css %}{% endblock block_css %}
 </head>
 <body>
-    <div class="container-menu">
-        <nav class="main-menu">
+    <header>
+        <div class="inner1">
             <div class="logo">
-                <img src="{% static 'assets/travelMor-logo-black.png' %}" alt="LOGO TRAVEL MOR">
-                <i class="fa fa-spin fa-gear"></i>
+                <img src="{% static 'assets/travelmor-logo-bg.png' %}" alt="LOGO TRAVEL MOR">
             </div>
-            <ul>
-                <li><a href="{% url "dashboard_gestion" %}"><i class="fa fa-bar-chart"></i></i></i>Dashboard</a></li>
-                <li><a href="{% url "voyages_gestion" %}"><i class="fa-solid fa-person-walking-luggage"></i></i>Voyages</a></li>
-                <li><a href="{% url "hotels_gestion" %}"><i class="fa fa-building"></i>Hotels</a></li>
-                <li><a href="{% url "utilisateurs_gestion" %}"><i class="fa fa-building"></i>Utilisateurs</a></li>
-                <li><a href="{% url "promotions_gestion" %}"><i class="fa fa-percent"></i>Promotions</a></li>
-                <li><a href="{% url "vols_gestion" %}"><i class="fa-solid fa-plane-departure"></i>Vols</a></li>
-                <li><a href="{% url "notifications_gestion" %}"><i class="fa fa-bell"></i>Notifications</a></li>
-                <li><a href="{% url "commentaires_gestion" %}"><i class="fa fa-comments"></i>Commentaires</a></li>
-                <li><a href="{% url "villes_gestion" %}"><i class="fa fa-location-arrow"></i>Villes</a></li>
-                <li><a href="{% url "pays_gestion" %}"><i class="fa fa-location-arrow"></i>Pays</a></li>
-            </ul>
-        </nav>
-        <div class="inner-container">
-            <div class="secondary-menu">
-                menu
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit">deconnexion</button>
-                </form>
+            <div class="search" onclick="openSearch()">
+                <input type="text" name="search" placeholder="Recherche">
+                <span><i class="fa-solid fa-magnifying-glass"></i></span>
             </div>
-            {% block main %} 
-            {% endblock main %}
+            {% if request.session.code_session %}
+                {% block bell_notif %}{% endblock bell_notif %}
+            {% endif %}
+            {% block menu_per_log_case %}{% endblock menu_per_log_case %}
+        </div>
+        <div class="inner2">
+            <nav>
+                <ul>
+                    <li><a class="{% block url_1_class %}{% endblock url_1_class %}" href="{% url "home" %}" ><i class="fa-solid fa-house"></i><span>Accueil</span></a></li>
+                    <li><a class="{% block url_2_class %}{% endblock url_2_class %}" href="{% url "hotels" %}"><i class="fa-solid fa-hotel"></i><span>Hôtels </span></a></li>
+                    <li><a class="{% block url_3_class %}{% endblock url_3_class %}" href="{% url "special_turqie" %}"><i class="fa-solid fa-wand-magic-sparkles"></i>Special Turquie</span></a></li>
+                    <li><a class="{% block url_4_class %}{% endblock url_4_class %}" href="{% url "special_asie" %}"><i class="fa-solid fa-wand-magic-sparkles"></i>Special Asie</span></a></li>
+                    <li><a class="{% block url_5_class %}{% endblock url_5_class %}" href="{% url "voyage_organise" %}"><i class="fa-solid fa-wand-magic-sparkles"></i>Voyage organisé</span></a></li>
+                    <li><a class="{% block url_6_class %}{% endblock url_6_class %}" href="{% url "special_omra" %}"><i class="fa-solid fa-kaaba"></i></i><span>Special Omra</span></a></li>
+                    <li><a class="{% block url_7_class %}{% endblock url_7_class %}" href="{% url "special_haj" %}"><i class="fa-solid fa-kaaba"></i></i><span>Special Haj</span></a></li>
+                    <li><a class="{% block url_8_class %}{% endblock url_8_class %}" href="{% url "promotions" %}"><i class="fa-solid fa-percent"></i><span>Promotion</span></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container"></div>
+
+    <div id="myOverlay" class="overlay animate">
+        <div class="overlay-content">
+        <form action="action_page.php">
+            <input type="text" placeholder="Essayer 'Dubai'" name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
         </div>
     </div>
-    {% block js_block %}{% endblock js_block %}
+
+    <div id="login-form-modal" class="modal">
+        <form class="modal-content animate" method="POST" action="{% url 'login' %}"> {% comment %} entrer le lien de la view {% endcomment %}
+            {% csrf_token %}
+            <div class="head">
+                <h1>Authentification</h3>
+                <span onclick="document.getElementById('login-form-modal').style.display='none'" class="close" title="Close Modal">&times;</span>
+            </div>
+            <div class="container-login">
+                <input type="email" placeholder="Entrer votre email.." name="email" required>
+                <input type="password" placeholder="Entrer le mot de pass" name="password" required>
+                <label style="margin: auto;">
+                    <input type="checkbox" checked="checked" name="remember"> Rester connecté
+                </label>
+                <button type="submit">s'authentifier</button>
+            </div>
+            <div class="under-container-login" style="background-color:#f1f1f1">
+                <span class="psw">Vous avez oublier <a href="#">mot de pass ?</a></span>
+                <button type="button" onclick="document.getElementById('login-form-modal').style.display='none'" class="cancelbtn">Annuler</button>
+            </div>
+        </form>
+    </div>
+
+    {% block main %} {% endblock %}
+
+    <footer>
+        <section class="Paiement">
+            <h3>Paiement securisé</h3>
+            <div class="methods">
+                <img src="{% static 'assets/visa.png' %}" alt="payment-methode-visa">
+                <img src="{% static 'assets/paypal.png' %}" alt="payment-methode-paypal">
+                <img src="{% static 'assets/western-union.png' %}" alt="payment-methode-western-union">
+                <img src="{% static 'assets/payoneer.png' %}" alt="payment-methode-payoneer">
+            </div>
+        </section>
+
+        <section class="contact-news-letter">
+            <div class="contact-box">
+                <div class="image-box">
+                    <img src="{% static "assets/support-services.png" %}">
+                </div>
+                <div class="telephone">
+                    CONTACTEZ NOS SPÉCIALISTES VOYAGES AU<br>
+                    <span>0600600000</span>
+                    <p>du lundi au Samedi de 09h00 à 18h00 | horaires de ramadan 09h00 à 16h00</p>
+                </div>
+            </div>
+            <div class="email-box">
+                <p>S'abonner à la newsletter :</p>
+                <input type="email" name="search" placeholder="Entrer votre email..">
+                <span><i class="fa-solid fa-envelope"></i></span>
+            </div>
+        </section>
+
+        <section class="menu">
+            <nav class="apropos">
+                <ul>
+                    <li><a href="#">Qui somme nous ?</a></li>
+                    <li><a href="#">Conditions Générales de Vente</a></li>
+                    <li><a href="#">Partenaires de l'Agence</a></li>
+                    <li><a href="#">Voyage en Groupe</a></li>
+                    <li><a href="#">Découvrez des Offres Exclusives</a></li>
+                </ul>
+            </nav>
+            <nav class="hotel">
+                <ul>
+                    <li><a href="#">Autres services</a></li>
+                    <li><a href="#">Conditions Générales de Vente</a></li>
+                    <li><a href="#">Partenaires de l'Agence</a></li>
+                    <li><a href="#">Aider nous a s'agrandir</a></li>
+                    <li><a href="#">Explorez des Destinations Exotiques</a></li>
+                </ul>
+            </nav>
+            <nav class="voyage">
+                <ul>
+                    <li><a href="#">Sécurité et Confort Assurés</a></li>
+                    <li><a href="#">Partenaires de l'Agence</a></li>
+                    <li><a href="#">Téléchargez l'Application Aujourd'hui</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </section>
+        <section class="copyright-socials">
+            <div class="socials">
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+            <p>&copy; 2024 TravelMor, Inc</p>
+            <div class="menu">
+                <a href="#">Confidentialité</a><span>&bull;</span>
+                <a href="#">Conditions générales</a><span>&bull;</span>
+                <a href="#">Plan du site</a><span>&bull;</span>
+                <a href="#">Fonctionnement du site</a><span>&bull;</span>
+                <a href="#">Infos sur l'entreprise</a>
+            </div>
+        </section>
+    </footer>
+    {% block js_block %} {% endblock %} 
+    <script src="{% static 'js/base.js' %}" type="text/javascript"></script>
+    <script>
+
+        // Open the full screen search box
+        function openSearch() {
+            document.getElementById("myOverlay").style.display = "block";
+            document.querySelector("header .search").style.display = "none";
+        }
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById("myOverlay")) {
+                document.getElementById("myOverlay").style.display = "none";
+                document.querySelector("header .search").style.display = "block";
+            }
+        }
+
+        /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
+        var prevScrollpos = window.pageYOffset;
+        window.onscroll = function() {
+        var currentScrollPos = window.pageYOffset;
+        if (prevScrollpos > currentScrollPos) {
+            document.getElementsByTagName("header")[0].style.top = "0";
+        } else {
+            document.getElementsByTagName("header")[0].style.top = "-72px";
+        }
+        prevScrollpos = currentScrollPos;
+        }
+    </script>
+
+    <script defer>
+        {% if request.session.code_session %}
+            id_user = {{ request.session.code_session }};
+        {% else %}
+            id_user = false; 
+        {% endif %}
+
+        const hearts = document.querySelectorAll('.heart');
+        const inputLike = document.querySelector('input[name="inputLike"]');
+
+        function getCSRFToken() {
+            const csrfCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
+            if (csrfCookie) {
+                return csrfCookie.split('=')[1];
+            }
+            return null;
+        }
+    
+        function fetchLikes(voyageId) {
+            const formData = { id_user: parseInt(id_user), id_voyage: voyageId };
+            const csrfToken = getCSRFToken();
+            fetch('/likes/retrieve/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify(formData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the UI based on the like status for the specific voyage
+                    data = JSON.parse(data);
+                    const isLiked = data["existe"];
+                    hearts.forEach(heart => {
+                        console.log(heart.id);
+                        if(heart.id == voyageId){
+                            heart.src = isLiked ? '{% static "assets/like-full.svg" %}' : '{% static "assets/like-empty.svg" %}';
+                            inputLike.value = isLiked ? 'true' : 'false';
+                        }
+                    });
+                });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            if(!id_user){
+            //console.log('you are not connected');
+            //document.getElementById('login-form-modal').style.display='block';
+            }else {
+            hearts.forEach(heart => {
+                const voyageId = heart.id;
+                fetchLikes(voyageId);
+                console.log(heart.id);
+            });    
+            }
+        });
+    
+        function toggleLike(heart) {
+            if(!id_user){
+                console.log('you are not connected');
+                document.getElementById('login-form-modal').style.display='block';
+            }else {
+                const voyageId = heart.id;
+                console.log('toggle: ' + inputLike.value);
+                const isLiked = inputLike.value === 'true';
+        
+                const formData = { id_user: parseInt(id_user), id_voyage: voyageId };
+                const csrfToken = getCSRFToken();
+        
+                const endpoint = isLiked ? '/likes/delete/' : '/likes/add/';
+        
+                fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken,
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    data = JSON.parse(data);
+                    const updatedIsLiked = data["existe"];
+                    heart.src = updatedIsLiked ? '{% static "assets/like-full.svg" %}' : '{% static "assets/like-empty.svg" %}';
+                    inputLike.value = updatedIsLiked ? 'true' : 'false';
+                });
+            }    
+        }
+    </script>
 </body>
 </html>

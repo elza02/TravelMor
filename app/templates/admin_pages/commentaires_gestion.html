@@ -1,5 +1,8 @@
 {% extends 'admin_pages/base.html' %}
 {% block title %} Commentraires {% endblock title %}
+{% block main_menu_link_class8 %}
+    class="active"
+{% endblock main_menu_link_class8 %}
 {% block main %}
 <div class="container">
     <h1>administration Commentraires</h1>
@@ -27,7 +30,9 @@
                     <td>{{Commentaire.id_utilisateur.nom}} {{Commentaire.id_utilisateur.prenom}} </td> 
                     <td>{{Commentaire.text_comment}} </td> 
                     <td>{{Commentaire.date_redaction}} {{Commentaire.heure_redaction}} </td> 
-                    <td><button><a href="{% url 'supp_commentaire' Commentaire.id_comment%}">supprimer</a></button></td>
+                    <td class="actions">
+                        <a href="{% url 'supp_commentaire' Commentaire.id_comment%}"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>supprimer</a>
+                    </td>
                 </tr>
 
                 {% endfor %}
@@ -35,8 +40,8 @@
         </table>
     </div>
     {% if messageSupp %}
-    <p style="color: red;">{{ messageSupp }}</p>
-{% endif %}
+        <p style="color: red;">{{ messageSupp }}</p>
+    {% endif %}
 <div class="container">
 
 {% endblock main %}
