@@ -68,6 +68,7 @@ class Utilisateur(models.Model):
     id_utilisateur = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=15)
     prenom = models.CharField(max_length=15)
+    nom_utilisateur = models.CharField(max_length=15)
     est_admin = models.BooleanField()
     mot_d_passe = models.CharField(max_length=10)
     num_telephone = models.CharField(max_length=12)
@@ -100,11 +101,11 @@ class Commentaire(models.Model):
         return self.text_comment
 
 class Recevoir(models.Model):
-    id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     id_notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
 
 class ReserverVoyage(models.Model):
-    id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
 
 class Avoir(models.Model):
@@ -112,7 +113,7 @@ class Avoir(models.Model):
     id_ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
 
 class Aimer(models.Model):
-    id_utilisateur_1 = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
 
 class inclure(models.Model):

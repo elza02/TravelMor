@@ -1,8 +1,37 @@
 {% extends 'admin_pages/base.html' %}
 {% block title %} voyages {% endblock title %}
+{% block main_menu_link_class2 %}
+    class="active"
+{% endblock main_menu_link_class2 %}
 {% block main %}
 <div class="container">
     <h1>administration voyages</h1>
+    {% if messageSupp %}
+    <p style="color: red;">{{ messageSupp }}</p>
+    {% endif %}
+    {% if messageEdit %}
+        <p style="color: green;">{{ messageEdit }}</p>
+    {% endif %}
+
+    {% if form_modif %}
+        <form action="{% url 'modif_voyage' voyage.id_voyage%}" method="POST">
+            {% csrf_token %}
+            {{ form_modif.as_p }}
+            <button type="submit">Enregistrer</button>
+        </form>
+
+
+    {% elif form_ajout %}
+        <form action="{% url 'ajout_voyage'%}" method="POST">
+            {% csrf_token %}
+            {{ form_ajout.as_p }}
+            <button type="submit">Enregistrer</button>
+        </form>
+
+    {% else %}
+        <a class="ajtBtn" href="{% url 'ajout_voyage'%}">ajouter</a>   
+    
+{% endif %}
     <div>
         <table>
             <thead>
@@ -34,8 +63,8 @@
                     <td>{{voyage.id_promotion.pourcentage}} </td> 
                     <td>{{voyage.id_categorie.nom_categorie}} </td> 
                     <td class="actions">
-                        <a href="{% url 'supp_voyage' voyage.id_voyage%}">Supprimer</a>
-                        <a href="{% url 'modif_voyage' voyage.id_voyage%}"> Modifier</a>
+                        <a href="{% url 'supp_voyage' voyage.id_voyage%}"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>Supprimer</a>
+                        <a href="{% url 'modif_voyage' voyage.id_voyage%}"><i class="fa-solid fa-pen-to-square" style="margin-right: 5px;"></i>Modifier</a>
                     </td>
                 </tr>
 
@@ -43,32 +72,7 @@
             </tbody>
         </table>
     </div>
-{% if messageSupp %}
-    <p style="color: red;">{{ messageSupp }}</p>
-{% endif %}
-{% if messageEdit %}
-    <p style="color: green;">{{ messageEdit }}</p>
-{% endif %}
 
-{% if form_modif %}
-    <form action="{% url 'modif_voyage' voyage.id_voyage%}" method="POST">
-        {% csrf_token %}
-        {{ form_modif.as_p }}
-        <button type="submit">Enregistré</button>
-    </form>
-
-
-{% elif form_ajout %}
-    <form action="{% url 'ajout_voyage'%}" method="POST">
-        {% csrf_token %}
-        {{ form_ajout.as_p }}
-        <button type="submit">Enregistré</button>
-    </form>
-
-{% else %}
-<button type="submit"><a href="{% url 'ajout_voyage'%}">ajouter</a></button>
-
-{% endif %}
     
 </div>
 {% endblock main %}

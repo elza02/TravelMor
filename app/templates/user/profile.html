@@ -1,97 +1,101 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} Profile utilisateur {% endblock title %}
+{% block title %} Profile {% endblock title %} 
 {% block block_css %}
-<style>
-    header .inner2 {
-        display: none;
-    }
-
-    .profile-container {
-        max-width: 600px;
-        margin: 100px auto;
-        padding: 20px;
-        background-color: #f8f8f8;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .profile-info {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .profile-item {
-        background-color: #fff;
-        padding: 10px;
-        border-radius: 4px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-
-</style>
-{% endblock block_css %}
-{% block menu_per_log_case %}
-    {% if request.session.code_session %}
-        <div class="log" id="LogMenuButton">
-            <i class="fa-solid fa-bars"></i>
-            <img src="{% static 'assets/profile_imgs/' %}{{ utilisateur.path_img_profile }}">
-            <div class="menu hide" id="LogMenu">
-                <ul>
-                    <li><a href="{% url 'profile' request.session.code_session %}">Profile</a></li>
-                    <li><a href="{% url 'logout' %}">Deconnexion</a></li>
-                    <li><a href="#">Cartes cadeaux</a></li>
-                    <li><a href="#">Centre d'aide</a></li>
-                </ul>
-            </div>
+<link rel="stylesheet" href="{% static "css/profile.css" %}">
+{% endblock block_css %} 
+{% block bell_notif %}
+<i class="fa-solid fa-bell"><span></span></i>
+{% endblock bell_notif %}
+{% block menu_per_log_case %} {% if request.session.code_session %}
+<div class="log" id="LogMenuButton">
+  <i class="fa-solid fa-bars"></i>
+  <img
+    src="{% static 'assets/profile_imgs/' %}{{ utilisateur.path_img_profile }}"
+  />
+  <div class="menu hide" id="LogMenu">
+    <ul>
+      <li>
+        <a href="{% url 'profile' request.session.code_session %}">Profile</a>
+      </li>
+      <li><a href="{% url 'logout' %}">Deconnexion</a></li>
+      <li><a href="#">Cartes cadeaux</a></li>
+      <li><a href="#">Centre d'aide</a></li>
+    </ul>
+  </div>
+</div>
+{% else %}
+<div class="log" id="LogMenuButton">
+  <i class="fa-solid fa-bars"></i>
+  <i class="fa-solid fa-circle-user"></i>
+  <div class="menu hide" id="LogMenu">
+    <ul>
+      <li><a href="{% url 'registration' %}">Inscription</a></li>
+      <li>
+        <a
+          href="#"
+          onclick="document.getElementById('login-form-modal').style.display='block'"
+          >Connexion</a
+        >
+      </li>
+      <li><a href="#">Cartes cadeaux</a></li>
+      <li><a href="#">Centre d'aide</a></li>
+    </ul>
+  </div>
+</div>
+{% endif %} {% endblock menu_per_log_case %} {% block main %}
+<form action="{% url 'profile' utilisateur.id_utilisateur %}" method="post" class="profile-container">
+  {% csrf_token %}
+    <div class="profile-info">
+        <div class="profile-card">
+            <h1>Profile utilisateur</h1>
+            <img
+                src="{% static 'assets/profile_imgs/' %}{{ utilisateur.path_img_profile }}"
+                alt="Profile Image"
+            />
+            <p><input type="text" name="nom" value="{{ utilisateur.nom }}"><input type="text" name="prenom" value="{{ utilisateur.prenom }}"></p>
+            <h2>{{ utilisateur.nom }} {{ utilisateur.prenom }}<i class="fa-solid fa-pen" onclick="toggleUpdate()"></i></h2>
+            <p><input type="text" name="nom_utilisateur" value="{{ utilisateur.nom_utilisateur }}"></p>
+            <p><span>@{{ utilisateur.nom_utilisateur }}</span><i class="fa-solid fa-pen" onclick="toggleUpdate()"></i></p>
+            <p><input type="text" name="email" value="{{ utilisateur.email }}"></p>
+            <p><span>{{ utilisateur.email }}</span><i class="fa-solid fa-pen" onclick="toggleUpdate()"></i></p>
+            <p><input type="text" name="num_telephone" value="{{ utilisateur.num_telephone }}"></p>
+            <p><span>{{ utilisateur.num_telephone }}</span><i class="fa-solid fa-pen" onclick="toggleUpdate()"></i></p>
+            <ul>
+                <li>
+                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                </li>
+                <li>
+                <a href="#"> <i class="fa-brands fa-twitter"></i></a>
+                </li>
+                <li>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </li>
+                <li>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                </li>
+            </ul>
+            <button>Mise a jour les informations</button>
         </div>
-    {% else %}
-        <div class="log" id="LogMenuButton">
-            <i class="fa-solid fa-bars"></i>
-            <i class="fa-solid fa-circle-user"></i>
-            <div class="menu hide" id="LogMenu">
-                <ul>
-                    <li><a href="{% url 'registration' %}">Inscription</a></li>
-                    <li><a href="#" onclick="document.getElementById('login-form-modal').style.display='block'">Connexion</a></li>
-                    <li><a href="#">Cartes cadeaux</a></li>
-                    <li><a href="#">Centre d'aide</a></li>
-                </ul>
-            </div>
-        </div>
-    {% endif %}
-{% endblock menu_per_log_case %}
-
-{% block main %}
-    <div class="profile-container">
-        <h1>User Profile</h1>
-        <div class="profile-info">
-            <div class="profile-item">
-                <strong>Nom:</strong> {{ utilisateur.nom }}
-            </div>
-            <div class="profile-item">
-                <strong>Prenom:</strong> {{ utilisateur.prenom }}
-            </div>
-            <div class="profile-item">
-                <strong>Admin:</strong> {% if utilisateur.est_admin %} Yes {% else %} No {% endif %}
-            </div>
-            <div class="profile-item">
-                <strong>Email:</strong> {{ utilisateur.email }}
-            </div>
-            <div class="profile-item">
-                <strong>Numéro de téléphone:</strong> {{ utilisateur.num_telephone }}
-            </div>
-            <div class="profile-item">
-                <strong>Image Profile:</strong>
-                <img src="{% static 'assets/profile_imgs/' %}{{ utilisateur.path_img_profile }}" alt="Profile Image" />
-            </div>
-            <div class="profile-item">
-                <strong>Hotel:</strong> {{ utilisateur.id_hotel.nom_hotel }}
-            </div>
-        </div>
-    </div>
+  </div>
+</form>
 {% endblock main %}
+{% block js_block %}
+<script defer>
+    const formInputs = document.querySelectorAll('form input');
+    const formh2 = document.querySelector('.profile-card h2');
+    const formPSpans = document.querySelectorAll('form p span');
+    const formSubmit = document.querySelector('.profile-card button');
+    function toggleUpdate() {
+        formInputs.forEach(formInput => {
+            formInput.style.display = 'block';
+        });
+        formPSpans.forEach(formPSpan => {
+            formPSpan.style.display = 'none';
+        });
+        formSubmit.style.display = 'block';
+        formh2.style.display = 'none';
+    }
+</script>
+{% endblock js_block %}
+

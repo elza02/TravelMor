@@ -1,8 +1,36 @@
 {% extends 'admin_pages/base.html' %}
 {% block title %} Ville {% endblock title %}
+{% block main_menu_link_class9 %}
+    class="active"
+{% endblock main_menu_link_class9 %}
 {% block main %}
 <div class="container">
     <h1>administration ville</h1>
+
+    {% if messageSupp %}
+    <p style="color: red;">{{ messageSupp }}</p>
+    {% endif %}
+    {% if messageEdit %}
+        <p style="color: green;">{{ messageEdit }}</p>
+    {% endif %}
+
+    {% if form_modif %}
+        <form action="{% url 'modif_ville' ville.id_ville%}" method="POST">
+            {% csrf_token %}
+            {{ form_modif.as_p }}
+            <button type="submit">Enregistrer</button>
+        </form>
+    
+    {% elif form_ajout %}
+    <form action="{% url 'ajout_ville'%}" method="POST">
+        {% csrf_token %}
+        {{ form_ajout.as_p }}
+        <button type="submit">Enregistré</button>
+    </form>
+    {% else %}
+        <a class="ajtBtn" href="{% url 'ajout_ville'%}">ajouter</a>
+    {% endif %}
+
     <div>
         <table>
             <thead>
@@ -20,35 +48,12 @@
                     <td>{{v.nom_ville}} </td> 
                     <td>{{v.id_pays.nom_pays}} </td> 
                     <td class="actions">
-                        <a href="{% url 'supp_ville' v.id_ville%}">supprimer</a>
+                        <a href="{% url 'supp_ville' v.id_ville%}"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>supprimer</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-{% if messageSupp %}
-    <p style="color: red;">{{ messageSupp }}</p>
-{% endif %}
-{% if messageEdit %}
-    <p style="color: green;">{{ messageEdit }}</p>
-{% endif %}
-
-{% if form_modif %}
-    <form action="{% url 'modif_ville' ville.id_ville%}" method="POST">
-        {% csrf_token %}
-        {{ form_modif.as_p }}
-        <button type="submit">Enregistré</button>
-    </form>
-  
-{% elif form_ajout %}
-<form action="{% url 'ajout_ville'%}" method="POST">
-    {% csrf_token %}
-    {{ form_ajout.as_p }}
-    <button type="submit">Enregistré</button>
-</form>
-{% else %}
-    <button type="submit"><a href="{% url 'ajout_ville'%}">ajouter</a></button>
-{% endif %}
 </div>
 {% endblock main %}

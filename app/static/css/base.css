@@ -112,6 +112,23 @@ header .inner1 .search {
     color: var(--main-gray);
 }
 
+.inner1 .fa-bell {
+    color: var(--main-gray); 
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.inner1 .fa-bell span {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: red;
+}
+
 header .inner1 .log {
     position: relative;
     border: 1px solid var(--second-underline);
