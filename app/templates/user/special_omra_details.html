@@ -99,6 +99,7 @@
             <p class="descrp">Hotel {{ vol.id_voyage.id_hotel.type_hotel }} étoiles, type de chambre: {{ vol.id_voyage.id_hotel.type_hotel }}</p>
             <p>{% if hotel.petit_dejeuner%}<i class="fa-solid fa-utensils"></i>{% endif %}</p>
             <div class="price">+{{ vol.id_vol.prix_vol }} MAD</div>
+            <button><a href= "{%url 'paiement'  vol.id_vol.id_vol%}" > Choisir</a> </button>
         </div>
     </div>
     {% endfor%}

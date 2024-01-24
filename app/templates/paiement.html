@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de Paiement</title>
+</head>
+<body>
+
+<h2>Formulaire de Paiement</h2>
+
+
+<p>Montant Total: {{ montant }}</p>
+
+
+<p>Details du Voyage:</p>
+<ul>
+    <li>Titre du Voyage: {{ voyage.titre_voyage }}</li>
+    <li>ID du Vol: {{ vol.id_vol}}</li>
+    <li>Transport: {% if voyage.transport %} True {% else %} False{% endif %}</li>
+    <li>Petit Dejeuner: {% if voyage.id_hotel.petit_dejeuner %} True {% else %} False{% endif %}</li>
+
+</ul>
+
+<form method="post" action="{% url 'paiement' vol.id_vol %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Payer</button>
+</form>
+
+</body>
+</html>

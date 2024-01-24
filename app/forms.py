@@ -241,3 +241,9 @@ class NotifModificationForm(forms.ModelForm):
         # You can customize the appearance of the 'type' field here if needed
         self.fields['type'].widget.attrs.update({'class': 'your-custom-class'})
         self.fields['content'].widget.attrs.update({'class': 'your-custom-class'})
+
+class PaiementForm(forms.Form):
+    nom_carte = forms.CharField(label='Nom sur la carte', required=True)
+    numero_carte = forms.CharField(label='Numéro de carte', required=True)
+    date_expiration = forms.CharField(label='Date d\'expiration (MM/YY)', required=True)
+    code_securite = forms.CharField(label='Code de sécurité', required=True)

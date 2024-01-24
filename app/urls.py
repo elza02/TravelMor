@@ -74,4 +74,5 @@ urlpatterns = [
     #login/logout
     path('login/', views.login, name="login"),
     path('logout/', views.logout, name='logout'),
+    path('paiement/<str:id_vol>/', views.paiement, name='paiement'),
 ]

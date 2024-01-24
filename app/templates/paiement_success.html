@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Succès de Paiement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .success-message {
+            color: green;
+            font-size: 24px;
+        }
+        .redirect-message {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="success-message">
+    <p>Votre paiement a été effectué avec succès !</p>
+</div>
+
+<div class="redirect-message">
+    <p>Vous serez redirigé au home dans 3 secondes...</p>
+</div>
+
+<script>
+    setTimeout(function() {
+        // Redirection vers une autre page après 3 secondes
+        window.location.href = '/';
+    }, 3000);
+</script>
+
+</body>
+</html>

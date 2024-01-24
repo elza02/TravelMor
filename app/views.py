@@ -270,6 +270,8 @@ def home (request):
     # inclure1.save()
     # inclure2.save()
     # inclure3.save()
+    if request.session.get('id_voyage',None) != None:
+        del request.session['id_voyage']
     user_id_session = request.session.get('code_session')
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
@@ -295,6 +297,9 @@ def voyage_organise(request):
 
 def voyage_organise_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    if request.session.get('id_voyage',None) != None:
+        del request.session['id_voyage']
+    request.session['id_voyage'] = id_voyage
     user_id_session = request.session.get('code_session')
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
@@ -321,6 +326,9 @@ def promotions(request):
 
 def promotions_details(request, id_voyage):  
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    if request.session.get('id_voyage',None) != None:
+        del request.session['id_voyage']
+    request.session['id_voyage'] = id_voyage
     user_id_session = request.session.get('code_session')
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
@@ -366,6 +374,9 @@ def special_turqie(request):
 
 def special_turqie_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    if request.session.get('id_voyage',None) != None:
+        del request.session['id_voyage']
+    request.session['id_voyage'] = id_voyage
     user_id_session = request.session.get('code_session')
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
@@ -384,6 +395,9 @@ def special_asie(request):
 
 def special_asie_details(request, id_voyage):
     avoir, inclure_instance, comments = voyageDetails(id_voyage)
+    if request.session.get('id_voyage',None) != None:
+        del request.session['id_voyage']
+    request.session['id_voyage'] = id_voyage
     user_id_session = request.session.get('code_session')
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
@@ -402,6 +416,9 @@ def special_omra(request):
 
 def special_omra_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    if request.session.get('id_voyage',None) != None:
+        del request.session['id_voyage']
+    request.session['id_voyage'] = id_voyage
     user_id_session = request.session.get('code_session')
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
@@ -421,6 +438,9 @@ def special_haj(request):
 
 def special_haj_details(request, id_voyage):
     avoir, inclure_instance, comment = voyageDetails(id_voyage)
+    if request.session.get('id_voyage',None) != None:
+        del request.session['id_voyage']
+    request.session['id_voyage'] = id_voyage
     user_id_session = request.session.get('code_session')
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
@@ -1023,3 +1043,26 @@ def supp_notification(request,id_notification):
     notification = models.Notification.objects.get(id_notification = id_notification)
     notification.delete()
     return redirect('/admin_page/notifications/')
+
+def paiement(request, id_vol):
+    if request.session.get('code_session',None) == None:
+        redirect('/')
+    else:    
+        utilisateur  = models.Utilisateur.objects.get(id_utilisateur = request.session.get('code_session',None))
+        voyage = models.Voyage.objects.get(id_voyage = request.session.get('id_voyage',None))
+        vol = models.Vol.objects.get(id_vol = id_vol)
+        if request.method == 'POST':
+            form = PaiementForm(request.POST)
+            if form.is_valid():
+                # number = form.cleaned_data['numero_carte']
+                # exp_month= int(form.cleaned_data['date_expiration'].split('/')[0])
+                # exp_year= int(form.cleaned_data['date_expiration'].split('/')[1])
+                # cvc= form.cleaned_data['code_securite']
+                reserve = models.ReserverVoyage.objects.create(id_utilisateur = utilisateur, id_voyage = voyage,id_vol = vol)
+                reserve.save()
+                del request.session['id_voyage']
+                return render(request, 'paiement_success.html')
+        else:
+            montant = vol.prix_vol + voyage.prix_voyage
+            form = PaiementForm()
+            return render(request, 'paiement.html', {'form': form, 'vol': vol,'voyage' : voyage,'montant':montant})
