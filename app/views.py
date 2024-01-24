@@ -897,8 +897,8 @@ def ajout_ville(request):
                         destination.write(chunk)
                         
                 image = models.Image.objects.create(path_image=image_filename)
-                models.ImageVille.objects.create(id_images=image, id_ville=ville)
-
+                aa = models.ImageVille.objects.create(id_images=image, id_ville=ville)
+                aa.save()
             message = "Nouvelle ville est ajouté avec succée!"
             return  render(request,'admin_pages/villes_gestion.html',{'villes' : villes,'messageEdit' : message})
             #redirect('admin_page/voyages/')
