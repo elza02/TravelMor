@@ -998,33 +998,26 @@ def notifier(request):
             
             
             notifications = models.Notification.objects.all()
-            # Optionally, you can redirect to a success page or do something else
             return redirect('/admin_page/notifications/')
-            #return render(request, 'admin_pages/notifications_gestion.html', {'notifications': notifications})    
-            #return notifications_gestion(request)
-            #notifications = models.Notification.objects.all()
-            #return redirect(reverse('notifications_gestion') + f'?notifications={notifications}')
     else:
         form = NotificationForm()
         notifications = models.Notification.objects.all()
     return render(request, 'admin_pages/notifications_gestion.html', {'form_notifier': form, 'notifications': notifications})
-def modif_notification(request,id_notification):
+
+def modif_notification(request, id_notification):
     if request.method == 'POST':
         notification = get_object_or_404(models.Notification, id_notification=id_notification)
-        form = NotifModificationForm(request.POST,instance = notification)
+        form = NotifModificationForm(request.POST, instance=notification)
         if form.is_valid():
             form.save()
-            # Optionally, you can redirect to a success page or do something else
             return redirect('/admin_page/notifications/')
-            #return render(request, 'admin_pages/notifications_gestion.html', {'notifications': notifications})    
-            #return notifications_gestion(request)
-            #notifications = models.Notification.objects.all()
-            #return redirect(reverse('notifications_gestion') + f'?notifications={notifications}')
     else:
-        form = NotifModificationForm()
+        notification = get_object_or_404(models.Notification, id_notification=id_notification)
+        form = NotifModificationForm(instance=notification)
         notifications = models.Notification.objects.all()
-        curr_notifications = models.Notification.objects.get(id_notification = id_notification)
-    return render(request, 'admin_pages/notifications_gestion.html', {'form_modif': form, 'notifications': notifications,'curr_notifications' : curr_notifications})
+        curr_notifications = models.Notification.objects.get(id_notification=id_notification)
+
+    return render(request, 'admin_pages/notifications_gestion.html', {'form_modif': form, 'notifications': notifications, 'curr_notifications': curr_notifications})
 
 def supp_notification(request,id_notification):
     notification = models.Notification.objects.get(id_notification = id_notification)

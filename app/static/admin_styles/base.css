@@ -222,6 +222,7 @@ form:not(.logout) input {
     margin-left: 15px;
     padding: 5px 10px;
     outline: none;
+    width: 300px;
 }
 
 form:not(.logout) input[type="file"]::file-selector-button {
@@ -244,6 +245,7 @@ form:not(.logout) select {
     border: 1px solid #77777796;
     border-radius: 10px;
     margin-left: 15px;
+    width: 300px;
     padding: 5px 10px;
     outline: none;
 }

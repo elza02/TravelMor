@@ -31,9 +31,9 @@ class VoyageModificationForm(forms.ModelForm):
             'transport': 'Transport',
         }
     # Utiliser ModelChoiceField avec les noms affichés
-    id_hotel = forms.ModelChoiceField(queryset=models.Hotel.objects.all(), empty_label=None, to_field_name='nom_hotel')
-    id_promotion = forms.ModelChoiceField(queryset=models.Promotion.objects.all(), required=False, empty_label=None, to_field_name='pourcentage')
-    id_categorie = forms.ModelChoiceField(queryset=models.Categorie.objects.all(), empty_label=None, to_field_name='nom_categorie')
+    id_hotel = forms.ModelChoiceField(queryset=models.Hotel.objects.all(), empty_label=None)
+    id_promotion = forms.ModelChoiceField(queryset=models.Promotion.objects.all(), required=False, empty_label=None)
+    id_categorie = forms.ModelChoiceField(queryset=models.Categorie.objects.all(), empty_label=None)
 class VoyageAjoutForm(forms.ModelForm):
     class Meta:
         model = models.Voyage
@@ -52,10 +52,12 @@ class VoyageAjoutForm(forms.ModelForm):
 class HotelModificationForm(forms.ModelForm):
     class Meta:
         model = models.Hotel
-        fields = ['id_hotel','nom_hotel', 'prix_nuit', 'type_chambre', 'type_hotel', 'n_chambreDispo', 'petit_dejeuner','id_ville']
+        fields = ['id_hotel', 'nom_hotel', 'prix_nuit', 'type_chambre', 'type_hotel', 'n_chambreDispo', 'petit_dejeuner', 'id_ville']
 
     # Utiliser ModelChoiceField avec les noms affichés
-    id_ville = forms.ModelChoiceField(queryset=models.Ville.objects.all(), empty_label=None, to_field_name='nom_ville')
+    id_ville = forms.ModelChoiceField(queryset=models.Ville.objects.all(), empty_label=None)
+
+
 class HotelAjoutForm(forms.ModelForm):
     class Meta:
         model = models.Hotel
@@ -103,17 +105,20 @@ class PromotionAjoutForm(forms.ModelForm):
 class VolModificationForm(forms.ModelForm):
     class Meta:
         model = models.Vol
-        fields = ['id_vol','date_d_vol', 'date_f_vol', 'prix_vol']
-        labels = {
-            'id_vol': 'Vol ID',
-            'date_d_vol': 'Date debut vol',
-            'date_f_vol': 'Date Fin vol',
-            'prix_vol': 'Prix du vol',
-        }
+        fields = '__all__'
         widgets = {
             'date_d_vol': forms.DateInput(attrs={'type': 'date'}),
             'date_f_vol': forms.DateInput(attrs={'type': 'date'}),
         }
+
+    labels = {
+        'id_vol': 'Vol ID',
+        'date_d_vol': 'Date debut vol',
+        'date_f_vol': 'Date Fin vol',
+        'prix_vol': 'Prix du vol',
+        # Add labels for other fields if needed
+    }
+
 class VolAjoutForm(forms.ModelForm):
     class Meta:
         model = models.Vol
@@ -227,8 +232,12 @@ class NotifModificationForm(forms.ModelForm):
         model = models.Notification
         fields = ['type', 'content']
         labels = {
-            'content': 'Contenu',  # Changed the label for clarity
+            'content': 'Contenu',
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # You can customize the appearance of the 'type' field here if needed
+        self.fields['type'].widget.attrs.update({'class': 'your-custom-class'})
+        self.fields['content'].widget.attrs.update({'class': 'your-custom-class'})
