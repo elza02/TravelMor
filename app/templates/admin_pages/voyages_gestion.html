@@ -20,7 +20,6 @@
             <button type="submit">Enregistrer</button>
         </form>
 
-
     {% elif form_ajout %}
         <form action="{% url 'ajout_voyage'%}" method="POST">
             {% csrf_token %}
@@ -35,7 +34,7 @@
             <button type="submit">Enregistrer</button>
         </form>
     {% else %}
-        <a class="ajtBtn" href="{% url 'ajout_voyage'%}">ajouter</a>   
+    <a class="ajtBtn" href="{% url 'ajout_voyage'%}">ajouter</a>   
     
 {% endif %}
     <div>

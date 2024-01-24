@@ -64,6 +64,7 @@ class Vol(models.Model):
     prix_vol = models.DecimalField(max_digits=15, decimal_places=2)
     def __str__(self):
         return f"{self.id_vol}"
+    
 class Utilisateur(models.Model):
     id_utilisateur = models.AutoField(primary_key=True)
     nom = models.CharField(max_length=15)

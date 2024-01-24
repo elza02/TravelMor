@@ -730,17 +730,12 @@ def ajout_voyage(request):
             duree_voyage = form.cleaned_data['duree_voyage']
             transport = form.cleaned_data['transport']
             id_hotel = form.cleaned_data['id_hotel']
-            #hotel = models.Hotel.objects.get(id_hotel = id_hotel)
             id_promotion = form.cleaned_data['id_promotion']
             id_categorie = form.cleaned_data['id_categorie']
 
             id_ville = request.POST.get('ville', '0')
             ville = models.Ville.objects.get(id_ville=id_ville)
-            
-            #strin = titre_voyage+" "+str(prix_voyage)+" "+str(duree_voyage)+" "+str(transport)+" "+str(id_hotel)+" "+str(id_promotion)+" "+str(id_categorie)
-            #"return HttpResponse(strin)
             voyage = models.Voyage.objects.create(id_promotion = id_promotion,titre_voyage = titre_voyage,prix_voyage=prix_voyage,duree_voyage=duree_voyage,transport=transport,id_hotel=id_hotel,id_categorie=id_categorie)
-            #voyage.id_promotion.set(id_promotion)
             voyage.save()
             avoir_instance = models.Avoir.objects.create(id_ville=ville, id_voyage=voyage)
 
@@ -790,7 +785,6 @@ def ajout_hotel(request):
         form = HotelAjoutForm(request.POST, request.FILES)  # Include request.FILES for handling file uploads
         if form.is_valid():
             hotel = form.save()
-            id_hotel = hotel.id_hotel
             uploaded_images = request.FILES.getlist('path_image')  # Use getlist to get multiple files
             for uploaded_image in uploaded_images:
                 image_filename = uploaded_image.name
@@ -801,7 +795,7 @@ def ajout_hotel(request):
                         destination.write(chunk)
                         
                 image = models.Image.objects.create(path_image=image_filename)
-                images_hotel = models.ImageHotel.objects.create(id_images=image, id_hotel=hotel)
+                models.ImageHotel.objects.create(id_images=image, id_hotel=hotel)
             
             message = "Nouvelle hôtel ajoutée avec succès!"
             return render(request, 'admin_pages/hotels_gestion.html', {'hotels': hotels, 'messageEdit': message})
@@ -890,7 +884,21 @@ def ajout_ville(request):
     if request.method == 'POST':
         form = VilleAjoutForm(request.POST)
         if form.is_valid():
-            form.save()
+            ville = form.save()
+            uploaded_images = request.FILES.getlist('path_image')
+            print('hiho-----------------------------')
+            for uploaded_image in uploaded_images:
+                image_filename = uploaded_image.name
+                image_path = f'./app/static/assets/cities/{image_filename}'
+                print('image:', image_filename)
+                
+                with open(image_path, 'wb') as destination:
+                    for chunk in uploaded_image.chunks():
+                        destination.write(chunk)
+                        
+                image = models.Image.objects.create(path_image=image_filename)
+                models.ImageVille.objects.create(id_images=image, id_ville=ville)
+
             message = "Nouvelle ville est ajouté avec succée!"
             return  render(request,'admin_pages/villes_gestion.html',{'villes' : villes,'messageEdit' : message})
             #redirect('admin_page/voyages/')
