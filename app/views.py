@@ -1046,7 +1046,7 @@ def supp_notification(request,id_notification):
 
 def paiement(request, id_vol):
     if request.session.get('code_session',None) == None:
-        redirect('/')
+        return registration(request)
     else:    
         utilisateur  = models.Utilisateur.objects.get(id_utilisateur = request.session.get('code_session',None))
         voyage = models.Voyage.objects.get(id_voyage = request.session.get('id_voyage',None))
