@@ -34,8 +34,31 @@
             <button type="submit">Enregistrer</button>
         </form>
     {% else %}
-    <a class="ajtBtn" href="{% url 'ajout_voyage'%}">ajouter</a>   
-    
+    <a class="ajtBtn" href="{% url 'ajout_voyage'%}"><i class="fa-solid fa-plus"></i> Ajouter voyage</a>   
+    <a class="ajtBtn" href="#" onclick="showFormAssociate()"><i class="fa-solid fa-link"></i> Associer un vol a un voyage</a>   
+    <form id="associerForm" method="POST" style="display: none;">
+        {% csrf_token %}
+        <p>
+            <label for="voyage_select">Choisir un voyage :</label>
+            <select name="voyage_select" id="voyage_select">
+                {% for voyage in voyages %}
+                    <option value="{{ voyage.id_voyage }}">{{ voyage.titre_voyage }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <label for="vol_select">Choisir un vol :</label>
+            <select name="vol_select" id="vol_select">
+                {% for vol in vols %}
+                    <option value="{{ vol.id_vol }}">{{ vol.id_vol }}<span style="font-style: italic;">
+                        {{ vol.date_d_vol}}=>{{ vol.date_f_vol}}
+                    </span></option>
+                {% endfor %}
+            </select>
+        </p>
+        <button type="submit" onclick="submitForm()">Enregister</button>
+    </form>
+
 {% endif %}
     <div>
         <table>
@@ -80,4 +103,23 @@
 
     
 </div>
+
+
+<script>
+    function submitForm() {
+        var form = document.getElementById('associerForm');
+        var selectedVoyage = document.getElementById('voyage_select').value;
+        var selectedVol = document.getElementById('vol_select').value;
+        form.action = `{% url 'associer_vol_voyage' id_vol=0 id_voyage=0 %}`.replace('0', selectedVol).replace('0', selectedVoyage);
+        form.submit();
+    }
+    function showFormAssociate() {
+        const form = document.getElementById('associerForm');
+        if(form.style.display== 'none'){
+            form.style.display= '';
+        }else {
+            form.style.display= 'none';
+        }
+    }
+</script>
 {% endblock main %}

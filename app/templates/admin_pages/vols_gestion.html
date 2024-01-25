@@ -17,7 +17,22 @@
     {% if form_modif %}
         <form action="{% url 'modif_vol' vol.id_vol%}" method="POST">
             {% csrf_token %}
-            {{ form_modif.as_p }}
+            <p>
+                <label for="{{ form_modif.id_vol.id_for_label }}">Vol ID :</label>
+                <input type="text" name="id_vol" value="{{ form_modif.id_vol.value }}">
+            </p>
+            <p>
+                <label for="{{ form_modif.date_d_vol.id_for_label }}">Date debut vol :</label>
+                <input type="date" name="{{ form_modif.date_d_vol.name }}" id="{{ form_modif.date_d_vol.id }}" value="{{ form_modif.date_d_vol.value|date:'Y-m-d' }}" />
+            </p>
+            <p>
+                <label for="{{ form_modif.date_f_vol.id_for_label }}">Date fin vol :</label>
+                <input type="date" name="{{ form_modif.date_f_vol.name }}" id="{{ form_modif.date_f_vol.id }}" value="{{ form_modif.date_f_vol.value|date:'Y-m-d' }}" />
+            </p>
+            <p>
+                <label for="{{ form_modif.prix_vol.id_for_label }}">Prix du vol :</label>
+                {{ form_modif.prix_vol }}
+            </p>
             <button type="submit">Enregistrer</button>
         </form>
     

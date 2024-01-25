@@ -16,6 +16,7 @@ class Promotion(models.Model):
     pourcentage = models.DecimalField(max_digits=4, decimal_places=2)
     def __str__(self):
         return f'{self.pourcentage}'
+    
 class Categorie(models.Model):
     id_categorie = models.AutoField(primary_key=True)
     nom_categorie = models.CharField(max_length=50)

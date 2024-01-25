@@ -580,9 +580,10 @@ def voyages_gestion(request):
     if request.session.get('est_admin',None) != None:
         voyages = models.Voyage.objects.all()
         villes = models.Ville.objects.all()
+        vols = models.Vol.objects.all()
         for ville in villes: 
             print(ville)
-        return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages, 'villes' : villes})
+        return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages, 'villes' : villes, 'vols' : vols})
     else:
         return redirect('login')
     
@@ -608,7 +609,7 @@ def dashboard_gestion(request):
         client_nb = models.Utilisateur.objects.filter(est_admin = 0).count()
         nb_voyage = models.Voyage.objects.count()
         Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
-        return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations,'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
+        return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations, 'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
     else:
         return redirect('login')
 
@@ -770,7 +771,15 @@ def ajout_voyage(request):
         form = VoyageAjoutForm()
         return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'form_ajout':form, 'villes' : villes})
         # return redirect('voyages_gestion')
-        
+    
+def associer_vol_voyage(request, id_vol, id_voyage):
+    voyage = get_object_or_404(models.Voyage, id_voyage=id_voyage)
+    vol = get_object_or_404(models.Vol, id_vol=id_vol)
+    inclure = models.inclure.objects.create(id_vol=vol, id_voyage=voyage)
+    inclure.save()
+    return redirect('voyages_gestion')
+
+
 def supp_hotel(request, id_hotel):
     hotel = models.Hotel.objects.get(id_hotel=id_hotel)
     image_hotel_entries = models.ImageHotel.objects.filter(id_hotel=hotel)
@@ -840,7 +849,6 @@ def modif_promotion(request,id_promotion):
             form.save()
             message = "Promotion id: "+str(id_promotion)+" est modifiée!"
             return  render(request,'admin_pages/promotions_gestion.html',{'promotions' : promotions,'messageEdit' : message})
-            #redirect('admin_page/voyages/')
     else:    
         form = PromotionModificationForm(instance = promotion)
         return  render(request,'admin_pages/promotions_gestion.html',{'promotions' : promotions,'promotion' : promotion,'form_modif':form})
@@ -862,22 +870,25 @@ def supp_vol(request,id_vol):
     vol = models.Vol.objects.get(id_vol = id_vol)
     vol.delete()
     vols = models.Vol.objects.all()
-    message_supp = "vols id: "+id_vol+" est supprimée!"
+    message_supp = "vols id: "+str(id_vol)+" est supprimée!"
     return  render(request,'admin_pages/vols_gestion.html',{'vols' : vols,'messageSupp' : message_supp})
 
-def modif_vol(request,id_vol):
+def modif_vol(request, id_vol):
     vol = get_object_or_404(models.Vol, id_vol=id_vol)
     vols = models.Vol.objects.all()
     if request.method == 'POST':
-        form = VolModificationForm(request.POST,instance = vol)
+        form = VolModificationForm(request.POST, instance=vol)
         if form.is_valid():
             form.save()
-            message = "vol id: "+id_vol+" est modifiée!"
-            return  render(request,'admin_pages/vols_gestion.html',{'vols' : vols,'messageEdit' : message})
-            #redirect('admin_page/voyages/')
-    else:    
-        form = VolModificationForm(instance = vol)
-        return  render(request,'admin_pages/vols_gestion.html',{'vols' : vols,'vol' : vol,'form_modif':form})
+            message = "Le vol avec l'ID " + id_vol + " a été modifié avec succès !"
+            return render(request, 'admin_pages/vols_gestion.html', {'vols': vols, 'messageEdit': message})
+        else:
+            message = "Le vol avec l'ID " + id_vol + " n'a pas été modifié avec succès !"
+            return render(request, 'admin_pages/vols_gestion.html', {'vols': vols, 'messageEdit': message})
+    else:
+        form = VolModificationForm(instance=vol)
+    return render(request, 'admin_pages/vols_gestion.html', {'vols': vols, 'vol': vol, 'form_modif': form})
+
 
 def ajout_vol(request):
     vols = models.Vol.objects.all()
@@ -933,18 +944,19 @@ def supp_pays(request,id_pays):
     pays = models.Pays.objects.all()
     message_supp = "pays id: "+str(id_pays)+" est supprimée!"
     return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'messageSupp' : message_supp})
-def modif_pays(request,id_pays):
-    pays = get_object_or_404(models.Pays, id_pays=id_pays)
+
+def modif_pays(request, id_pays):
+    pays_modif = get_object_or_404(models.Pays, id_pays=id_pays)
+    pays = models.Pays.objects.all()
     if request.method == 'POST':
-        form = PaysAjoutForm(request.POST,instance=pays)
+        form = PaysModificationForm(request.POST, instance=pays_modif)
         if form.is_valid():
             form.save()
             message = "Nouvelle pays est ajouté avec succée!"
-            return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'messageEdit' : message})
-            #redirect('admin_page/voyages/')
+            return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays, 'messageEdit' : message})
     else:    
-        form = PaysAjoutForm(instance = pays)
-        return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'form_ajout':form})
+        form = PaysModificationForm(instance = pays_modif)
+        return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays, 'form_ajout':form})
 
 def ajout_pays(request):
     pays = models.Pays.objects.all()
@@ -954,7 +966,6 @@ def ajout_pays(request):
             form.save()
             message = "Nouvelle pays est ajouté avec succée!"
             return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'messageEdit' : message})
-            #redirect('admin_page/voyages/')
     else:    
         form = PaysAjoutForm()
         return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays,'form_ajout':form})
@@ -973,19 +984,19 @@ def supp_utilisateur(request,id_utilisateur):
     utilisateurs = models.Utilisateur.objects.all()
     message_supp = "utilisateur id: "+str(id_utilisateur)+" est supprimée!"
     return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateurs,'utilisateur' : utilisateur,'messageSupp' : message_supp})
+
 def modif_utilisateur(request,id_utilisateur):
     utilisateur = get_object_or_404(models.Utilisateur, id_utilisateur=id_utilisateur)
     utilisateurs = models.Utilisateur.objects.all()
     if request.method == 'POST':
-        form = utilisateurAjoutForm(request.POST,instance=utilisateur)
+        form = utilisateurModificationForm(request.POST, instance=utilisateur)
         if form.is_valid():
             form.save()
             message = "Nouvelle utilisateur est ajouté avec succée!"
-            return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateurs,'utilisateur' : utilisateur,'messageEdit' : message})
-            #redirect('admin_page/voyages/')
+            return  render(request, 'admin_pages/utilisateurs_gestion.html', {'utilisateurs' : utilisateurs, 'utilisateur' : utilisateur, 'messageEdit' : message})
     else:    
-        form = utilisateurAjoutForm(instance = utilisateur)
-        return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateur' : utilisateur,'form_ajout':form})
+        form = utilisateurModificationForm(instance = utilisateur)
+        return  render(request, 'admin_pages/utilisateurs_gestion.html', {'utilisateurs' : utilisateurs, 'form_ajout':form})
 
 def ajout_utilisateur(request):
     utilisateurs = models.Utilisateur.objects.all()
@@ -995,7 +1006,6 @@ def ajout_utilisateur(request):
             form.save()
             message = "Nouvelle utilisateur est ajouté avec succée!"
             return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateurs,'messageEdit' : message})
-            #redirect('admin_page/voyages/')
     else:    
         form = utilisateurAjoutForm()
         return  render(request,'admin_pages/utilisateurs_gestion.html',{'utilisateurs' : utilisateurs,'form_ajout':form})

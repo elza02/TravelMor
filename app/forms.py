@@ -1,15 +1,10 @@
 # myapp/forms.py
 from django import forms
 from . import models
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import AuthenticationForm
-
     
 class SimpleForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput, label='Mot de passe')
-
 
 class RegistrationForm(forms.Form):
     nom = forms.CharField()
@@ -30,10 +25,10 @@ class VoyageModificationForm(forms.ModelForm):
             'duree_voyage': 'Durée Voyage',
             'transport': 'Transport',
         }
-    # Utiliser ModelChoiceField avec les noms affichés
     id_hotel = forms.ModelChoiceField(queryset=models.Hotel.objects.all(), empty_label=None)
     id_promotion = forms.ModelChoiceField(queryset=models.Promotion.objects.all(), required=False, empty_label=None)
     id_categorie = forms.ModelChoiceField(queryset=models.Categorie.objects.all(), empty_label=None)
+
 class VoyageAjoutForm(forms.ModelForm):
     class Meta:
         model = models.Voyage
@@ -44,7 +39,6 @@ class VoyageAjoutForm(forms.ModelForm):
             'duree_voyage': 'Durée Voyage',
             'transport': 'Transport',
         }
-    # Utiliser ModelChoiceField avec les noms affichés
     id_hotel = forms.ModelChoiceField(queryset=models.Hotel.objects.all(), empty_label=None, to_field_name='nom_hotel')
     id_promotion = forms.ModelChoiceField(queryset=models.Promotion.objects.all(), required=False, empty_label=None, to_field_name='pourcentage')
     id_categorie = forms.ModelChoiceField(queryset=models.Categorie.objects.all(), empty_label=None, to_field_name='nom_categorie')
@@ -53,8 +47,6 @@ class HotelModificationForm(forms.ModelForm):
     class Meta:
         model = models.Hotel
         fields = ['id_hotel', 'nom_hotel', 'prix_nuit', 'type_chambre', 'type_hotel', 'n_chambreDispo', 'petit_dejeuner', 'id_ville']
-
-    # Utiliser ModelChoiceField avec les noms affichés
     id_ville = forms.ModelChoiceField(queryset=models.Ville.objects.all(), empty_label=None)
 
 
@@ -62,28 +54,13 @@ class HotelAjoutForm(forms.ModelForm):
     class Meta:
         model = models.Hotel
         fields = ['nom_hotel', 'prix_nuit', 'type_chambre', 'type_hotel', 'n_chambreDispo', 'petit_dejeuner','id_ville']
-
-    # Utiliser ModelChoiceField avec les noms affichés
     id_ville = forms.ModelChoiceField(queryset=models.Ville.objects.all(), empty_label=None, to_field_name='nom_ville')
 
 class PromotionModificationForm(forms.ModelForm):
     class Meta:
         model = models.Promotion
-        fields = ['id_promotion','date_d_promo', 'date_f_promo', 'heure_d_promos', 'heure_f_promos', 'pourcentage']
-        labels = {
-            'id_promotion': 'Promotion ID',
-            'date_d_promo': 'Date debut promotion',
-            'date_f_promo': 'Date Fin promotion',
-            'heure_d_promos': 'Heure Debut promotion',
-            'heure_f_promos': 'Heure Fin promotion',
-            'pourcentage': 'Valeur promotion',
-        }
-        widgets = {
-            'date_d_promo': forms.DateInput(attrs={'type': 'date'}),
-            'date_f_promo': forms.DateInput(attrs={'type': 'date'}),
-            'heure_d_promos': forms.TimeInput(attrs={'type': 'time'}),
-            'heure_f_promos': forms.TimeInput(attrs={'type': 'time'}),
-        }
+        fields = ['id_promotion', 'date_d_promo', 'date_f_promo', 'heure_d_promos', 'heure_f_promos', 'pourcentage']
+
 class PromotionAjoutForm(forms.ModelForm):
     class Meta:
         model = models.Promotion
@@ -95,29 +72,11 @@ class PromotionAjoutForm(forms.ModelForm):
             'heure_f_promos': 'Heure Fin promotion',
             'pourcentage': 'Valeur promotion',
         }
-        widgets = {
-            'date_d_promo': forms.DateInput(attrs={'type': 'date'}),
-            'date_f_promo': forms.DateInput(attrs={'type': 'date'}),
-            'heure_d_promos': forms.TimeInput(attrs={'type': 'time'}),
-            'heure_f_promos': forms.TimeInput(attrs={'type': 'time'}),
-        }
 
 class VolModificationForm(forms.ModelForm):
     class Meta:
         model = models.Vol
         fields = '__all__'
-        widgets = {
-            'date_d_vol': forms.DateInput(attrs={'type': 'date'}),
-            'date_f_vol': forms.DateInput(attrs={'type': 'date'}),
-        }
-
-    labels = {
-        'id_vol': 'Vol ID',
-        'date_d_vol': 'Date debut vol',
-        'date_f_vol': 'Date Fin vol',
-        'prix_vol': 'Prix du vol',
-        # Add labels for other fields if needed
-    }
 
 class VolAjoutForm(forms.ModelForm):
     class Meta:
@@ -138,11 +97,6 @@ class VilleModificationForm(forms.ModelForm):
     class Meta:
         model = models.Ville
         fields = ['id_ville','nom_ville', 'id_pays']
-        # labels = {
-        #     'id_ville': 'Ville ID',
-        #     'nom_ville': 'Nom Ville',
-        #     'id_pays': 'Nom Pays',
-        # }
     id_pays = forms.ModelChoiceField(queryset=models.Pays.objects.all(), empty_label=None, to_field_name='nom_pays')
 
 class VilleAjoutForm(forms.ModelForm):
@@ -179,7 +133,7 @@ class utilisateurAjoutForm(forms.ModelForm):
         labels = {
             'nom': 'Nom',
             'prenom': 'Prenom',
-            'est_admin': 'Status',
+            'est_admin': 'Status(admin ou pas)',
             'email': 'Email',
             'mot_d_passe': 'Mot de passe', 
         }
@@ -192,7 +146,7 @@ class utilisateurModificationForm(forms.ModelForm):
             'id_utilisateur': 'Utilisateur ID',
             'nom': 'Nom',
             'prenom': 'Prenom',
-            'est_admin': 'Status',
+            'est_admin': 'Status(admin ou pas)',
             'email': 'Email',
             'mot_d_passe': 'Mot de passe',           
         }
@@ -203,15 +157,10 @@ class NotificationForm(forms.Form):
         ('alert', 'Alert'),
         ('reminder', 'Reminder'),
     )
-    
-    content = forms.CharField(widget=forms.Textarea, label='Notification Content')
-    notification_type = forms.ChoiceField(choices=type_choices, label='Notification Type')
-    
+    content = forms.CharField(widget=forms.Textarea, label='Sujet de notification')
+    notification_type = forms.ChoiceField(choices=type_choices, label='Type de notification')
     def __init__(self, *args, **kwargs):
         super(NotificationForm, self).__init__(*args, **kwargs)
-        
-        # Dynamically populate users from the Utilisateur table
-        #user_choices = [(f"{user.nom} {user.prenom}") for user in models.Utilisateur.objects.all()]
         user_choices = [(user.id_utilisateur, f"{user.nom} {user.prenom}") for user in models.Utilisateur.objects.all()]
         self.fields['users'] = forms.MultipleChoiceField(
             widget=forms.CheckboxSelectMultiple,
@@ -225,20 +174,15 @@ class NotifModificationForm(forms.ModelForm):
         ('information', 'Information'),
         ('alert', 'Alert'),
     ]
-
     type = forms.ChoiceField(choices=CHOICES, label='Type')
-
     class Meta:
         model = models.Notification
         fields = ['type', 'content']
         labels = {
             'content': 'Contenu',
         }
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        # You can customize the appearance of the 'type' field here if needed
         self.fields['type'].widget.attrs.update({'class': 'your-custom-class'})
         self.fields['content'].widget.attrs.update({'class': 'your-custom-class'})
 
