@@ -529,6 +529,7 @@ def admin_view(request):
         return render(request, 'admin_pages/dashboard.html', {})
     else:
         return redirect('login')
+    
 def pays_gestion(request):
     if request.session.get('est_admin',None) != None:
         pays = models.Pays.objects.all()
@@ -601,17 +602,89 @@ def notification_gestion(request):
     else:
         return redirect('login')
     
+# def dashboard_gestion(request):
+#     if request.session.get('est_admin', None) is not None:
+#         nbr_reservations = models.ReserverVoyage.objects.count()
+#         reservations = models.ReserverVoyage.objects.all()
+#         total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
+#         client_nb = models.Utilisateur.objects.filter(est_admin=0).count()
+#         nb_voyage = models.Voyage.objects.count()
+        
+#         # Calculer la satisfaction avec deux chiffres après la virgule
+#         satisfaction_sum = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum']
+#         satisfaction_count = models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
+#         Satisfaction = satisfaction_sum / satisfaction_count if satisfaction_count > 0 else 0.0
+#         Satisfaction = "{:.2f}".format(Satisfaction)
+
+#         # Formater le revenu avec deux chiffres après la virgule
+#         total_price = "{:.2f}".format(total_price) if total_price is not None else 0.0
+
+#         return render(request, 'admin_pages/dashboard.html', {
+#             'reservations': reservations,
+#             'Satisfaction': Satisfaction,
+#             'nb_voyages': nb_voyage,
+#             'reservations_nbr': nbr_reservations,
+#             'revenue': total_price,
+#             'client_nb': client_nb
+#         })
+#     else:
+#         return redirect('login')
+
+
 def dashboard_gestion(request):
-    if request.session.get('est_admin', None) != None:
+    if request.session.get('est_admin', None) is not None:
         nbr_reservations = models.ReserverVoyage.objects.count()
         reservations = models.ReserverVoyage.objects.all()
         total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
-        client_nb = models.Utilisateur.objects.filter(est_admin = 0).count()
+        client_nb = models.Utilisateur.objects.filter(est_admin=0).count()
         nb_voyage = models.Voyage.objects.count()
-        Satisfaction = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum'] / models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
-        return render(request, 'admin_pages/dashboard.html',{'reservations' : reservations, 'Satisfaction' : Satisfaction,'nb_voyages': nb_voyage, 'reservations_nbr' : nbr_reservations, 'revenue' : total_price,'client_nb' : client_nb})
+        
+        # Calculer la satisfaction avec deux chiffres après la virgule
+        satisfaction_sum = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum']
+        satisfaction_count = models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
+        Satisfaction = satisfaction_sum / satisfaction_count if satisfaction_count > 0 else 0.0
+        Satisfaction = "{:.2f}".format(Satisfaction)
+
+        # Formater le revenu avec deux chiffres après la virgule
+        total_price = "{:.2f}".format(total_price) if total_price is not None else 0.0
+        
+        # Calculer les voyages les plus aimés
+        top_voyages = models.Aimer.objects.values('id_voyage__titre_voyage').annotate(count=Count('id_voyage')).order_by('-count')[:5]
+
+        # Extraire les données pour Chart.js
+        labels = [voyage['id_voyage__titre_voyage'] for voyage in top_voyages]
+        data = [voyage['count'] for voyage in top_voyages]
+
+        return render(request, 'admin_pages/dashboard.html', {
+            'reservations': reservations,
+            'Satisfaction': Satisfaction,
+            'nb_voyages': nb_voyage,
+            'reservations_nbr': nbr_reservations,
+            'revenue': total_price,
+            'client_nb': client_nb,
+            # 'top_voyages': top_voyages,
+            # 'chart_labels': labels,
+            # 'chart_data': data,
+        })
     else:
         return redirect('login')
+    
+def top_voyages_data(request):
+    top_voyages = models.Aimer.objects.values('id_voyage__titre_voyage').annotate(count=Count('id_voyage')).order_by('-count')[:5]
+    data = {
+        'labels': [voyage['id_voyage__titre_voyage'] for voyage in top_voyages],
+        'data': [voyage['count'] for voyage in top_voyages],
+    }
+    return JsonResponse(data)
+    
+def category_distribution(request):
+    categories = models.Categorie.objects.annotate(num_voyages=Count('voyage'))
+    
+    labels = [category.nom_categorie for category in categories]
+    data = [category.num_voyages for category in categories]
+
+    return JsonResponse({'labels': labels, 'data': data})
+
 
 def login(request):
     if request.method == 'POST':
@@ -953,10 +1026,10 @@ def modif_pays(request, id_pays):
         if form.is_valid():
             form.save()
             message = "Nouvelle pays est ajouté avec succée!"
-            return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays, 'messageEdit' : message})
+            return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays, 'pays_modif' : pays_modif, 'messageEdit' : message})
     else:    
         form = PaysModificationForm(instance = pays_modif)
-        return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays, 'form_ajout':form})
+        return  render(request,'admin_pages/pays_gestion.html',{'pays' : pays, 'pays_modif' : pays_modif, 'form_modif':form})
 
 def ajout_pays(request):
     pays = models.Pays.objects.all()

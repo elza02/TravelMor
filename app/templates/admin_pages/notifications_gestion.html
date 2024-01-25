@@ -11,16 +11,16 @@
         <form action="{% url 'modif_notification' curr_notifications.id_notification%}" method="POST">
             {% csrf_token %}
             {{ form_modif.as_p }}
-            <button type="submit">Enregistrer</button>
+            <button type="submit"><i class="fa-solid fa-plus"></i> Enregistrer</button>
         </form>
     {% elif form_notifier %}
         <form action="{% url 'notifier'%}" method="POST">
             {% csrf_token %}
             {{ form_notifier.as_p }}
-            <button type="submit">Enregistrer</button>
+            <button type="submit"><i class="fa-solid fa-plus"></i> Enregistrer</button>
         </form>
     {% else %}
-        <a class="ajtBtn" href="{% url 'notifier'%}">Notifier</a>
+        <a class="ajtBtn" href="{% url 'notifier'%}"><i class="fa-regular fa-bell"></i> Notifier</a>
     {% endif %}
 
     <div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Succès de Paiement</title>
+    <title>Payment Success</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -17,23 +17,48 @@
         .redirect-message {
             font-size: 18px;
         }
+        .countdown {
+            font-size: 24px;
+            color: red;
+            animation: countdownAnimation 5s linear forwards;
+        }
+        @keyframes countdownAnimation {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
 <div class="success-message">
-    <p>Votre paiement a été effectué avec succès !</p>
+    <p>Your payment was successful!</p>
 </div>
 
 <div class="redirect-message">
-    <p>Vous serez redirigé au home dans 3 secondes...</p>
+    <p>You will be redirected to the home page in <span class="countdown">5</span> seconds...</p>
 </div>
 
 <script>
-    setTimeout(function() {
-        // Redirection vers une autre page après 3 secondes
-        window.location.href = '/';
-    }, 3000);
+    let seconds = 5;
+
+    function updateCountdown() {
+        document.querySelector('.countdown').innerText = seconds;
+    }
+
+    function countdown() {
+        updateCountdown();
+        seconds--;
+
+        if (seconds >= 0) {
+            setTimeout(countdown, 1000);
+        } else {
+            // Redirect to another page after countdown
+            window.location.href = '/';
+        }
+    }
+
+    // Initial call to start the countdown
+    countdown();
 </script>
 
 </body>

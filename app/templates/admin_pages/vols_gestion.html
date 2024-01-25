@@ -33,17 +33,17 @@
                 <label for="{{ form_modif.prix_vol.id_for_label }}">Prix du vol :</label>
                 {{ form_modif.prix_vol }}
             </p>
-            <button type="submit">Enregistrer</button>
+            <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
         </form>
     
     {% elif form_ajout %}
     <form action="{% url 'ajout_vol'%}" method="POST">
         {% csrf_token %}
         {{ form_ajout.as_p }}
-        <button type="submit">Enregistrer</button>
+        <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
     </form>
     {% else %}
-        <a class="ajtBtn" href="{% url 'ajout_vol'%}">ajouter</a>
+        <a class="ajtBtn" href="{% url 'ajout_vol'%}"><i class="fa-solid fa-plus"></i> Ajouter vol</a>
     {% endif %}
 
     <div>

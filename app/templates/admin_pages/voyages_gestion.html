@@ -17,7 +17,7 @@
         <form action="{% url 'modif_voyage' voyage.id_voyage%}" method="POST">
             {% csrf_token %}
             {{ form_modif.as_p }}
-            <button type="submit">Enregistrer</button>
+            <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
         </form>
 
     {% elif form_ajout %}
@@ -31,7 +31,7 @@
                     {% endfor %}
                 </select>
             </label>
-            <button type="submit">Enregistrer</button>
+            <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
         </form>
     {% else %}
     <a class="ajtBtn" href="{% url 'ajout_voyage'%}"><i class="fa-solid fa-plus"></i> Ajouter voyage</a>   

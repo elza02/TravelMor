@@ -40,6 +40,9 @@ urlpatterns = [
     path('admin_page/hotels/', views.hotels_gestion, name="hotels_gestion"),
     path('admin_page/voyages/', views.voyages_gestion, name="voyages_gestion"),
     path('admin_page/dashboard/', views.dashboard_gestion, name="dashboard_gestion"),
+     path('top_voyages_data/', views.top_voyages_data, name='top_voyages_data'),
+     path('category_distribution/', views.category_distribution, name='category_distribution'),
+     
     path('admin_page/utilisateurs/', views.utilisateurs_gestion, name="utilisateurs_gestion"),
     path('admin_page/notification/', views.notification_gestion, name="notification_gestion"),
     

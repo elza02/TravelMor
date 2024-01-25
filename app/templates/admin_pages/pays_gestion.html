@@ -15,20 +15,20 @@
     {% endif %}
 
     {% if form_modif %}
-        <form action="{% url 'modif_pays' pays.id_pays%}" method="POST">
+        <form action="{% url 'modif_pays' pays_modif.id_pays%}" method="POST">
             {% csrf_token %}
             {{ form_modif.as_p }}
-            <button type="submit">Enregistrer</button>
+            <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
         </form>
     
     {% elif form_ajout %}
     <form action="{% url 'ajout_pays'%}" method="POST">
         {% csrf_token %}
         {{ form_ajout.as_p }}
-        <button type="submit">Enregistrer</button>
+        <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
     </form>
     {% else %}
-        <a class="ajtBtn" href="{% url 'ajout_pays'%}">ajouter</a>
+        <a class="ajtBtn" href="{% url 'ajout_pays'%}"><i class="fa-solid fa-plus"></i> Ajouter pays</a>
     {% endif %}
 
     <div>

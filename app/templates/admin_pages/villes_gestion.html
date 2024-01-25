@@ -18,7 +18,7 @@
         <form action="{% url 'modif_ville' ville.id_ville%}" method="POST">
             {% csrf_token %}
             {{ form_modif.as_p }}
-            <button type="submit">Enregistrer</button>
+            <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
         </form>
     
     {% elif form_ajout %}
@@ -28,10 +28,10 @@
         <label for="path_image" class="custom-file-label">Selectionner des images:
             <input type="file" name="path_image" multiple accept="image/*" />
         </label>
-        <button type="submit">Enregistrer</button>
+        <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
     </form>
     {% else %}
-        <a class="ajtBtn" href="{% url 'ajout_ville'%}">ajouter</a>
+        <a class="ajtBtn" href="{% url 'ajout_ville'%}"><i class="fa-solid fa-plus"></i> Ajouter ville</a>
     {% endif %}
 
     <div>

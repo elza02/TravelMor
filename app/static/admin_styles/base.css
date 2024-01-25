@@ -287,3 +287,12 @@ form:not(.logout) button[type="submit"]:hover {
     background-color: #000;
     color: #fff;
 }
+
+.charts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin: 100px auto;
+}

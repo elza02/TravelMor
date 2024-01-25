@@ -9,33 +9,49 @@
 {% endblock main_menu_link_class1 %}
 {% block main %}
 <div class="container">
-    <h1>admin dashboard</h1>
+    {% comment %} <h1>Admin dashboard</h1> {% endcomment %}
     <div class="cards">
         <div class="card">
             <h2>Total de reservations</h2>
             <p>{{reservations_nbr}}</p>
+            <span>{{reservations_nbr}}</span>
         </div>
 
         <div class="card">
             <h2>Revenue</h2>
             <p>${{revenue}}</p>
+            <span>${{revenue}}</span>
         </div>
 
         <div class="card">
             <h2>Nombre de clients</h2>
             <p>{{client_nb}} </p>
+            <span>{{client_nb}} </span>
         </div>
         <div class="card">
             <h2>Nombre de Voyages</h2>
             <p>{{nb_voyages}} </p>
+            <span>{{nb_voyages}} </span>
         </div>
         <div class="card">
             <h2>Satisfaction des clients</h2>
             <p>{{Satisfaction}}/5 </p>
+            <span>{{Satisfaction}}/5 </span>
         </div>
     </div>
     <div>
-    <h1> Liste des reservations</h1>
+
+    <div class="charts">
+        <div style="height: fit-content; width: 450px;">
+            <canvas id="myPieChart"></canvas>
+        </div>
+        
+        <div style="height: fit-content; width: 450px;">
+            <canvas id="categoryDistributionChart"></canvas>
+        </div>
+    </div>
+
+    <h1 style="margin-block: 20px; text-align: center;"> Liste des reservations</h1>
     <table>
         <thead>
             <tr>
@@ -49,8 +65,8 @@
             {%for reservation in reservations%}
             <tr>
                 <td>{{reservation.id_voyage.id_voyage}} </td> 
-                <td>{{reservation.id_utilisateur_1.id_utilisateur}} </td> 
-                <td>{{reservation.id_utilisateur_1.nom}} {{reservation.id_utilisateur_1.prenom}} </td> 
+                <td>{{reservation.id_utilisateur.id_utilisateur}} </td> 
+                <td>{{reservation.id_utilisateur.nom}} {{reservation.id_utilisateur.prenom}} </td> 
                 <td>{{reservation.id_voyage.duree_voyage}} jours </td> 
             </tr>
 
@@ -59,4 +75,70 @@
     </table>
 </div>
 
+
+
 {% endblock main %}
+
+{% block js_block %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/top_voyages_data/')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.labels);
+                console.log(data.data);
+                var ctx = document.getElementById('myPieChart').getContext('2d');
+                var myPieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.data,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(153, 102, 255, 0.7)',
+                            ],
+                        }],
+                    },
+                });
+            });
+    });
+    
+</script>
+
+<!-- Include this script in your HTML file -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/category_distribution/')
+            .then(response => response.json())
+            .then(data => {
+                var ctx = document.getElementById('categoryDistributionChart').getContext('2d');
+                var myBarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Number of Voyages',
+                            data: data.data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        }],
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+    });
+</script>
+
+
+{% endblock js_block %}

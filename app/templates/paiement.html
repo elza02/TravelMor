@@ -1,33 +1,30 @@
+{% extends "app/templates/base.html" %}
+{% load static %}
+{% block css_block %}
+<link rel="stylesheet" href="{% static "css/registration.css" %}">
+{% endblock css_block %}
+{% block title %}Formulaire de Paiement{% endblock title %}
+{% block main %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire de Paiement</title>
-</head>
-<body>
+<form class="modal-content animate" method="post" action="{% url 'paiement' vol.id_vol %}" style="margin-block: 200px;">
+    <div class="head">
+        <h2>Formulaire de Paiement</h2>
+        <p>Montant Total: {{ montant }}</p>
+        <p>Details du Voyage:</p>
+        <ul>
+            <li>Titre du Voyage: {{ voyage.titre_voyage }}</li>
+            <li>ID du Vol: {{ vol.id_vol}}</li>
+            <li>Transport: {% if voyage.transport %} True {% else %} False{% endif %}</li>
+            <li>Petit Dejeuner: {% if voyage.id_hotel.petit_dejeuner %} True {% else %} False{% endif %}</li>
 
-<h2>Formulaire de Paiement</h2>
-
-
-<p>Montant Total: {{ montant }}</p>
-
-
-<p>Details du Voyage:</p>
-<ul>
-    <li>Titre du Voyage: {{ voyage.titre_voyage }}</li>
-    <li>ID du Vol: {{ vol.id_vol}}</li>
-    <li>Transport: {% if voyage.transport %} True {% else %} False{% endif %}</li>
-    <li>Petit Dejeuner: {% if voyage.id_hotel.petit_dejeuner %} True {% else %} False{% endif %}</li>
-
-</ul>
-
-<form method="post" action="{% url 'paiement' vol.id_vol %}">
+        </ul>
+    </div>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Payer</button>
+    <div class="container-login">
+        {{ form.as_p }}
+        <button type="submit">Payer</button>
+    </div>
 </form>
+{% endblock main %}
 
-</body>
-</html>
+
