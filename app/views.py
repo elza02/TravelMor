@@ -694,11 +694,13 @@ def profile_view(request, user_id):
                 user.path_img_profile = uploaded_image
 
             user.save()
-            return render(request, 'user/profile.html', {'utilisateur': user})
+            reservations = models.ReserverVoyage.objects.filter(user=user)
+            return render(request, 'user/profile.html', {'utilisateur': user, 'reservations' : reservations})
         else:
             utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
+            reservations = models.ReserverVoyage.objects.filter(id_utilisateur=utilisateur)
             notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
-            return render(request, 'user/profile.html', {'utilisateur': utilisateur, 'notifications' : notifications})
+            return render(request, 'user/profile.html', {'utilisateur': utilisateur, 'notifications' : notifications, 'reservations' : reservations})
     else:
         return redirect('login')
 

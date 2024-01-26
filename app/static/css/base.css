@@ -147,6 +147,9 @@ header .inner1 .search {
     list-style: none;
     width: 100%;
     padding: 20px;
+}
+
+.user-notifications ul li:not(:last-child) {
     border-bottom: 1px solid var(--second-underline);
 }
 
@@ -184,7 +187,7 @@ header .inner1 .log img {
     border-radius: 50%;
 }
 
-header .inner1 .menu {
+header .inner1 .menu, header .inner1 .reservations {
     border-radius: var(--main-border-radius);
     box-shadow: var(--main-shadow);
     width: fit-content;
@@ -199,7 +202,7 @@ header .inner1 .log:hover {
     box-shadow: var(--secondary-shadow-hovered);
 }
 
-header .inner1 .menu ul {
+header .inner1 .menu ul, header .inner1 .reservations ul {
     width: 200px;
     display: flex;
     flex-direction: column;
@@ -208,7 +211,7 @@ header .inner1 .menu ul {
     height: fit-content;
 }
 
-header .inner1 .menu ul li {
+header .inner1 .menu ul li, header .inner1 .reservations ul li {
     width: 100%;
     list-style: none;
     display: inline-block;
@@ -233,7 +236,48 @@ header .inner1 .menu ul li:nth-child(2) {
     border-bottom: 1px solid rgb(148, 147, 147);
     width: 100%;
     padding-bottom: 14px;
-    /* margin-bottom: 2px; */
+}
+
+header .inner1 .reservations {
+    width: 300px;
+    right: 100px;
+    top: 75px;
+    display: none;
+}
+
+header #hideReservations  {
+    width: fit-content;
+    position: relative;
+    left: 90%;
+    top: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 50%;
+    display: inline-block;
+    text-align: center;
+    width: 25px;
+    height: 20px;
+    transition: all .3s ease;
+}
+
+header #hideReservations:hover  {
+    background-color: #c2bdbd;
+}
+
+header .inner1 .reservations ul {
+    width: 100%;
+    padding: 20px 10px;
+}
+
+header .inner1 .reservations ul li span {
+    font-weight: bold;
+    font-style: italic;
+    color: var(--main-gray);
+}
+
+header .inner1 .reservations ul li:not(:last-child) {
+    border-bottom: 1px solid var(--second-underline);
+    padding-bottom: 10px;
 }
 
 header .inner2 {

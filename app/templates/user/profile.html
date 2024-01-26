@@ -21,6 +21,25 @@
         {% endif %}
     </ul>
 </div>
+<div class="reservations">
+  <div style="position: absolute; width: 100%;">
+    <span id="hideReservations">X</span>
+  </div>
+  <ul>
+  {% for reservation in reservations  %}
+    <li>
+      <div>
+        <span>Voyage: </span>{{ reservation.id_voyage.titre_voyage}}
+      </div>
+      <div>
+        <span>Prix: </span>{{ reservation.id_voyage.prix_voyage}}
+      </div>
+      <div><span>Date debut vol: </span>{{ reservation.id_vol.date_d_vol}}</div>
+      <div><span>Date fin vol: </span>{{ reservation.id_vol.date_f_vol}}</div>
+    </li>
+  {% endfor %}  
+  </ul>
+</div>
 {% endblock bell_notif %}
 {% block menu_per_log_case %} 
 {% if request.session.code_session %}
@@ -35,6 +54,7 @@
         <a href="{% url 'profile' request.session.code_session %}">Profile</a>
       </li>
       <li><a href="{% url 'logout' %}">Deconnexion</a></li>
+      <li><a href="#" id="reservationsButton">Mes reservations</a></li>
       <li><a href="#">Cartes cadeaux</a></li>
       <li><a href="#">Centre d'aide</a></li>
     </ul>
@@ -115,6 +135,15 @@
         formSubmit.style.display = 'block';
         formh2.style.display = 'none';
     }
+</script>
+<script>
+  document.getElementById('reservationsButton').addEventListener('click', function() {
+    LogMenu.style.display = '';
+    document.querySelector('.reservations').style.display = 'block';
+  });
+  document.getElementById('hideReservations').addEventListener('click', function() {
+    document.querySelector('.reservations').style.display = 'none';
+  })
 </script>
 {% endblock js_block %}
 
