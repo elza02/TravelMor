@@ -103,17 +103,13 @@
         <span>{{ avoir.id_voyage.prix_voyage }} Dhs par personne</span></span>
       <span class="rating">Durée:
         <span>{{ avoir.id_voyage.duree_voyage }} jours / {{avoir.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
-      <form
-        method="get"
-        action="/special_turqie_details/{{ avoir.id_voyage.id_voyage }}"
-      >
-        <button type="submit">J'en profite</button>
-      </form>
+      
+        <button id="boutonVol">J'en profite</button>
     </div>
   </div>
   {% endfor %}
 
-  <h4 style="text-align: center">Les vols de ce voyage :</h4>
+  <h4 style="text-align: center" id="vol">Les vols de ce voyage :</h4>
   <div class="vols-box">
     {% for vol in inclure %}
     <div class="vol">
@@ -138,6 +134,15 @@
       </div>
     </div>
     {% endfor%}
+    {% if inclure.count == 0 %}
+    <div class="vol">
+        <div class="body">
+            <p class="descrp">
+            Aucun vol pour le moment.
+            </p>
+        </div>
+    </div>
+    {% endif %}
   </div>
 
   <h4 style="text-align: center">Les commentaire sur ce voyage :</h4>
@@ -192,6 +197,13 @@
 <script defer src="{% static 'js/detailed_card.js' %}"></script>
 
 <script defer>
+    document.getElementById('boutonVol').addEventListener('click', function() {
+      // Déplacement vers la section avec l'id "vol"
+      var sectionVol = document.getElementById('vol');
+
+      // Défilement en douceur vers la section cible
+      sectionVol.scrollIntoView({ behavior: 'smooth' });
+  });
     let selectedStars = 0;
     document.addEventListener('DOMContentLoaded', function () {
 

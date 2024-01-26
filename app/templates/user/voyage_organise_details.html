@@ -116,6 +116,15 @@
         <a href= "{%url 'paiement'  vol.id_vol.id_vol%}" > Choisir</a>
     </div>
     {% endfor%}
+    {% if inclure.count == 0 %}
+    <div class="vol">
+        <div class="body">
+            <p class="descrp">
+            Aucun vol pour le moment.
+            </p>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 <h4 style="text-align: center;">Avis des clients sur ce voyage : </h4>
