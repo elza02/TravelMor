@@ -2,7 +2,7 @@
 {% block url_8_class %}
 active
 {% endblock url_8_class %} 
-{% block title %} hotel details - {{ hotel }} {% endblock title %} {% block block_css %}
+{% block title %} hotel details - {{ hotel.first.id_hotel }} {% endblock title %} {% block block_css %}
 <link rel="stylesheet" href="{% static 'css/detailed_card.css' %}" />
 <style>
   .container {
@@ -13,10 +13,25 @@ active
       font-size: 1.5rem;
   }
 </style>
-{% block bell_notif %}
-<i class="fa-solid fa-bell"><span></span></i>
-{% endblock bell_notif %}
 {% endblock block_css %}
+{% block bell_notif %}
+<i class="fa-solid fa-bell">{% if notifications.count > 0 %}<span></span>{% endif %}</i>
+<div class="user-notifications" id="user-notifications">
+    <ul>
+        {% for notification in notifications %}
+            <li class="{{ notification.id_notification.type }}">
+                <span class="content">{{ notification.id_notification.content}}</span>
+                <span class="temp">{{ notification.id_notification.date_notif }} {{ notification.id_notification.heure_d_notif}}</span>
+            </li>
+        {% endfor %}
+        {% if notifications.count == 0 %}
+            <li>
+                <span class="content">0 notifications</span>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock bell_notif %}
 {% block menu_per_log_case %}
     {% if request.session.code_session %}
         <div class="log" id="LogMenuButton">

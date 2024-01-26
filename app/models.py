@@ -28,12 +28,14 @@ class Pays(models.Model):
     nom_pays = models.CharField(max_length=50)
     def __str__(self):
         return f"{self.nom_pays}"
+    
 class Ville(models.Model):
     id_ville = models.AutoField(primary_key=True)
     nom_ville = models.CharField(max_length=50)
     id_pays = models.ForeignKey(Pays, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.nom_ville}"
+    
 class Hotel(models.Model):
     id_hotel = models.AutoField(primary_key=True)
     prix_nuit = models.DecimalField(max_digits=15, decimal_places=2)
@@ -91,6 +93,7 @@ class Voyage(models.Model):
     id_categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
     def __str__(self):
         return self.titre_voyage
+    
 class Commentaire(models.Model):
     id_comment = models.AutoField(primary_key=True)
     text_comment = models.CharField(max_length=150)

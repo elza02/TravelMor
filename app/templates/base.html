@@ -230,7 +230,8 @@
                 <span><i class="fa-solid fa-magnifying-glass"></i></span>
             </div>
             {% if request.session.code_session %}
-                {% block bell_notif %}{% endblock bell_notif %}
+                {% block bell_notif %}
+                {% endblock bell_notif %}
             {% endif %}
             {% block menu_per_log_case %}{% endblock menu_per_log_case %}
         </div>
@@ -364,13 +365,11 @@
     <script src="{% static 'js/base.js' %}" type="text/javascript"></script>
     <script>
 
-        // Open the full screen search box
         function openSearch() {
             document.getElementById("myOverlay").style.display = "block";
             document.querySelector("header .search").style.display = "none";
         }
         
-        // When the user clicks anywhere outside of the modal, close it
         window.onclick = function(event) {
             if (event.target == document.getElementById("myOverlay")) {
                 document.getElementById("myOverlay").style.display = "none";
@@ -378,7 +377,6 @@
             }
         }
 
-        /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
         var prevScrollpos = window.pageYOffset;
         window.onscroll = function() {
         var currentScrollPos = window.pageYOffset;
@@ -422,11 +420,9 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    // Update the UI based on the like status for the specific voyage
                     data = JSON.parse(data);
                     const isLiked = data["existe"];
                     hearts.forEach(heart => {
-                        console.log(heart.id);
                         if(heart.id == voyageId){
                             heart.src = isLiked ? '{% static "assets/like-full.svg" %}' : '{% static "assets/like-empty.svg" %}';
                             inputLike.value = isLiked ? 'true' : 'false';
@@ -437,13 +433,10 @@
     
         document.addEventListener('DOMContentLoaded', function () {
             if(!id_user){
-            //console.log('you are not connected');
-            //document.getElementById('login-form-modal').style.display='block';
             }else {
             hearts.forEach(heart => {
                 const voyageId = heart.id;
                 fetchLikes(voyageId);
-                console.log(heart.id);
             });    
             }
         });
@@ -454,7 +447,7 @@
                 document.getElementById('login-form-modal').style.display='block';
             }else {
                 const voyageId = heart.id;
-                console.log('toggle: ' + inputLike.value);
+                //console.log('toggle: ' + inputLike.value);
                 const isLiked = inputLike.value === 'true';
         
                 const formData = { id_user: parseInt(id_user), id_voyage: voyageId };

@@ -292,7 +292,8 @@ def voyage_organise(request):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/voyage_organise.html', {'query' : query, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/voyage_organise.html', {'query' : query, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/voyage_organise.html', {'query' : query})
 
 def voyage_organise_details(request, id_voyage):
@@ -304,7 +305,8 @@ def voyage_organise_details(request, id_voyage):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/voyage_organise_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 def paysRelatedToVoyage(ville):
@@ -312,16 +314,17 @@ def paysRelatedToVoyage(ville):
 
 def promotions(request):
     query = models.Avoir.objects.select_related(
-        'id_voyage__id_hotel__id_ville__id_pays',  # Inclure le pays lié à l'hôtel
+        'id_voyage__id_hotel__id_ville__id_pays',  
         'id_voyage__id_promotion',
         'id_voyage__id_categorie',
-        'id_ville__id_pays'  # Inclure le pays lié à la ville
+        'id_ville__id_pays'  
         ).all()
     user_id_session = request.session.get('code_session')
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/promotions.html', {'query' : query, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/promotions.html', {'query' : query, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/promotions.html', {'query' : query})
 
 def promotions_details(request, id_voyage):  
@@ -333,7 +336,8 @@ def promotions_details(request, id_voyage):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/promotions_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/promotions_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment, 'notifications' : notifications})
     return render(request, 'user/promotions_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 def hotels(request):
@@ -341,7 +345,6 @@ def hotels(request):
         pays = models.Pays.objects.get(nom_pays='Maroc')
     except models.Pays.DoesNotExist:
         pays = None
-
     if pays:
         villes = models.Ville.objects.filter(id_pays=pays).values_list('id_ville', flat=True)
         query = models.Hotel.objects.filter(id_ville__in=villes)
@@ -351,7 +354,8 @@ def hotels(request):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/hotels.html', {'query': query, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/hotels.html', {'query': query, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/hotels.html', {'query': query})
 
 def hotels_details(request, id_hotel):
@@ -360,7 +364,8 @@ def hotels_details(request, id_hotel):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/hotels_details.html', {'hotel' : hotel, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/hotels_details.html', {'hotel' : hotel, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/hotels_details.html', {'hotel' : hotel})
 
 def special_turqie(request):
@@ -369,7 +374,8 @@ def special_turqie(request):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/special_turqie.html', {'query' :query, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/special_turqie.html', {'query' :query, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/special_turqie.html', {'query' :query})
 
 def special_turqie_details(request, id_voyage):
@@ -381,7 +387,8 @@ def special_turqie_details(request, id_voyage):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/special_turqie_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/special_turqie_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment, 'notifications' : notifications})
     return render(request, 'user/special_turqie_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 def special_asie(request):
@@ -390,7 +397,8 @@ def special_asie(request):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/special_asie.html', {'query' :query, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/special_asie.html', {'query' :query, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/special_asie.html', {'query' :query})
 
 def special_asie_details(request, id_voyage):
@@ -402,7 +410,8 @@ def special_asie_details(request, id_voyage):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/special_asie_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/special_asie_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance, 'notifications' : notifications})
     return render(request, 'user/special_asie_details.html', {'id_voyage' : id_voyage, 'comments' : comments, 'avoir' : avoir, 'inclure' : inclure_instance})
 
 def special_omra(request):
@@ -411,7 +420,8 @@ def special_omra(request):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/special_omra.html', {'query' :query, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/special_omra.html', {'query' :query, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/special_omra.html', {'query' :query})
 
 def special_omra_details(request, id_voyage):
@@ -423,9 +433,9 @@ def special_omra_details(request, id_voyage):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/special_omra_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/special_omra_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment, 'notifications' : notifications})
     return render(request, 'user/special_omra_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
-
 
 def special_haj(request):
     query = models.Avoir.objects.all()
@@ -433,7 +443,8 @@ def special_haj(request):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/special_haj.html', {'query' :query, 'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/special_haj.html', {'query' :query, 'utilisateur': utilisateur, 'notifications' : notifications})
     return render(request, 'user/special_haj.html', {'query' :query})
 
 def special_haj_details(request, id_voyage):
@@ -445,7 +456,8 @@ def special_haj_details(request, id_voyage):
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
-            return render(request, 'user/special_haj_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/special_haj_details.html', {'id_voyage' : id_voyage, 'utilisateur': utilisateur, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment, 'notifications' : notifications})
     return render(request, 'user/special_haj_details.html', {'id_voyage' : id_voyage, 'avoir' : avoir, 'inclure' : inclure_instance, 'comments' : comment})
 
 # comments and like handling
@@ -461,15 +473,9 @@ class CustomJSONEncoder(JSONEncoder):
 
 def retrieve_comments(request):
     try:
-        # Retrieve the JSON data from the request
         data = json.loads(request.body.decode('utf-8'))
-        print("Received data:", data)  # Add this line for debugging
-        
-        # Get the Voyage and Utilisateur objects from the database or raise Http404
         voyage = get_object_or_404(models.Voyage, id_voyage=int(data.get('id_voyage', 0)))
         utilisateur = get_object_or_404(models.Utilisateur, id_utilisateur=int(data.get('id_user', 0)))
-
-        # Create a Commentaire object and save it to the database
         comment = models.Commentaire(
             text_comment=data.get('comment', ''),
             date_redaction=timezone.now().date(),
@@ -479,33 +485,25 @@ def retrieve_comments(request):
             id_voyage=voyage
         )
         comment.save()
-        # Convert the Commentaire object to a dictionary
         new_comment = model_to_dict(comment)
         utilisateur = model_to_dict(utilisateur)
-        # Encode the data as a JSON string
         response_data = json.dumps({'success': True, 'new_comment': new_comment, 'utilisateur' : utilisateur}, cls=CustomJSONEncoder)
-        # Return a JsonResponse with the data
         return JsonResponse(response_data, safe=False)
     except json.JSONDecodeError as e:
         print("JSON Decode Error:", e)
-        # Return a JsonResponse with an error message
         return JsonResponse(json.dumps({'success': False, 'error': str(e)}), safe=False)
 
 def retrieve_likes(request):
     data = json.loads(request.body.decode('utf-8'))
-    print("Received data:", data)  # Add this line for debugging
-    
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
     if models.Aimer.objects.filter(id_utilisateur=utilisateur, id_voyage=voyage):
         existe = True
     else : existe = False
-    print("Received data:", data)  # Add this line for debugging
     return JsonResponse(json.dumps({'fetch': True, 'id_user' : data.get('id_user', 0), 'id_voyage' : data.get('id_voyage', 0), 'existe' : existe  }), safe=False)
 
 def delete_like(request):
     data = json.loads(request.body.decode('utf-8'))
-    print("Received del data:", data)  # Add this line for debugging
     
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
@@ -515,8 +513,6 @@ def delete_like(request):
 
 def add_like(request):
     data = json.loads(request.body.decode('utf-8'))
-    print("Received add data:", data)  # Add this line for debugging
-    
     utilisateur = models.Utilisateur.objects.get(id_utilisateur=data.get('id_user', 0))
     voyage = models.Voyage.objects.get(id_voyage=data.get('id_voyage', 0))
     aimer = models.Aimer(id_utilisateur=utilisateur, id_voyage=voyage)
@@ -564,12 +560,14 @@ def vols_gestion(request):
         return render(request, 'admin_pages/vols_gestion.html',{'vols' : vols})
     else:
         return redirect('login')
+    
 def promotions_gestion(request):
     if request.session.get('est_admin',None) != None:
         promotions = models.Promotion.objects.all()
         return render(request, 'admin_pages/promotions_gestion.html',{'promotions' : promotions})
     else:
         return redirect('login')
+    
 def hotels_gestion(request):
     if request.session.get('est_admin',None) != None:
         hotels = models.Hotel.objects.all()
@@ -601,35 +599,6 @@ def notification_gestion(request):
         return render(request, 'admin_pages/notification_gestion.html',{'notification' : notification})
     else:
         return redirect('login')
-    
-# def dashboard_gestion(request):
-#     if request.session.get('est_admin', None) is not None:
-#         nbr_reservations = models.ReserverVoyage.objects.count()
-#         reservations = models.ReserverVoyage.objects.all()
-#         total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
-#         client_nb = models.Utilisateur.objects.filter(est_admin=0).count()
-#         nb_voyage = models.Voyage.objects.count()
-        
-#         # Calculer la satisfaction avec deux chiffres après la virgule
-#         satisfaction_sum = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum']
-#         satisfaction_count = models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
-#         Satisfaction = satisfaction_sum / satisfaction_count if satisfaction_count > 0 else 0.0
-#         Satisfaction = "{:.2f}".format(Satisfaction)
-
-#         # Formater le revenu avec deux chiffres après la virgule
-#         total_price = "{:.2f}".format(total_price) if total_price is not None else 0.0
-
-#         return render(request, 'admin_pages/dashboard.html', {
-#             'reservations': reservations,
-#             'Satisfaction': Satisfaction,
-#             'nb_voyages': nb_voyage,
-#             'reservations_nbr': nbr_reservations,
-#             'revenue': total_price,
-#             'client_nb': client_nb
-#         })
-#     else:
-#         return redirect('login')
-
 
 def dashboard_gestion(request):
     if request.session.get('est_admin', None) is not None:
@@ -638,20 +607,12 @@ def dashboard_gestion(request):
         total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
         client_nb = models.Utilisateur.objects.filter(est_admin=0).count()
         nb_voyage = models.Voyage.objects.count()
-        
-        # Calculer la satisfaction avec deux chiffres après la virgule
         satisfaction_sum = models.Commentaire.objects.aggregate(Sum('evaluation'))['evaluation__sum']
         satisfaction_count = models.Commentaire.objects.aggregate(Count('evaluation'))['evaluation__count']
         Satisfaction = satisfaction_sum / satisfaction_count if satisfaction_count > 0 else 0.0
         Satisfaction = "{:.2f}".format(Satisfaction)
-
-        # Formater le revenu avec deux chiffres après la virgule
         total_price = "{:.2f}".format(total_price) if total_price is not None else 0.0
-        
-        # Calculer les voyages les plus aimés
         top_voyages = models.Aimer.objects.values('id_voyage__titre_voyage').annotate(count=Count('id_voyage')).order_by('-count')[:5]
-
-        # Extraire les données pour Chart.js
         labels = [voyage['id_voyage__titre_voyage'] for voyage in top_voyages]
         data = [voyage['count'] for voyage in top_voyages]
 
@@ -662,9 +623,6 @@ def dashboard_gestion(request):
             'reservations_nbr': nbr_reservations,
             'revenue': total_price,
             'client_nb': client_nb,
-            # 'top_voyages': top_voyages,
-            # 'chart_labels': labels,
-            # 'chart_data': data,
         })
     else:
         return redirect('login')
@@ -679,10 +637,8 @@ def top_voyages_data(request):
     
 def category_distribution(request):
     categories = models.Categorie.objects.annotate(num_voyages=Count('voyage'))
-    
     labels = [category.nom_categorie for category in categories]
     data = [category.num_voyages for category in categories]
-
     return JsonResponse({'labels': labels, 'data': data})
 
 
@@ -700,7 +656,6 @@ def login(request):
         if user is not None:
             if not user.est_admin:
                 request.session['code_session'] = user.id_utilisateur
-                # return redirect('profile', user.id_utilisateur)
                 return redirect('/')
             else:
                 request.session['est_admin'] = user.id_utilisateur
@@ -739,11 +694,11 @@ def profile_view(request, user_id):
                 user.path_img_profile = uploaded_image
 
             user.save()
-
             return render(request, 'user/profile.html', {'utilisateur': user})
         else:
             utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
-            return render(request, 'user/profile.html', {'utilisateur': utilisateur})
+            notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/profile.html', {'utilisateur': utilisateur, 'notifications' : notifications})
     else:
         return redirect('login')
 

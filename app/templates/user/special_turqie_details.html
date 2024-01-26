@@ -11,7 +11,22 @@
 </style>
 {% endblock block_css %}
 {% block bell_notif %}
-<i class="fa-solid fa-bell"><span></span></i>
+<i class="fa-solid fa-bell">{% if notifications.count > 0 %}<span></span>{% endif %}</i>
+<div class="user-notifications" id="user-notifications">
+    <ul>
+        {% for notification in notifications %}
+            <li class="{{ notification.id_notification.type }}">
+                <span class="content">{{ notification.id_notification.content}}</span>
+                <span class="temp">{{ notification.id_notification.date_notif }} {{ notification.id_notification.heure_d_notif}}</span>
+            </li>
+        {% endfor %}
+        {% if notifications.count == 0 %}
+            <li>
+                <span class="content">0 notifications</span>
+            </li>
+        {% endif %}
+    </ul>
+</div>
 {% endblock bell_notif %}
 {% block menu_per_log_case %}
     {% if request.session.code_session %}

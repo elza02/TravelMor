@@ -130,6 +130,26 @@ header .inner1 .search {
     background-color: red;
 }
 
+.user-notifications {
+    border-radius: var(--main-border-radius);
+    box-shadow: var(--main-shadow);
+    width: fit-content;
+    max-width: 200px;
+    position: absolute;
+    right: 100px;
+    top: 65px;
+    background-color: #fff;
+    z-index: 999;
+    display: none;
+}
+
+.user-notifications ul li {
+    list-style: none;
+    width: 100%;
+    padding: 20px;
+    border-bottom: 1px solid var(--second-underline);
+}
+
 header .inner1 .log {
     position: relative;
     border: 1px solid var(--second-underline);
@@ -442,6 +462,50 @@ body .container {
     flex-wrap: wrap;
     gap: 30px;
     background-color: var(--second-gray);
+}
+#filterForm {
+    width: 100%;
+    text-align: center;
+    padding-block: 10px;
+    /* border: 1px solid red; */
+    background-color: var(--main-gray-bg);
+    border-radius: var(--main-border-radius);
+    font-weight: bold;
+}
+
+#filterForm label {
+    display: inline-block;
+    font-weight: bold;
+    color: #000;
+    letter-spacing: 1px;
+}
+
+#filterForm input {
+    margin-inline: 20px;
+    width: 50%;
+    border: 1px solid #77777796;
+    border-radius: 10px;
+    margin-left: 15px;
+    padding: 5px 10px;
+    outline: none;
+    width: 300px;
+}
+
+#filterForm button {
+    border: none;
+    border-radius: 10px;
+    background-color: var(--main--green);
+    color: #000;
+    outline: none;
+    padding: 8px 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all .3s;
+}
+
+#filterForm button:hover {
+    background-color: #000;
+    color: #fff;
 }
 
 .inner-container {

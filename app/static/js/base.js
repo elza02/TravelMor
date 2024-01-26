@@ -12,3 +12,17 @@ button.addEventListener('click', function () {
     console.log(menu)
 })
 
+buttonNotif = document.querySelector('i.fa-bell');
+
+buttonNotif.addEventListener('click', function () {
+        console.log('cliked')
+        const user_notif = document.querySelector('.user-notifications');
+        if(user_notif.style.display == 'block') {
+            user_notif.style.display = 'none';
+        }else {
+            user_notif.style.display = 'block'
+        }
+})
+
+
+

@@ -6,7 +6,22 @@
 <link rel="stylesheet" href="{% static 'css/card.css' %}">
 {% endblock block_css %}
 {% block bell_notif %}
-<i class="fa-solid fa-bell"><span></span></i>
+<i class="fa-solid fa-bell">{% if notifications.count > 0 %}<span></span>{% endif %}</i>
+<div class="user-notifications" id="user-notifications">
+    <ul>
+        {% for notification in notifications %}
+            <li class="{{ notification.id_notification.type }}">
+                <span class="content">{{ notification.id_notification.content}}</span>
+                <span class="temp">{{ notification.id_notification.date_notif }} {{ notification.id_notification.heure_d_notif}}</span>
+            </li>
+        {% endfor %}
+        {% if notifications.count == 0 %}
+            <li>
+                <span class="content">0 notifications</span>
+            </li>
+        {% endif %}
+    </ul>
+</div>
 {% endblock bell_notif %}
 {% block menu_per_log_case %}
     {% if request.session.code_session %}
@@ -40,9 +55,14 @@
 {% block main %}
 
 <section class="second">
+    <form id="filterForm">
+        <label for="locationFilter">Filtrer par localisation:</label>
+        <input type="text" id="locationFilter" name="locationFilter" placeholder="Entrer une localisation">
+        <button type="button" id="filterFormId">Filtrer</button>
+    </form>
     {% for avoir_instance in query %}
         {% if avoir_instance.id_voyage.id_categorie.nom_categorie == "voyage_organise"%} 
-    <div class="mini-card-voyage">
+    <div class="mini-card-voyage filterable">
         <div class="image">
             <img src="{% static "assets/cities/"%}{{ avoir_instance.id_ville.imageville_set.first.id_images.path_image }}" alt="">
             <span class="reaction">
@@ -58,7 +78,7 @@
         <div class="body">
             <div class="title-localisation">
                 <span class="title">{{ avoir_instance.id_voyage.titre_voyage }}</span>
-                <span class="localisation"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
+                <span class="localisation filterable"><i class="fa-solid fa-location-dot"></i>{{ avoir_instance.id_ville.id_pays.nom_pays }}, {{ avoir_instance.id_ville.nom_ville }}</span>
             </div>
             <div class="price"><img src="{% static 'assets/background-pricing.png' %}" alt="background-pricing"><span>{{ avoir_instance.id_voyage.prix_voyage }} Dhs</span></div>
             <span class="nom-hotel">Nom hotel: <span>{{ avoir_instance.id_voyage.id_hotel.nom_hotel }}</span></span>
@@ -73,4 +93,5 @@
 </section>
 {% endblock main %}
 {% block js_block %}
+<script src="{% static "js/formFilter.js" %}" type='text/javascript'></script>
 {% endblock js_block %}
