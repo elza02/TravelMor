@@ -20,19 +20,19 @@
             {% comment %} {{ form_modif.as_p }} {% endcomment %}
 
             <p>
-                <label for="date_d_promo">Date debut promotion :</label>
+                <label for="{{ form_modif.date_d_promo.id_for_label }}">Date debut promotion :</label>
                 <input type="date" name="date_d_promo" id="date_d_promo" value="{{ form_modif.date_d_promo.value|date:'Y-m-d' }}" />
             </p>
             <p>
-                <label for="heure_d_promos">Heure debut promotion</label>
+                <label for="{{ form_modif.heure_d_promos.id_for_label }}">Heure debut promotion</label>
                 <input type="time" name="heure_d_promos" id="heure_d_promos" value="{{ form_modif.heure_d_promos.value|time:'H:i:s' }}" />
             </p>
             <p>
-                <label for="date_f_promo">Date fin promotion :</label>
+                <label for="{{ form_modif.date_f_promo.id_for_label }}">Date fin promotion :</label>
                 <input type="date" name="date_f_promo" id="date_f_promo" value="{{ form_modif.date_f_promo.value|date:'Y-m-d' }}" />
             </p>
             <p>
-                <label for="heure_f_promos">Heure fin de promotion</label>
+                <label for="{{ form_modif.heure_f_promos.id_for_label }}">Heure fin de promotion</label>
                 <input type="time" name="heure_f_promos" id="heure_f_promos" value="{{ form_modif.heure_f_promos.value|time:'H:i:s' }}" />
             </p>
             <p>

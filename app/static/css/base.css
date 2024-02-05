@@ -187,7 +187,8 @@ header .inner1 .log img {
     border-radius: 50%;
 }
 
-header .inner1 .menu, header .inner1 .reservations {
+header .inner1 .menu,
+header .inner1 .reservations {
     border-radius: var(--main-border-radius);
     box-shadow: var(--main-shadow);
     width: fit-content;
@@ -202,7 +203,8 @@ header .inner1 .log:hover {
     box-shadow: var(--secondary-shadow-hovered);
 }
 
-header .inner1 .menu ul, header .inner1 .reservations ul {
+header .inner1 .menu ul,
+header .inner1 .reservations ul {
     width: 200px;
     display: flex;
     flex-direction: column;
@@ -211,7 +213,8 @@ header .inner1 .menu ul, header .inner1 .reservations ul {
     height: fit-content;
 }
 
-header .inner1 .menu ul li, header .inner1 .reservations ul li {
+header .inner1 .menu ul li,
+header .inner1 .reservations ul li {
     width: 100%;
     list-style: none;
     display: inline-block;
@@ -245,7 +248,7 @@ header .inner1 .reservations {
     display: none;
 }
 
-header #hideReservations  {
+header #hideReservations {
     width: fit-content;
     position: relative;
     left: 90%;
@@ -260,7 +263,7 @@ header #hideReservations  {
     transition: all .3s ease;
 }
 
-header #hideReservations:hover  {
+header #hideReservations:hover {
     background-color: #c2bdbd;
 }
 
@@ -507,6 +510,7 @@ body .container {
     gap: 30px;
     background-color: var(--second-gray);
 }
+
 #filterForm {
     width: 100%;
     text-align: center;

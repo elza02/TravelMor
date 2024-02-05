@@ -72,6 +72,12 @@ class PromotionAjoutForm(forms.ModelForm):
             'heure_f_promos': 'Heure Fin promotion',
             'pourcentage': 'Valeur promotion',
         }
+        widgets = {
+            'date_d_promo': forms.DateInput(attrs={'type': 'date'}),
+            'date_f_promo': forms.DateInput(attrs={'type': 'date'}),
+            'heure_d_promos': forms.DateInput(attrs={'type': 'time'}),
+            'heure_f_promos': forms.DateInput(attrs={'type': 'time'}),
+        }
 
 class VolModificationForm(forms.ModelForm):
     class Meta:
