@@ -361,6 +361,9 @@ def hotels(request):
 def hotels_details(request, id_hotel):
     hotel = models.Hotel.objects.filter(id_hotel=id_hotel)
     user_id_session = request.session.get('code_session')
+    if request.session.get('id_hotel',None) != None:
+        del request.session['id_hotel']
+    request.session['id_hotel'] = id_hotel
     if user_id_session:
         utilisateur = models.Utilisateur.objects.filter(id_utilisateur=user_id_session).first()
         if utilisateur:
@@ -596,6 +599,16 @@ def supp_reservation_voyage(request, id_reservation):
 
     return redirect('dashboard_gestion')
 
+def supp_reservation_hotel(request, id_reservation):
+    try:
+        reservation_hotel = models.reserver_hotel.objects.get(id=id_reservation)
+        reservation_hotel.delete()
+        messages.success(request, f'La reservation du hotel avec id: {id_reservation} a été annulé avec succès !')
+    except models.hotel.DoesNotExist:
+        messages.error(request, f'La reservation du hotel avec l\'identifiant {id_reservation} n\'existe pas.')
+
+    return redirect('dashboard_gestion')
+
 def utilisateurs_gestion(request):
     if request.session.get('est_admin',None) != None:
         utilisateur = models.Utilisateur.objects.all()
@@ -613,7 +626,8 @@ def notification_gestion(request):
 def dashboard_gestion(request):
     if request.session.get('est_admin', None) is not None:
         nbr_reservations = models.ReserverVoyage.objects.count()
-        reservations = models.ReserverVoyage.objects.all()
+        reservations_voyage = models.ReserverVoyage.objects.all()
+        reservations_hotel = models.reserver_hotel.objects.all()
         total_price = models.ReserverVoyage.objects.aggregate(Sum('id_voyage__prix_voyage'))['id_voyage__prix_voyage__sum']
         client_nb = models.Utilisateur.objects.filter(est_admin=0).count()
         nb_voyage = models.Voyage.objects.count()
@@ -627,7 +641,8 @@ def dashboard_gestion(request):
         data = [voyage['count'] for voyage in top_voyages]
 
         return render(request, 'admin_pages/dashboard.html', {
-            'reservations': reservations,
+            'reservations_voyage': reservations_voyage,
+            'reservations_hotel': reservations_hotel,
             'Satisfaction': Satisfaction,
             'nb_voyages': nb_voyage,
             'reservations_nbr': nbr_reservations,
@@ -772,12 +787,13 @@ def supp_voyage(request, id_voyage):
 def modif_voyage(request,id_voyage):
     voyage = get_object_or_404(models.Voyage, id_voyage=id_voyage)
     voyages = models.Voyage.objects.all()
+    vols = models.Vol.objects.all()
     if request.method == 'POST':
         form = VoyageModificationForm(request.POST,instance = voyage)
         if form.is_valid():
             form.save()
             message = "Voyage id: "+str(id_voyage)+" est modifiée!"
-            return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'messageEdit' : message})
+            return  render(request,'admin_pages/voyages_gestion.html',{'voyages' : voyages,'vols' : vols, 'messageEdit' : message})
             #redirect('admin_page/voyages/')
     else:    
         
@@ -1114,3 +1130,21 @@ def paiement(request, id_vol):
             montant = vol.prix_vol + voyage.prix_voyage
             form = PaiementForm()
             return render(request, 'paiement.html', {'form': form, 'vol': vol,'voyage' : voyage,'montant':montant})
+        
+def paiement_hotel(request, id_hotel):
+    if request.session.get('code_session',None) == None:
+        return registration(request)
+    else:    
+        utilisateur  = models.Utilisateur.objects.get(id_utilisateur = request.session.get('code_session',None))
+        hotel = models.Hotel.objects.get(id_hotel = request.session.get('id_hotel',None))
+        if request.method == 'POST':
+            form = PaiementForm(request.POST)
+            if form.is_valid():
+                reserve = models.reserver_hotel.objects.create(id_utilisateur = utilisateur, id_hotel = hotel)
+                reserve.save()
+                del request.session['id_hotel']
+                return render(request, 'paiement_success.html')
+        else:
+            montant = hotel.prix_nuit
+            form = PaiementForm()
+            return render(request, 'paiement_hotel.html', {'form': form, 'hotel' : hotel,'montant':montant})

@@ -118,6 +118,11 @@ header .inner1 .search {
     cursor: pointer;
     position: absolute;
     right: 20%;
+    transition: .2s scale ease-in-out;
+}
+
+.inner1 .fa-bell:hover {
+    scale: 1.2;
 }
 
 .inner1 .fa-bell span {
@@ -137,10 +142,10 @@ header .inner1 .search {
     max-width: 200px;
     position: absolute;
     right: 100px;
-    top: 65px;
+    top: -200px;
     background-color: #fff;
     z-index: 999;
-    display: none;
+    transition: all .3s;
 }
 
 .user-notifications ul li {
@@ -167,6 +172,7 @@ header .inner1 .log {
     cursor: pointer;
     color: rgb(152, 148, 148);
     transition: all .2s ease;
+    
 }
 
 header .inner1 .log:hover {

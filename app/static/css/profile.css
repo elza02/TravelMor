@@ -1,3 +1,11 @@
+body {
+  background-color: var(--second-gray);
+}
+
+:root {
+  --second-gray: #f4f5f7;
+}
+
 header .inner2 {
   display: none;
 }
@@ -7,6 +15,9 @@ header .inner2 {
   max-width: 800px;
   margin: 130px auto 50px;
   text-align: center;
+  box-shadow: 0px 0px 62px -4px rgba(195, 195, 195, 1);
+  -webkit-box-shadow: 0px 0px 62px -4px rgba(195, 195, 195, 1);
+  -moz-box-shadow: 0px 0px 62px -4px rgba(195, 195, 195, 1);
 }
 
 .profile-container h1 {
@@ -21,8 +32,8 @@ header .inner2 {
 }
 
 .profile-card {
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  /* border: 1px solid #ccc; */
+  /* border-radius: 10px; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   background-color: #fff;

@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <h1 style="margin-block: 20px; text-align: center;"> Liste des reservations</h1>
+    <h1 style="margin-block: 20px; text-align: center;"> Liste des reservations voyage</h1>
     <table>
         <thead>
             <tr>
@@ -65,7 +65,7 @@
             </tr>
         </thead>
         <tbody>
-            {%for reservation in reservations%}
+            {%for reservation in reservations_voyage%}
             <tr>
                 <td>{{reservation.id_voyage.id_voyage}} </td> 
                 <td>{{reservation.id_utilisateur.id_utilisateur}} </td> 
@@ -75,6 +75,36 @@
                 <td>{{reservation.id_vol}}</td> 
                 <td class="actions">
                     <a href="{% url 'supp_reservation_voyage' reservation.id%}"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>Supprimer</a>
+                </td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+    <h1 style="margin-block: 20px; text-align: center;"> Liste des reservations hotel</h1>
+    <table>
+        <thead>
+            <tr>
+                <th> Hotel ID </th>
+                <th> Client ID </th>
+                <th> Client nom </th>
+                <th> Nom du hotel </th>
+                <th> Prix nuit </th>
+                <th> Type chambre </th>
+                <th> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for reservation in reservations_hotel%}
+            <tr>
+                <td>{{reservation.id_hotel.id_hotel}} </td> 
+                <td>{{reservation.id_utilisateur.id_utilisateur}} </td> 
+                <td>{{reservation.id_utilisateur.nom}} {{reservation.id_utilisateur.prenom}} </td> 
+                <td>{{reservation.id_hotel.nom_hotel}} </td> 
+                <td>{{reservation.id_hotel.prix_nuit}} </td> 
+                <td>{{reservation.id_hotel.type_chambre}} </td> 
+                <td class="actions">
+                    <a href="{% url 'supp_reservation_hotel' reservation.id%}"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>Supprimer</a>
                 </td>
             </tr>
 

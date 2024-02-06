@@ -14,14 +14,24 @@ button.addEventListener('click', function () {
 
 buttonNotif = document.querySelector('i.fa-bell');
 
+// buttonNotif.addEventListener('click', function () {
+//         console.log('cliked')
+//         const user_notif = document.querySelector('.user-notifications');
+//         if(user_notif.style.display == 'block') {
+//             user_notif.style.display = 'none';
+//         }else {
+//             user_notif.style.display = 'block'
+//         }
+// })
+
 buttonNotif.addEventListener('click', function () {
-        console.log('cliked')
-        const user_notif = document.querySelector('.user-notifications');
-        if(user_notif.style.display == 'block') {
-            user_notif.style.display = 'none';
-        }else {
-            user_notif.style.display = 'block'
-        }
+    // console.log('cliked')
+    const user_notif = document.querySelector('.user-notifications');
+    if(user_notif.style.top == '-200px') {
+        user_notif.style.top = '65px';
+    }else {
+        user_notif.style.top = '-200px'
+    }
 })
 
 

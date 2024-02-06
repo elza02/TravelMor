@@ -114,6 +114,10 @@ class ReserverVoyage(models.Model):
     id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
     id_vol = models.ForeignKey(Vol, on_delete=models.CASCADE, null = True)
+    
+class reserver_hotel(models.Model):
+    id_utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE)
+    id_hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
 
 class Avoir(models.Model):
     id_voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)

@@ -4,6 +4,20 @@
 {% block block_css %}
 <link rel="stylesheet" href="{% static "css/profile.css" %}">
 <link rel="stylesheet" href="{% static "css/card.css" %}">
+<style>
+.mini-card-voyage {
+    width: 400px;
+    height: 250px;
+    border-radius: var(--main-border-radius);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 62px -4px rgba(195, 195, 195, 1);
+    -webkit-box-shadow: 0px 0px 62px -4px rgba(195, 195, 195, 1);
+    -moz-box-shadow: 0px 0px 62px -4px rgba(195, 195, 195, 1);
+    overflow: hidden;
+    transition: box-shadow .5s ease;
+}
+</style>
 {% endblock block_css %} 
 {% block bell_notif %}
 <i class="fa-solid fa-bell">{% if notifications.count > 0 %}<span></span>{% endif %}</i>
@@ -135,22 +149,9 @@
   </form>
   {% for fav_voyage in favorite_voyages %}
       <div class="mini-card-voyage filterable">
-          <div class="image">
-              <img src="{% static "assets/cities/"%}{{ fav_voyage.id_voyage.id_ville.imageville_set.first.id_images.path_image }}" alt="">
-                  <span class="reaction">
-                      <img class="heart" src="{% static "assets/like-empty.svg" %}" data-voyage="{{ fav_voyage.id_voyage.id_voyage }}" id="{{ fav_voyage.id_voyage.id_voyage }}" onclick="toggleLike(this)">
-                      <form>
-                          {% csrf_token %}
-                          <input type="hidden" name="id_user" value=1>
-                          <input type="hidden" name="id_voyage" value={{ fav_voyage.id_voyage.id_voyage }}>
-                          <input type="hidden" name="inputLike" value="#">
-                      </form>
-                  </span>
-          </div>
           <div class="body">
               <div class="title-localisation">
                   <span class="title">{{ fav_voyage.id_voyage.titre_voyage }}</span>
-                  <span class="localisation filterable"><i class="fa-solid fa-location-dot"></i>{{ fav_voyage.id_voyage.ville_set }}, {{ fav_voyage.id_ville.nom_ville }}</span>
               </div>
               <span class="price"><img src="{% static 'assets/background-pricing.png' %}" alt="background-pricing">Prix: <span>{{ fav_voyage.id_voyage.prix_voyage }} Dhs</span></span>
               <span class="nom-hotel">Nom hotel: <span>{{ fav_voyage.id_voyage.id_hotel.nom_hotel }}</span></span>

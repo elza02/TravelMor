@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de Paiement</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: fit-content;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards; 
+        }
+
+        .head {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .head h2 {
+            color: #333;
+        }
+
+        .head p {
+            margin: 5px 0;
+            color: #555;
+            text-align: start;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+            margin: 10px 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+            color: #777;
+        }
+
+        form {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        form label {
+            display: inline-block;
+            width: 300px;
+            font-weight: bold;
+            color: #777;
+            text-align: start;
+        }
+        
+        form input {
+            border: 1px solid #77777796;
+            border-radius: 2px;
+            margin-left: 15px;
+            padding: 5px 10px;
+            outline: none;
+            width: 300px;
+        }
+        
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: .3s all ease;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<form class="modal-content animate" method="post" action="{% url 'paiement_hotel' hotel.id_hotel %}">
+    <div class="head">
+        <h2>Formulaire de Paiement</h2>
+        <p>Les informations sur l'Hotel:</p>
+        <ul>
+            <li>Nom d'Hotel: {{ hotel.id_hotel.titre_hotel }}</li>
+            <li>Petit Dejeuner: {% if hotel.id_hotel.petit_dejeuner %} True {% else %} False {% endif %}</li>
+            <li>Wifi: {% if hotel.id_hotel.wifi %} True {% else %} False {% endif %}</li>
+        </ul>
+        <p>Montant Total: <span style="font-weight: bold;">{{ montant }}</span></p>
+    </div>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Payer</button>
+</form>
+
+</body>
+<script>
+function formatCardNumber(input) {
+    var cardNumber = input.value.replace(/\D/g, '');
+    
+    cardNumber = cardNumber.replace(/(.{4})/g, '$1 ').trim();
+
+    input.value = cardNumber.slice(0, 19);
+}
+
+function formatExpirationDate(input) {
+    var expirationDate = input.value.replace(/\D/g, '');
+
+    expirationDate = expirationDate.replace(/(.{2})/g, '$1/').trim();
+
+    input.value = expirationDate.slice(0, 5);
+}
+</script>
+
+</html>
