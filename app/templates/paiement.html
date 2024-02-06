@@ -121,4 +121,22 @@
 </form>
 
 </body>
+<script>
+function formatCardNumber(input) {
+    var cardNumber = input.value.replace(/\D/g, '');
+    
+    cardNumber = cardNumber.replace(/(.{4})/g, '$1 ').trim();
+
+    input.value = cardNumber.slice(0, 19);
+}
+
+function formatExpirationDate(input) {
+    var expirationDate = input.value.replace(/\D/g, '');
+
+    expirationDate = expirationDate.replace(/(.{2})/g, '$1/').trim();
+
+    input.value = expirationDate.slice(0, 5);
+}
+</script>
+
 </html>

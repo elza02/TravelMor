@@ -2,7 +2,7 @@
 .mini-card-hotel,
 .mini-card-voyage {
     width: 400px;
-    height: 450px;
+    height: 460px;
     border-radius: var(--main-border-radius);
     display: flex;
     flex-direction: column;
@@ -102,6 +102,11 @@
     color: var(--main-gray);
 }
 
+.mini-card-hotel .body .title-localisation .localisation i,
+.mini-card-voyage .body .title-localisation .localisation i {
+    margin-right: 5px;
+}
+
 .mini-card-hotel .body .price,
 .mini-card-voyage .body .price {
     position: relative;
@@ -131,15 +136,16 @@
     outline: none;
     padding: 10px 15px;
     border-radius: var(--main-border-radius);
-    font-weight: 600;
+    font-weight: bolder;
     background-color: var(--main--green);
     cursor: pointer;
-    transition: all .3s ease;
+    transition: transform .3s ease, opacity .3s ease, box-shadow .3s ease;
 }
 
 .mini-card-hotel .body form button i,
 .mini-card-voyage .body form button i {
     transition: .3s all ease;
+    vertical-align: middle;
 }
 
 .mini-card-hotel .body form button:hover i,

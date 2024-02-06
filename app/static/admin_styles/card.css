@@ -1,12 +1,12 @@
 .cards {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
     padding-inline: 30px;
 }
-
 
 .cards .card {
     position: relative;
@@ -31,7 +31,7 @@
 
 .cards .card:hover span {
     scale: 1.1;
-    opacity: .3;
+    opacity: .6;
 }
 
 .cards .card span {
@@ -39,7 +39,7 @@
     font-size: 90px;
     width: 100%;
     overflow: hidden;
-    opacity: .1;
+    opacity: .3;
     top: 0;
     left: 0;
 }
@@ -57,19 +57,19 @@
 
 .cards .card:nth-child(3) {
     background: rgb(131, 58, 180);
-    background: linear-gradient(90deg, #7dd0d1 0%, #8fd7d8 100%)
+    background: linear-gradient(90deg, #7dd0d1 0%, #73f4f7 100%)
 }
 
 
 .cards .card:nth-child(4) {
     background: rgb(180, 58, 128);
-    background: linear-gradient(90deg, #f9d67f 0%, #fbda86 100%);
+    background: linear-gradient(90deg, #f9d67f 0%, #ffe6a7 100%);
 }
 
 
 .cards .card:nth-child(5) {
     background: rgb(175, 180, 58);
-    background: linear-gradient(90deg, #6ebbef 0%, #a2d5f6 100%);
+    background: linear-gradient(90deg, #6ebbef 0%, #b1defb 100%);
 }
 
 

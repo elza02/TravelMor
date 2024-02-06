@@ -46,14 +46,14 @@ class VoyageAjoutForm(forms.ModelForm):
 class HotelModificationForm(forms.ModelForm):
     class Meta:
         model = models.Hotel
-        fields = ['id_hotel', 'nom_hotel', 'prix_nuit', 'type_chambre', 'type_hotel', 'n_chambreDispo', 'petit_dejeuner', 'id_ville']
+        fields = ['id_hotel', 'nom_hotel', 'prix_nuit', 'type_chambre', 'type_hotel', 'n_chambreDispo', 'petit_dejeuner', 'wifi', 'id_ville']
     id_ville = forms.ModelChoiceField(queryset=models.Ville.objects.all(), empty_label=None)
 
 
 class HotelAjoutForm(forms.ModelForm):
     class Meta:
         model = models.Hotel
-        fields = ['nom_hotel', 'prix_nuit', 'type_chambre', 'type_hotel', 'n_chambreDispo', 'petit_dejeuner','id_ville']
+        fields = ['nom_hotel', 'prix_nuit', 'type_chambre', 'type_hotel', 'n_chambreDispo', 'petit_dejeuner', 'wifi','id_ville']
     id_ville = forms.ModelChoiceField(queryset=models.Ville.objects.all(), empty_label=None, to_field_name='nom_ville')
 
 class PromotionModificationForm(forms.ModelForm):
@@ -193,7 +193,8 @@ class NotifModificationForm(forms.ModelForm):
         self.fields['content'].widget.attrs.update({'class': 'your-custom-class'})
 
 class PaiementForm(forms.Form):
-    nom_carte = forms.CharField(label='Nom sur la carte', required=True)
-    numero_carte = forms.CharField(label='Numéro de carte', required=True)
-    date_expiration = forms.CharField(label='Date d\'expiration (MM/YY)', required=True)
-    code_securite = forms.CharField(label='Code de sécurité', required=True)
+    nom_carte = forms.CharField(label='Nom sur la carte', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    numero_carte = forms.CharField(label='Numéro de carte', required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'maxlength': '19', 'placeholder' : '1234 4567 7890 1234', 'oninput': 'formatCardNumber(this)'}))
+    date_expiration = forms.CharField(label='Date d\'expiration (MM/YY)', required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'maxlength': '5', 'placeholder' : 'MM/YY', 'oninput': 'formatExpirationDate(this)'}))
+    code_securite = forms.CharField(label='Code de sécurité', required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'maxlength': '3', 'placeholder' : '123'}))
+

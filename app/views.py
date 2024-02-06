@@ -585,7 +585,17 @@ def voyages_gestion(request):
         return render(request, 'admin_pages/voyages_gestion.html',{'voyages' : voyages, 'villes' : villes, 'vols' : vols})
     else:
         return redirect('login')
-    
+
+def supp_reservation_voyage(request, id_reservation):
+    try:
+        reservation_voyage = models.ReserverVoyage.objects.get(id=id_reservation)
+        reservation_voyage.delete()
+        messages.success(request, f'La reservation du voyage avec id: {id_reservation} a été annulé avec succès !')
+    except models.Voyage.DoesNotExist:
+        messages.error(request, f'La reservation du voyage avec l\'identifiant {id_reservation} n\'existe pas.')
+
+    return redirect('dashboard_gestion')
+
 def utilisateurs_gestion(request):
     if request.session.get('est_admin',None) != None:
         utilisateur = models.Utilisateur.objects.all()
@@ -694,13 +704,16 @@ def profile_view(request, user_id):
                 user.path_img_profile = uploaded_image
 
             user.save()
-            reservations = models.ReserverVoyage.objects.filter(user=user)
-            return render(request, 'user/profile.html', {'utilisateur': user, 'reservations' : reservations})
+            reservations = models.ReserverVoyage.objects.filter(id_utilisateur=user)
+            notifications = models.Recevoir.objects.filter(id_utilisateur=user)
+            favorite_voyages = models.Aimer.objects.filter(id_utilisateur=user)
+            return render(request, 'user/profile.html', {'utilisateur': user, 'reservations' : reservations, 'notifications' : notifications, 'favorite_voyages' : favorite_voyages})
         else:
             utilisateur = models.Utilisateur.objects.get(id_utilisateur=user_id)
             reservations = models.ReserverVoyage.objects.filter(id_utilisateur=utilisateur)
             notifications = models.Recevoir.objects.filter(id_utilisateur=utilisateur)
-            return render(request, 'user/profile.html', {'utilisateur': utilisateur, 'notifications' : notifications, 'reservations' : reservations})
+            favorite_voyages = models.Aimer.objects.filter(id_utilisateur=utilisateur)
+            return render(request, 'user/profile.html', {'utilisateur': utilisateur, 'notifications' : notifications, 'reservations' : reservations, 'favorite_voyages' : favorite_voyages})
     else:
         return redirect('login')
 
@@ -753,7 +766,7 @@ def supp_voyage(request, id_voyage):
     except models.Voyage.DoesNotExist:
         messages.error(request, f'Le voyage avec l\'identifiant {id_voyage} n\'existe pas.')
 
-    return redirect('voyages_gestion') #hna redirect hssn ms nchofo ki dowzo les msgs
+    return redirect('voyages_gestion')
 
 
 def modif_voyage(request,id_voyage):
@@ -861,7 +874,6 @@ def ajout_hotel(request):
     else:
         form = HotelAjoutForm()
         return render(request, 'admin_pages/hotels_gestion.html', {'hotels': hotels, 'form_ajout': form})
-
 
 def supp_promotion(request,id_promotion):
     promotion = models.Promotion.objects.get(id_promotion = id_promotion)
@@ -1094,10 +1106,6 @@ def paiement(request, id_vol):
         if request.method == 'POST':
             form = PaiementForm(request.POST)
             if form.is_valid():
-                # number = form.cleaned_data['numero_carte']
-                # exp_month= int(form.cleaned_data['date_expiration'].split('/')[0])
-                # exp_year= int(form.cleaned_data['date_expiration'].split('/')[1])
-                # cvc= form.cleaned_data['code_securite']
                 reserve = models.ReserverVoyage.objects.create(id_utilisateur = utilisateur, id_voyage = voyage,id_vol = vol)
                 reserve.save()
                 del request.session['id_voyage']

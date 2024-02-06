@@ -58,7 +58,10 @@
                 <th> Voyage ID </th>
                 <th> Client ID </th>
                 <th> Client nom </th>
-                <th> Duree de voyage </th>
+                <th> Titre du voyage </th>
+                <th> Duree de voyage (jours) </th>
+                <th> Vol </th>
+                <th> Action </th>
             </tr>
         </thead>
         <tbody>
@@ -67,7 +70,12 @@
                 <td>{{reservation.id_voyage.id_voyage}} </td> 
                 <td>{{reservation.id_utilisateur.id_utilisateur}} </td> 
                 <td>{{reservation.id_utilisateur.nom}} {{reservation.id_utilisateur.prenom}} </td> 
-                <td>{{reservation.id_voyage.duree_voyage}} jours </td> 
+                <td>{{reservation.id_voyage.titre_voyage}} </td> 
+                <td>{{reservation.id_voyage.duree_voyage}} </td> 
+                <td>{{reservation.id_vol}}</td> 
+                <td class="actions">
+                    <a href="{% url 'supp_reservation_voyage' reservation.id%}"><i class="fa-solid fa-trash" style="margin-right: 5px;"></i>Supprimer</a>
+                </td>
             </tr>
 
             {% endfor %}
@@ -123,7 +131,7 @@
                     data: {
                         labels: data.labels,
                         datasets: [{
-                            label: 'Number of Voyages',
+                            label: 'Nombre de voyages',
                             data: data.data,
                             backgroundColor: 'rgba(75, 192, 192, 0.7)',
                         }],
@@ -131,7 +139,7 @@
                     options: {
                         scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
                             }
                         }
                     }

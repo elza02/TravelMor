@@ -54,12 +54,12 @@
 {% endblock menu_per_log_case %}
 {% block main %}
 <section class="second">
-    {% for hotel in query %}
     <form id="filterForm">
         <label for="locationFilter">Filtrer par localisation:</label>
         <input type="text" id="locationFilter" name="locationFilter" placeholder="Entrer une localisation">
         <button type="button" id="filterFormId">Filtrer</button>
     </form>
+    {% for hotel in query %}
     <div class="mini-card-hotel filterable">
         <div class="image">
             <img src="{% static "assets/hotels/"%}{{ hotel.imagehotel_set.first.id_images.path_image }}" alt="">
@@ -67,11 +67,14 @@
         <div class="body">
             <div class="title-localisation">
                 <span class="title">{{ hotel.nom_hotel }}</span>
-                <span class="localisation filterable"><i class="fa-solid fa-location-dot"></i>&nbsp;{{ hotel.id_ville.nom_ville }}</span>
+                <span class="localisation filterable"><i class="fa-solid fa-location-dot"></i>{{ hotel.id_ville.nom_ville }}</span>
             </div>
             <div class="price"><img src="{% static 'assets/background-pricing.png' %}" alt="background-pricing"><span>{{ hotel.prix_nuit }} MAD/Pers.</span></div>
             <span class="type_ch">Type Chambre : <span>{{hotel.type_chambre}}</span></span>
-            <span>{% if hotel.petit_dejeuner%}<i class="fa-solid fa-utensils" style="color: gray;"></i>{% endif %}</span>
+            <span>
+                {% if hotel.petit_dejeuner%}<i class="fa-solid fa-utensils" style="color: gray; margin-right: 10px;"></i>{% endif %}
+                {% if hotel.wifi%}<i class="fa-solid fa-wifi" style="color: gray; margin-right: 10px;"></i>{% endif %}
+            </span>
             <form method="get" action="/hotels_details/{{ hotel.id_hotel }}">
                 <button type="submit"><i class="fa-solid fa-angles-right">&nbsp;&nbsp;</i>Details</button>
             </form>

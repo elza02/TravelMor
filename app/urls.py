@@ -75,6 +75,7 @@ urlpatterns = [
     path('notifier/', views.notifier, name='notifier'),
     path('admin_page/notification/admin_page/notifications/supp_notification/<int:id_notification>/', views.supp_notification, name='supp_notification'),
     path('admin_page/notification/admin_page/notifications/modif_notification/<int:id_notification>/', views.modif_notification, name='modif_notification'),
+    path('admin_page/voyages/supp_reservation_voyage/<int:id_reservation>/', views.supp_reservation_voyage, name='supp_reservation_voyage'),
     #login/logout
     path('login/', views.login, name="login"),
     path('logout/', views.logout, name='logout'),

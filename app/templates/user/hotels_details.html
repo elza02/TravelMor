@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} 
-{% block url_8_class %}
+{% block url_2_class %}
 active
-{% endblock url_8_class %} 
+{% endblock url_2_class %} 
 {% block title %} hotel details - {{ hotel.first.id_hotel }} {% endblock title %} {% block block_css %}
 <link rel="stylesheet" href="{% static 'css/detailed_card.css' %}" />
 <style>
@@ -71,7 +71,7 @@ active
         {% for image in hotel.imagehotel_set.all %}
         <div class="mySlides">
           <div class="numbertext">
-            {{ forloop.counter }} / {{ hotel.imageshotel_set.count }}
+            {{ forloop.counter }} / {{ hotel.imagehotel_set.count }}
           </div>
           <img
             src="{% static 'assets/hotels/' %}{{ image.id_images.path_image }}"
@@ -84,9 +84,9 @@ active
         <a class="prev" onclick="plusSlides(-1)">❮</a>
         <a class="next" onclick="plusSlides(1)">❯</a>
       </div>
-      <div class="caption-container">
+      <div class="caption-container" style="display: none;">
         <p id="caption"></p>
-      </div>
+      </div> 
 
       <div class="row">
         {% for image in hotel.imagehotel_set.all %}
@@ -103,20 +103,25 @@ active
       </div>
     </div>
     <div class="body">
-      <span class="title">{{ hotel.titre_hotel }}</span>
-      <span class="localisation"
-        ><i class="fa-solid fa-location-dot"></i> {{ hotel.id_pays.nom_pays }}, {{ hotel.nom_hotel }}</span
-      >
-      <span class="price"
-        >à partir de
-        <span>{{ hotel.prix_hotel }} Dhs par personne</span></span
-      >
+      <span class="title">{{ hotel.nom_hotel }}</span>
+      <span class="localisation" style="font-style: italic; color: gray;">
+        <i class="fa-solid fa-location-dot"></i> {{ hotel.id_ville.nom_ville }}
+      </span>
+      <span class="price">à partir de
+        <span style="font-weight: bold">{{ hotel.prix_nuit }} Dhs</span> par personne
+      </span>
       <span class="rating"
-        >Durée:
-        <span
-          >{{ hotel.duree_hotel }} jours / {{ hotel.duree_hotel|add:"-1" }} nuits</span
-        ></span
-      >
+        ><i class="fa-solid fa-utensils" style="color: gray; margin-right: 10px;"></i>Petit dejeuner:
+        <span style="font-weight: bold">
+          {% if hotel.petit_dejeuner%}Inclus{% else %}Non inclus{% endif %}
+        </span>
+      </span>
+      <span class="rating"
+        ><i class="fa-solid fa-wifi" style="color: gray; margin-right: 10px;"></i>Wifi:
+        <span style="font-weight: bold">
+          {% if hotel.wifi%}Inclus{% else %}Non inclus{% endif %}
+        </span>
+      </span>
       <form
         method="get"
         action="# {{ hotel }}"
@@ -126,6 +131,7 @@ active
     </div>
   </div>
   {% endfor %}
-{% endblock main %} {% block js_block %}
+{% endblock main %}
+{% block js_block %}
 <script defer src="{% static 'js/detailed_card.js' %}"></script>
 {% endblock js_block %}
