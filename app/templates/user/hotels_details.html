@@ -111,18 +111,23 @@ active
         <span style="font-weight: bold">{{ hotel.prix_nuit }} Dhs</span> par personne
       </span>
       <span class="rating"
-        ><i class="fa-solid fa-utensils" style="color: gray; margin-right: 10px;"></i>Petit dejeuner: 
+        ><i class="fa-solid fa-utensils" style="color: gray; margin-right: 10px;"></i>Petit dejeuner:
         <span style="font-weight: bold">
           {% if hotel.petit_dejeuner%}Inclus{% else %}Non inclus{% endif %}
         </span>
       </span>
       <span class="rating"
-        ><i class="fa-solid fa-wifi" style="color: gray; margin-right: 10px;"></i>Wifi: 
+        ><i class="fa-solid fa-wifi" style="color: gray; margin-right: 10px;"></i>Wifi:
         <span style="font-weight: bold">
           {% if hotel.wifi%}Inclus{% else %}Non inclus{% endif %}
         </span>
       </span>
-        <a href="{% url 'paiement_hotel' hotel.id_hotel %}">J'en profite</a>
+      <form
+        method="get"
+        action="{% url 'paiement_hotel' hotel.id_hotel %}"
+      >
+        <button type="submit">J'en profite</button>
+      </form>
     </div>
   </div>
   {% endfor %}

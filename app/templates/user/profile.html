@@ -38,19 +38,19 @@
 </div>
 <div class="reservations">
   <div style="position: absolute; width: 100%;">
-    <span id="hideReservations">X</span>
+    <i id="hideReservations" class="fa-solid fa-xmark"></i>
   </div>
   <ul>
   {% for reservation in reservations  %}
     <li>
       <div>
-        <span>Voyage: </span>{{ reservation.id_voyage.titre_voyage}}
+        <span>Voyage : </span>{{ reservation.id_voyage.titre_voyage}}
       </div>
       <div>
-        <span>Prix: </span>{{ reservation.id_voyage.prix_voyage}}
+        <span>Prix : </span>{{ reservation.id_voyage.prix_voyage}}
       </div>
-      <div><span>Date debut vol: </span>{{ reservation.id_vol.date_d_vol}}</div>
-      <div><span>Date fin vol: </span>{{ reservation.id_vol.date_f_vol}}</div>
+      <div><span>Date debut vol : </span>{{ reservation.id_vol.date_d_vol}}</div>
+      <div><span>Date fin vol : </span>{{ reservation.id_vol.date_f_vol}}</div>
     </li>
   {% endfor %}  
   {% if reservations.count == 0 %}
@@ -85,7 +85,7 @@
 <div class="log" id="LogMenuButton">
   <i class="fa-solid fa-bars"></i>
   <i class="fa-solid fa-circle-user"></i>
-  <div class="menu hide" id="LogMenu">
+  <div class="menu" id="LogMenu">
     <ul>
       <li><a href="{% url 'registration' %}">Inscription</a></li>
       <li>
@@ -156,7 +156,9 @@
               <span class="price"><img src="{% static 'assets/background-pricing.png' %}" alt="background-pricing">Prix: <span>{{ fav_voyage.id_voyage.prix_voyage }} Dhs</span></span>
               <span class="nom-hotel">Nom hotel: <span>{{ fav_voyage.id_voyage.id_hotel.nom_hotel }}</span></span>
               <span class="rating">Durée: <span>{{ fav_voyage.id_voyage.duree_voyage }} jours / {{ fav_voyage.id_voyage.duree_voyage|add:"-1" }} nuits</span></span>
-              <span class="percentage">Promotion: <span>{{ fav_voyage.id_voyage.id_promotion.pourcentage }} %</span></span>
+              {% if fav_voyage.id_voyage.id_promotion.pourcentage > 0 %}
+                <span class="percentage">Sous promotion: <span>{{ fav_voyage.id_voyage.id_promotion.pourcentage }} %</span></span>
+              {% endif %}
               <form method="get" action="{% url 'promotions_details' fav_voyage.id_voyage.id_voyage %}">
                   <button type="submit"><i class="fa-solid fa-angles-right">&nbsp;&nbsp;</i>Details</button>
               </form>
@@ -190,13 +192,16 @@
     }
 </script>
 <script>
-  document.getElementById('reservationsButton').addEventListener('click', function() {
-    LogMenu.style.display = '';
-    document.querySelector('.reservations').style.display = 'block';
-  });
-  document.getElementById('hideReservations').addEventListener('click', function() {
-    document.querySelector('.reservations').style.display = 'none';
-  })
+  button = document.getElementById('reservationsButton');
+  
+  button.addEventListener('click', function() {
+    document.querySelector('.reservations').style.top = '75px';
+});
+
+document.getElementById('hideReservations').addEventListener('click', function() {
+    document.querySelector('.reservations').style.top = '-300px';
+});
+
 </script>
 {% endblock js_block %}
 

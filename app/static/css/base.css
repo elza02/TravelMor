@@ -30,13 +30,13 @@ body {
 /* body .container {
 } */
 
-.show {
+/* .show {
     display: block;
 }
 
 .hide {
     display: none;
-}
+} */
 
 /* header styles */
 
@@ -171,8 +171,7 @@ header .inner1 .log {
     padding-inline: 15px;
     cursor: pointer;
     color: rgb(152, 148, 148);
-    transition: all .2s ease;
-    
+    transition: top .3s ease-in-out;
 }
 
 header .inner1 .log:hover {
@@ -200,9 +199,10 @@ header .inner1 .reservations {
     width: fit-content;
     position: absolute;
     right: 0;
-    top: 55px;
+    top: -300px;
     background-color: #fff;
     z-index: 999;
+    transition: top .3s ease-in-out;
 }
 
 header .inner1 .log:hover {
@@ -250,10 +250,8 @@ header .inner1 .menu ul li:nth-child(2) {
 }
 
 header .inner1 .reservations {
-    width: 300px;
+    width: 400px;
     right: 100px;
-    top: 75px;
-    display: none;
 }
 
 header #hideReservations {
@@ -264,15 +262,14 @@ header #hideReservations {
     cursor: pointer;
     font-weight: bold;
     border-radius: 50%;
-    display: inline-block;
     text-align: center;
     width: 25px;
-    height: 20px;
+    height: 25px;
     transition: all .3s ease;
 }
 
 header #hideReservations:hover {
-    background-color: #c2bdbd;
+    color: var(--main-gray);
 }
 
 header .inner1 .reservations ul {
@@ -282,8 +279,12 @@ header .inner1 .reservations ul {
 
 header .inner1 .reservations ul li span {
     font-weight: bold;
-    font-style: italic;
+    /* font-style: italic; */
     color: var(--main-gray);
+    font-size: 0.9rem;
+    margin-right: 10px;
+    display: inline-block;
+    width: 120px;
 }
 
 header .inner1 .reservations ul li:not(:last-child) {

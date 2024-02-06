@@ -108,9 +108,9 @@
         <h2>Formulaire de Paiement</h2>
         <p>Les informations sur l'Hotel:</p>
         <ul>
-            <li>Nom d'Hotel: {{ hotel.id_hotel.titre_hotel }}</li>
-            <li>Petit Dejeuner: {% if hotel.id_hotel.petit_dejeuner %} True {% else %} False {% endif %}</li>
-            <li>Wifi: {% if hotel.id_hotel.wifi %} True {% else %} False {% endif %}</li>
+            <li>Nom d'Hotel: {{ hotel.nom_hotel }}</li>
+            <li>Petit Dejeuner: {% if hotel.id_hotel.petit_dejeuner %} Inclus {% else %} Non inclus {% endif %}</li>
+            <li>Wifi: {% if hotel.id_hotel.wifi %} Inclus {% else %} Non inclus {% endif %}</li>
         </ul>
         <p>Montant Total: <span style="font-weight: bold;">{{ montant }}</span></p>
     </div>

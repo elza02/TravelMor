@@ -110,8 +110,8 @@
         <ul>
             <li>Titre du Voyage: {{ voyage.titre_voyage }}</li>
             <li>ID du Vol: {{ vol.id_vol }}</li>
-            <li>Transport: {% if voyage.transport %} True {% else %} False {% endif %}</li>
-            <li>Petit Dejeuner: {% if voyage.id_hotel.petit_dejeuner %} True {% else %} False {% endif %}</li>
+            <li>Transport: {% if voyage.transport %} Inclus {% else %} Non inclus {% endif %}</li>
+            <li>Petit Dejeuner: {% if voyage.id_hotel.petit_dejeuner %} Inclus {% else %} Non inclus {% endif %}</li>
         </ul>
         <p>Montant Total: <span style="font-weight: bold;">{{ montant }}</span></p>
     </div>

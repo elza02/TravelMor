@@ -193,7 +193,7 @@ class NotifModificationForm(forms.ModelForm):
         self.fields['content'].widget.attrs.update({'class': 'your-custom-class'})
 
 class PaiementForm(forms.Form):
-    nom_carte = forms.CharField(label='Nom sur la carte', required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    nom_carte = forms.CharField(label='Nom sur la carte', required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder' : 'Entrer votre nom'}))
     numero_carte = forms.CharField(label='Numéro de carte', required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'maxlength': '19', 'placeholder' : '1234 4567 7890 1234', 'oninput': 'formatCardNumber(this)'}))
     date_expiration = forms.CharField(label='Date d\'expiration (MM/YY)', required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'maxlength': '5', 'placeholder' : 'MM/YY', 'oninput': 'formatExpirationDate(this)'}))
     code_securite = forms.CharField(label='Code de sécurité', required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'maxlength': '3', 'placeholder' : '123'}))
