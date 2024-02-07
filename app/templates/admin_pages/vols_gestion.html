@@ -15,7 +15,7 @@
     {% endif %}
 
     {% if form_modif %}
-        <form action="{% url 'modif_vol' vol.id_vol%}" method="POST">
+        <form action="{% url 'modif_vol' vol.id_vol%}" method="POST" onsubmit="return validateDates()">
             {% csrf_token %}
             <p>
                 <label for="{{ form_modif.id_vol.id_for_label }}">Vol ID :</label>
@@ -37,7 +37,7 @@
         </form>
     
     {% elif form_ajout %}
-    <form action="{% url 'ajout_vol'%}" method="POST">
+    <form action="{% url 'ajout_vol'%}" method="POST" onsubmit="return validateDates()">
         {% csrf_token %}
         {{ form_ajout.as_p }}
         <button type="submit"><i class="fa-solid fa-check"></i> Enregistrer</button>
@@ -76,3 +76,21 @@
     </div>
 </div>
 {% endblock main %}
+{% block js_block %}
+<script>
+    function validateDates() {
+        var startDate = document.getElementById('id_date_d_vol').value;
+        var endDate = document.getElementById('id_date_f_vol').value;
+
+        var start = new Date(startDate);
+        var end = new Date(endDate);
+
+        if (start > end) {
+            alert('La date de début ne peut pas être supérieure à la date de fin.');
+            return false;
+        }
+        return true;
+    }
+</script>
+
+{% endblock js_block %}

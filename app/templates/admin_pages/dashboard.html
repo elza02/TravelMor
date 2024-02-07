@@ -42,12 +42,12 @@
     <div>
 
     <div class="charts">
-        <div style="height: fit-content; width: 450px;">
+        <div style="height: fit-content; height: 500px; width: 400px;">
             <canvas id="myPieChart"></canvas>
         </div>
         
-        <div style="height: fit-content; width: 450px;">
-            <canvas id="categoryDistributionChart"></canvas>
+        <div style="height: fit-content; height: 400px; width: 400px; display: flex;">
+            <canvas id="categoryDistributionChart" style="align-self: center;"></canvas>
         </div>
     </div>
 
@@ -118,8 +118,9 @@
 {% endblock main %}
 
 {% block js_block %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+ {% endcomment %}
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         fetch('/top_voyages_data/')
