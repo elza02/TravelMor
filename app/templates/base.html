@@ -443,11 +443,9 @@
     
         function toggleLike(heart) {
             if(!id_user){
-                //console.log('you are not connected');
                 document.getElementById('login-form-modal').style.display='block';
             }else {
                 const voyageId = heart.id;
-                //console.log('toggle: ' + inputLike.value);
                 const isLiked = inputLike.value === 'true';
         
                 const formData = { id_user: parseInt(id_user), id_voyage: voyageId };
