@@ -1,4 +1,4 @@
-# TravelMor: Travel Agency Management System
+# TravelMor: Travel Agency Management App
 
 ## Overview
 
